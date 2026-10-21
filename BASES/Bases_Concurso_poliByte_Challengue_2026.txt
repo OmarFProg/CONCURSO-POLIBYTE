@@ -1,0 +1,254 @@
+================================================================================
+POLIBYTE INNOVATION CHALLENGE 2026
+Bases Oficiales y Reglamento de Participación
+================================================================================
+
+ORGANIZACIÓN Y RESPALDO:
+- Institución: Escuela Superior Politécnica de Chimborazo (ESPOCH)
+- Facultad: Facultad de Informática y Electrónica (FIE)
+- Carrera: Carrera de Software
+- Comité Organizador: Club Académico PoliByte
+- En colaboración con: AEIS (Asociación de Escuela de Ingeniería de Software) – Rama Estudiantil IEEE ESPOCH
+- Proponente: Ing. Diego García, Miembro Docente
+- Convocatoria: Octubre – Noviembre de 2026
+- Lugar: Riobamba – Ecuador
+- Edición Especial Auspiciada por: Ing. Edwin Llauca (graduado de la ESPOCH y profesional destacado del sector de software)
+- Premio al Primer Lugar: Una laptop y certificados
+
+================================================================================
+DATOS CLAVE DEL CERTAMEN
+================================================================================
+- Qué es: Concurso de desarrollo de software en dos fases:
+  1. Propuesta técnica con defensa virtual.
+  2. Construcción de un producto mínimo viable (MVP), que culmina en una Gran Final presencial.
+- Modalidad: Propuestas innovadoras de libre elección. Cada equipo define el problema y la solución dentro de una de las tres categorías.
+- Categorías:
+  1. Neurociencias.
+  2. Visión por computador.
+  3. Despliegue de modelos de inteligencia artificial (IA) en local.
+- Quiénes pueden participar: Estudiantes de educación superior de cualquier carrera e institución (nacional o internacional).
+- Conformación de equipos: De 2 a 4 integrantes.
+- Costo: Inscripción y participación totalmente gratuitas.
+- Fechas clave principales:
+  * Cierre de inscripción de equipos (Paso 1): Miércoles 21 de octubre (23:59).
+  * Cierre de entrega de propuestas (Paso 2): Domingo 25 de octubre (23:59).
+  * Inicio de desarrollo del MVP: Domingo 25 de octubre.
+  * Defensas virtuales y anuncio de clasificados: Viernes 30 de octubre.
+  * Congelamiento de código (Code Freeze en GitHub): Miércoles 25 de noviembre.
+  * Pruebas técnicas en auditorio: Jueves 26 de noviembre.
+  * Gran Final presencial y premiación: Viernes 27 de noviembre de 2026.
+- Contacto oficial: club.polibyte@espoch.edu.ec | Instagram: @polibyte_espoch
+
+================================================================================
+1. PRESENTACIÓN
+================================================================================
+El Club Académico PoliByte, con respaldo de la Coordinación de Carrera de Software y de las autoridades de la FIE - ESPOCH, convoca al PoliByte Innovation Challenge 2026.
+El certamen busca que los estudiantes apliquen conocimientos teóricos y prácticos para desarrollar propuestas innovadoras en las tres categorías establecidas. Cada equipo identifica libremente un problema u oportunidad y propone una solución orientada a un MVP. Se valora especialmente la innovación aplicada, la calidad técnica y la utilidad demostrada.
+
+================================================================================
+2. DEFINICIONES
+================================================================================
+- Comité Organizador: Club Académico PoliByte, responsable de la convocatoria, logística y aplicación de las bases.
+- Comisión Académica y Enlace con el Jurado: Atiende consultas técnicas, asigna horarios de defensas y coordina evaluadores y jurado.
+- Tribunal Evaluador: Docentes que califican las propuestas escritas y las defensas virtuales en la Fase 1.
+- Jurado Calificador: Panel de la Gran Final, presidido por el Ing. Edwin Llauca e integrado por docentes especialistas.
+- Líder del equipo: Integrante designado como único contacto oficial ante el Comité Organizador.
+- MVP (Producto Mínimo Viable): Versión funcional del software con las capacidades esenciales para demostrar la solución.
+- Congelamiento de código (Code Freeze): Momento a partir del cual no se admiten commits adicionales en los repositorios de GitHub.
+- Hora oficial: Hora oficial de Ecuador continental (UTC-5).
+- Canales oficiales: Correo electrónico (club.polibyte@espoch.edu.ec) y cuenta de Instagram (@polibyte_espoch).
+
+================================================================================
+3. CONDICIONES DE PARTICIPACIÓN
+================================================================================
+3.1 Elegibilidad:
+- Estudiantes regulares de universidades, escuelas politécnicas o institutos de educación superior del Ecuador o del extranjero, sin restricción de carrera, facultad ni nivel.
+- Carácter interdisciplinario: Se invita a estudiantes de carreras técnicas y de áreas como Salud, Psicología, Educación, Administración, Diseño, Comunicación, etc.
+- Acreditación obligatoria: Carné universitario, certificado de matrícula vigente o constancia emitida por su institución de origen.
+
+3.2 Equipos:
+- De 2 a 4 integrantes.
+- Se permiten combinaciones de diferentes carreras e instituciones.
+- Exclusividad: Cada estudiante puede pertenecer a un solo equipo. Aparecer en más de un equipo anula todas las inscripciones involucradas.
+- Designación de un líder para comunicaciones, entregas y coordinación de defensas.
+
+3.3 Gratuidad y Gastos:
+- La inscripción, evaluación y certificados no tienen costo.
+- Gastos de traslado y estadía en Riobamba para la Gran Final presencial corren por cuenta de los equipos clasificados.
+
+================================================================================
+4. PROCESO DE INSCRIPCIÓN Y ENTREGA DE PROPUESTAS
+================================================================================
+La participación consta de 2 pasos independientes (cada uno con formulario y comprobante):
+
+- PASO 1: Inscripción del equipo (Hasta el miércoles 21 de octubre, 23:59 UTC-5)
+  * Registro mediante formulario con los datos de cada integrante: nombres completos, cédula/identificación, correo, institución, carrera, semestre/nivel y rol.
+  * No se adjunta la propuesta técnica en este paso.
+  * Se genera un código de equipo al culminar.
+
+- PASO 2: Entrega de la propuesta técnica (Hasta el domingo 25 de octubre, 23:59 UTC-5)
+  * El líder ingresa el código de equipo en el formulario de entrega.
+  * Sube el documento de la propuesta técnica en formato PDF elaborado con la plantilla oficial de Word (máximo 4 páginas).
+  * Se emite un comprobante de recepción (la entrega no implica clasificación automática).
+  * Equipo inscrito que no entregue la propuesta dentro del plazo queda descalificado automáticamente.
+
+================================================================================
+5. CRONOGRAMA OFICIAL
+================================================================================
+- Jueves 15 de octubre: Publicación de bases y apertura de inscripciones (Fase 1).
+- Miércoles 21 de octubre (23:59): Cierre de inscripción de equipos - Paso 1 (Fase 1).
+- Domingo 25 de octubre (hora por confirmar): Inicio de desarrollo del MVP para todos los inscritos (Fases 1 y 2).
+- Domingo 25 de octubre (23:59): Cierre de entrega de propuestas - Paso 2 (Fase 1).
+- 26 al 29 de octubre: Revisión de propuestas escritas por el Tribunal Evaluador (Fase 1).
+- Viernes 30 de octubre: Defensas virtuales y publicación de clasificados a Fase 2 (Fase 1).
+- Miércoles 25 de noviembre (hora por confirmar): Congelamiento de código en GitHub (Fase 2).
+- Jueves 26 de noviembre: Pruebas técnicas de proyección y audio en el Auditorio de la FIE.
+- Viernes 27 de noviembre (hora por confirmar): Gran Final presencial y premiación en el Auditorio FIE.
+
+Nota: El cronograma toma en cuenta los feriados nacionales del 2 y 3 de noviembre y el feriado local de Riobamba del 11 de noviembre.
+
+================================================================================
+6. FASE 1: PROPUESTA TÉCNICA Y DEFENSA VIRTUAL
+================================================================================
+6.1 Estructura de la Propuesta Técnica (Documento PDF, máximo 4 páginas):
+1. Datos del proyecto y del equipo: Nombre del proyecto, categoría seleccionada, datos de integrantes y justificación breve de la relación con la categoría.
+2. Problema y propuesta de valor: Problema/oportunidad definida, beneficiarios, necesidad atendida y diferenciación frente a alternativas existentes.
+3. Innovación y validación: Aporte innovador, métodos o modelos previstos, justificación de su elección y plan de validación con criterios medibles y casos de prueba.
+4. Arquitectura y alcance del MVP: Diagrama de arquitectura inicial, herramientas tecnológicas seleccionadas, datos/recursos necesarios, funciones a demostrar y viabilidad temporal.
+
+6.2 Defensa Virtual (Viernes 30 de octubre):
+- Obligatoria por salas virtuales en horario asignado.
+- Duración total de 8 minutos:
+  * 5 minutos de exposición del equipo.
+  * 3 minutos de preguntas del Tribunal Evaluador.
+- Evaluación: Claridad de exposición, comprensión del problema, coherencia de arquitectura y factibilidad del desarrollo.
+
+6.3 Clasificación a la Fase 2:
+- Puntaje total Fase 1: 100 puntos (75 puntos documento escrito + 25 puntos defensa virtual).
+- Puntaje mínimo para ser elegible: 70 / 100 puntos.
+- Clasifican los puntajes más altos hasta completar el cupo definido por el Comité Organizador.
+- Equipos no clasificados concluyen su participación el 30 de octubre.
+
+================================================================================
+7. FASE 2: DESARROLLO DEL PRODUCTO MÍNIMO VIABLE (MVP)
+================================================================================
+- Periodo: Del 25 de octubre al 25 de noviembre (autónomo).
+- Congelamiento de código (Code Freeze): Miércoles 25 de noviembre.
+- Requisitos de entrega:
+  * Registro del enlace al repositorio de GitHub.
+  * Enlace al despliegue en línea o instrucciones claras para ejecución local.
+  * Commits posteriores a la hora límite no serán evaluados.
+
+================================================================================
+8. GRAN FINAL PRESENCIAL
+================================================================================
+- Fecha y Lugar: Viernes 27 de noviembre de 2026, Auditorio de la FIE - ESPOCH (Riobamba).
+- Los equipos clasificados inician desde cero en la Gran Final (la nota de Fase 1 solo sirvió para clasificar).
+- Secuencia de presentación por equipo:
+  1. Pitch (5 minutos): Exposición del problema, propuesta de valor, beneficios y potencial de escalabilidad.
+  2. Demostración en vivo (7 minutos): Ejecución real del software demostrando las funcionalidades comprometidas y casos de prueba. Prohibido usar únicamente diapositivas.
+  3. Preguntas del jurado (5 minutos): Preguntas técnicas sobre código fuente, base de datos y arquitectura.
+
+================================================================================
+9. RÚBRICAS DE EVALUACIÓN
+================================================================================
+
+9.1 Rúbrica Fase 1 (100 puntos):
+- Comprensión del problema (25 pts): Claridad del problema, identificación de usuarios y pertinencia en la categoría elegida.
+- Innovación y valor diferencial (25 pts): Aporte vs. alternativas, justificación del enfoque y plan de validación medible (no premia novedades por sí solas).
+- Arquitectura y viabilidad (25 pts): Coherencia arquitectural, disponibilidad de datos/recursos y factibilidad en el tiempo disponible.
+- Defensa virtual (25 pts): Capacidad de síntesis (5 min), dominio técnico de todos los integrantes y solvencia ante preguntas.
+
+9.2 Rúbrica de la Gran Final (100 puntos):
+- Innovación y solución al problema (30 pts): Utilidad demostrada para usuarios, creatividad del enfoque y aporte verificable.
+- Funcionalidad y madurez del MVP (25 pts): Cumplimiento de funciones comprometidas, manejo de errores/límites, ejecución sin fallos críticos.
+- Arquitectura y calidad técnica (20 pts): Modularidad del código en GitHub, integración, pruebas documentadas, trazabilidad y reproducibilidad.
+- Pitch y demostración (15 pts): Claridad, cumplimiento estricto de tiempos (5 min pitch + 7 min demo) y seguridad al exponer.
+- Experiencia de usuario - UI/UX (10 pts): Facilidad de uso, consistencia visual, diseño responsive y accesibilidad.
+
+9.3 Desempates:
+1. Mayor puntaje en "Innovación y solución al problema".
+2. Mayor puntaje en "Funcionalidad y madurez del MVP".
+3. Votación directa del Jurado Calificador.
+Decisiones del Tribunal y Jurado son definitivas e inapelables.
+
+================================================================================
+10. REGLAS TÉCNICAS, INTEGRIDAD Y ORIGINALIDAD
+================================================================================
+10.1 Libertad Tecnológica:
+- Elección libre de lenguajes de programación, librerías, frameworks y motores de bases de datos.
+- No se obliga a contratar servicios pagos.
+- Neurociencias y Visión por Computador pueden desplegarse en la nube o localmente.
+- Despliegue de IA en local: La inferencia principal DEBE correr obligatoriamente en local.
+
+10.2 Modelos e Inteligencia Artificial:
+- Libertad en elección de modelos y proveedores; se permiten modelos preentrenados y fine-tuning (no se exige entrenar desde cero).
+- El equipo debe justificar el valor añadido de los modelos y explicar errores/limitaciones (las métricas de confianza por sí solas no garantizan validez).
+- Uso de asistentes de código/IA: Permitido, pero todos los integrantes deben comprender la arquitectura, responder por cada módulo y demostrar dominio técnico.
+
+10.3 Originalidad:
+- Proyecto y código deben ser originales y desarrollados a partir del 15 de octubre de 2026.
+- Prohibido reutilizar proyectos de materias previas o partes de tesis/titulaciones.
+- Se auditará el historial de commits en GitHub para comprobar autoría y fechas.
+
+================================================================================
+11. PREMIACIÓN
+================================================================================
+- Primer Lugar: Una laptop y certificados de reconocimiento oficial.
+
+================================================================================
+12. PROPIEDAD INTELECTUAL Y DATOS
+================================================================================
+- Los equipos conservan en su totalidad la propiedad intelectual de sus soluciones.
+- Se autoriza a los organizadores a difundir nombres, descripciones, fotos y videos del evento con fines académicos e institucionales.
+
+================================================================================
+13. CAUSALES DE DESCALIFICACIÓN
+================================================================================
+1. Integrante que pertenezca simultáneamente a más de un equipo.
+2. Proyecto no original o reutilización de proyectos previos/titulación.
+3. Inasistencia a la defensa virtual obligatoria.
+4. Falta de dominio técnico sobre el código generado o asistido por herramientas de IA.
+5. Suministrar información falsa sobre identidad o condición académica estudiantil.
+6. Conductas irrespetuosas o que alteren el normal desarrollo del certamen.
+
+================================================================================
+15. CONTACTO OFICIAL
+================================================================================
+- Correo: club.polibyte@espoch.edu.ec
+- Instagram: @polibyte_espoch
+
+================================================================================
+ANEXO: DETALLE DE CATEGORÍAS Y ORIENTACIONES
+================================================================================
+A.1 Modalidad Libre:
+Los equipos eligen libremente la problemática sin retos impuestos.
+
+A.2 Categorías:
+1. Neurociencias:
+   - Soluciones relacionadas al sistema nervioso y procesos cognitivos.
+   - Ejemplos: análisis/visualización de señales neurofisiológicas, datos de neurociencia, herramientas orientadas a atención, memoria o aprendizaje.
+   - Requisito: Demostrar vínculo real con las neurociencias (usar una red neuronal artificial no clasifica por sí solo como neurociencia).
+
+2. Visión por Computador:
+   - Procesamiento e interpretación de imágenes o video.
+   - Ejemplos: detección y seguimiento de objetos, inspección visual automatizada, reconocimiento de gestos, herramientas de accesibilidad visual.
+   - Requisito: Explicar datos visuales procesados, salida generada y métodos de validación de calidad.
+
+3. Despliegue de Modelos de IA en Local:
+   - Ejecución e inferencia de modelos de IA en equipos, servidores locales o dispositivos edge sin depender de APIs de inferencia en la nube.
+   - Ejemplos: asistentes especializados off-line, análisis local de documentos, procesamiento de voz en dispositivo.
+   - Requisito: Declarar modelo, hardware necesario, entorno de ejecución y comprobar funcionamiento local en la final.
+
+A.4 Alcance Mínimo Exigido para el MVP:
+1. Función principal: Ejecución completa de extremo a extremo con datos reales o de prueba.
+2. Uso de la solución: Demostración de interacción útil para el usuario.
+3. Pruebas: Un caso representativo de éxito y un caso de error/límite/condición compleja.
+4. Evidencia: Resultados contrastados con criterios de validación medibles.
+5. Límites y errores: Identificación y manejo de fallos del sistema.
+6. Reproducibilidad: Instrucciones claras en el README de GitHub, requisitos, dependencias y modelos para levantar el sistema.
+
+A.5 Criterios de Solución Sobresaliente vs. A.6 Enfoques con Baja Valoración:
+- Sobresaliente: Resuelve una necesidad clara, sustenta innovación con evidencia, valida resultados de forma transparente, combina calidad técnica con usabilidad e integra habilidades multidisciplinarias.
+- Baja valoración: Relación forzada o nula con la categoría, CRUDs básicos que solo almacenan datos sin aporte innovador, chatbots genéricos instalados sin personalización real ni utilidad específica, apilar modelos o agentes sin justificación, o demos basadas en diapositivas o respuestas simuladas/estáticas.
+================================================================================

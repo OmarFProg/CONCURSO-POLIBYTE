@@ -1,0 +1,56 @@
+Neurociencia: teoría, patologías neurológicas en Latinoamérica y estudios en Ecuador
+Esta investigación está orientada al Polibyte Innovation Challenge 2026, especialmente a la categoría Neurociencias y al desarrollo de una aplicación como Yuyay, que utiliza minijuegos, visión por computador y análisis de indicadores motores y cognitivos.
+
+La idea es comprender tres aspectos: qué estudia la neurociencia, cuáles son los problemas neurológicos más relevantes en Latinoamérica y qué investigaciones realizadas en Ecuador podrían servir como fundamento científico para un proyecto de programación.
+1. Fundamentos teóricos de la neurociencia
+
+La neurociencia es el campo científico interdisciplinario que estudia el sistema nervioso: su estructura, funcionamiento, desarrollo y relación con el comportamiento humano, el aprendizaje, la memoria, las emociones y las enfermedades.
+
+Integra conocimientos de biología, medicina, psicología, informática, matemáticas, estadística e inteligencia artificial.
+
+================================================================================
+1.1. PRINCIPALES ÁREAS DE ESTUDIO
+================================================================================
+
+Área                    | ¿Qué estudia?                                              | Aplicación informática
+------------------------|------------------------------------------------------------|-----------------------------------------
+Neuroanatomía           | Estructuras del cerebro y sistema nervioso.                | Visualización cerebral 3D.
+Neurofisiología         | Actividad eléctrica y funcionamiento neuronal.             | Análisis de señales EEG.
+Neurociencia cognitiva  | Memoria, atención, aprendizaje y percepción.               | Juegos cognitivos y experimentos digitales.
+Neurociencia motora     | Control del movimiento, equilibrio y coordinación.         | Seguimiento de manos, marcha y movimientos.
+Neuropsicología         | Relación entre cerebro, conducta y cognición.              | Evaluaciones digitales de tareas cognitivas.
+Neuroimagen             | Estructura y actividad cerebral mediante técnicas de imagen.| Procesamiento y visualización de imágenes médicas.
+Neuroinformática        | Gestión, análisis y modelado de datos del sistema nervioso.| IA, aprendizaje automático y simulaciones.
+================================================================================
+1.2. ¿Cómo se puede estudiar el sistema nervioso mediante software?
+A. Señales eléctricas (EEG)
+
+Se registran diferencias de potencial eléctrico mediante electrodos colocados sobre el cuero cabelludo. Se pueden analizar ritmos, patrones y cambios temporales.
+
+Proyecto: visualizar señales EEG o experimentar con conjuntos de datos públicos.
+
+B. Movimiento y coordinación
+
+Una cámara permite estimar posiciones de manos, articulaciones y rostro. El software calcula tiempos, distancias y variaciones de movimiento.
+
+Proyecto: juegos de coordinación motora y seguimiento de movimientos.
+
+C. Memoria y atención
+
+Se estudian las respuestas a estímulos, los errores, el tiempo de reacción y la capacidad de recordar secuencias o rutas.
+
+Proyecto: minijuegos de memoria espacial, atención selectiva y control de respuestas.
+
+Una distinción esencial: el software puede medir una conducta observable, pero esa medida no permite conocer directamente toda la actividad cerebral ni determinar por sí sola qué enfermedad tiene una persona.
+2. Problemas y patologías neurológicas en Latinoamérica
+Para ordenar los problemas neurológicos hay que distinguir entre tres indicadores:
+- Prevalencia: cuántas personas viven con una condición.
+- Mortalidad: cuántas personas fallecen por ella.
+- Carga de enfermedad: cuánto afecta a la salud, la autonomía y la calidad de vida, incluyendo discapacidad y muerte prematura.
+Un estudio regional publicado en 2026, basado en el Global Burden of Disease (GBD) 2023, estimó que aproximadamente 470 millones de personas en la Región de las Américas vivían con al menos una de las condiciones neurológicas estudiadas. La migraña, las demencias, el accidente cerebrovascular isquémico y la hemorragia intracerebral figuraron entre los principales contribuyentes a la carga de enfermedad. Esta región incluye países fuera de Latinoamérica, por lo que la cifra no debe interpretarse como un total exclusivo latinoamericano. 
+
+PMC
++1
+
+2.1. Clasificación orientativa por relevancia epidemiológica
+La siguiente tabla es una priorización aproximada por carga de enfermedad y relevancia regional, no un ranking exacto de prevalencia de todas las patologías latinoamericanas.

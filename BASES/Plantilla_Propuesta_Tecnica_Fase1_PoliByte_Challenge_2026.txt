@@ -1,0 +1,111 @@
+================================================================================
+PLANTILLA OFICIAL DE PROPUESTA TÉCNICA — FASE 1
+POLIBYTE INNOVATION CHALLENGE 2026
+================================================================================
+Institución: Escuela Superior Politécnica de Chimborazo (ESPOCH)
+Facultad: Facultad de Informática y Electrónica (FIE) — Carrera de Software
+Organización: Club Académico PoliByte
+Edición Especial Auspiciada por: Ing. Edwin Llauca — Premio: Laptop de Alta Gama
+Documento fuente: Plantilla_Propuesta_Tecnica_Fase1_PoliByte_Challenge_2026.docx
+
+================================================================================
+INSTRUCCIONES MANDATORIAS DE FORMATO
+================================================================================
+1. Convocatoria abierta:
+   - Certamen abierto a estudiantes regulares de cualquier universidad del país o del extranjero, de cualquier carrera o disciplina académica.
+2. Extensión máxima permitida:
+   - Cuatro (4) páginas completas como límite máximo (incluyendo carátula/datos generales).
+3. Costo y registro:
+   - 100% gratuita (sin costos de inscripción ni aranceles).
+4. Formato de entrega:
+   - Completar este documento, guardar y exportar obligatoriamente en formato PDF antes de cargarlo al formulario digital oficial del Club PoliByte (Paso 2 de la inscripción, hasta el 25 de octubre, 23:59 UTC-5).
+5. Defensa sincrónica:
+   - Las propuestas seleccionadas defenderán su solución en una sesión virtual sincrónica de 8 minutos (5 min de exposición + 3 min de preguntas) ante el Tribunal Docente Evaluador el viernes 30 de octubre.
+
+================================================================================
+ESTRUCTURA Y CONTENIDO DE LA PLANTILLA
+================================================================================
+
+--------------------------------------------------------------------------------
+I. DATOS GENERALES DEL PROYECTO Y TEMÁTICA
+--------------------------------------------------------------------------------
+- Nombre del Proyecto / Solución:
+  [ Ingrese aquí el nombre o título de su propuesta técnica ]
+
+- Temática Oficial Única / Categoría Seleccionada:
+  [ Ingrese la categoría elegida según las bases:
+    1. Neurociencias
+    2. Visión por Computador
+    3. Despliegue de Modelos de Inteligencia Artificial en Local ]
+
+- Nombre del Equipo:
+  [ Ingrese aquí el nombre representativo del equipo ]
+
+--------------------------------------------------------------------------------
+II. NÓMINA DE INTEGRANTES DEL EQUIPO (MÁXIMO 4 MIEMBROS)
+--------------------------------------------------------------------------------
+(Tabla de integrantes, de 2 a 4 miembros)
+
+| Rol en Equipo               | Nombres y Apellidos | Universidad de Origen | Carrera / Semestre | Correo Electrónico |
+|-----------------------------|---------------------|-----------------------|--------------------|--------------------|
+| Líder de Equipo             | [ ... ]             | [ ... ]               | [ ... ]            | [ ... ]            |
+| Desarrollador / Miembro 2   | [ ... ]             | [ ... ]               | [ ... ]            | [ ... ]            |
+| Miembro 3 (Opcional)        | [ ... ]             | [ ... ]               | [ ... ]            | [ ... ]            |
+| Miembro 4 (Opcional)        | [ ... ]             | [ ... ]               | [ ... ]            | [ ... ]            |
+
+--------------------------------------------------------------------------------
+1. PLANTEAMIENTO DE LA PROBLEMÁTICA Y PROPUESTA DE VALOR
+--------------------------------------------------------------------------------
+
+A. Diagnóstico de la problemática:
+   * Pautas de Orientación:
+     Explique con precisión técnica la necesidad u oportunidad que aborda el proyecto en base a la categoría definida. ¿Cuál es el problema raíz y quiénes son los beneficiarios directos?
+   * Campo a redactar:
+     [ Redacte aquí el diagnóstico de la problemática, justificando la pertinencia del reto seleccionado y su relevancia en el entorno productivo o académico. (Extensión sugerida: 2 a 3 párrafos) ]
+
+B. Propuesta de valor diferencial:
+   * Pautas de Orientación:
+     Detalle la propuesta de valor diferencial de su solución. ¿Por qué es una solución superior o innovadora frente a alternativas existentes en el mercado o enfoques tradicionales?
+   * Campo a redactar:
+     [ Redacte aquí la propuesta de solución, sus funcionalidades nucleares y los factores que la convierten en un aporte único y práctico. (Extensión sugerida: 2 párrafos) ]
+
+--------------------------------------------------------------------------------
+2. COMPONENTE DE INNOVACIÓN E INTELIGENCIA ARTIFICIAL
+--------------------------------------------------------------------------------
+
+   * Pautas de Orientación:
+     Describa el núcleo innovador de la solución. Indique cómo se incorpora la Inteligencia Artificial (modelos de lenguaje, visión computacional, agentes autónomos, árboles de decisión, análisis predictivo o heurísticas avanzadas) u otra tecnología disruptiva para resolver el problema de manera inteligente.
+   * Campo a redactar:
+     [ Especifique qué modelos, librerías, algoritmos o servicios inteligentes integrará el proyecto y cómo interactúan con los flujos de negocio del MVP. Justifique el valor tangible que aporta la IA frente a una solución puramente determinista. ]
+     *Nota complementaria según bases:* Incluir el plan de validación con criterios medibles y casos de prueba.
+
+--------------------------------------------------------------------------------
+3. ARQUITECTURA DEL SISTEMA Y STACK TECNOLÓGICO LIBRE
+--------------------------------------------------------------------------------
+
+A. Diagrama de Arquitectura del Sistema:
+   * Pautas de Orientación:
+     Presente el diagrama de arquitectura lógica y conceptual del sistema (capas de frontend, backend, almacenamiento, autenticación y servicios de IA). Inserte una imagen o diagrama legible en este espacio.
+   * Campo a insertar:
+     [ INSERTE AQUÍ EL DIAGRAMA DE ARQUITECTURA DEL SISTEMA (Formato PNG o JPEG legible, capturado desde herramientas como Draw.io, Mermaid, Excalidraw o Figma) ]
+     [ Breve descripción de los componentes del diagrama y su flujo de interacción entre capas (Extensión sugerida: 1 párrafo) ]
+
+B. Justificación del Stack Tecnológico Libre:
+   * Pautas de Orientación:
+     Justifique la selección del stack tecnológico libre (lenguajes de programación, frameworks, librerías y bases de datos). Recuerde que no se exige ninguna plataforma de nube de pago (despliegue local, niveles gratuitos o contenedores permitidos).
+   * Campos a completar:
+     • Frontend / Interfaz de Usuario: [ Framework o tecnología seleccionada y justificación ]
+     • Backend / API y Lógica de Negocio: [ Framework, lenguaje y justificación técnica ]
+     • Persistencia y Base de Datos: [ Gestor de base de datos relacional / NoSQL y modelo ]
+     • Componentes de IA / ML: [ Librerías, modelos o APIs abiertas empleadas ]
+     • Entorno de Ejecución / Despliegue: [ Local, Docker o servicio en la nube gratuito ]
+
+================================================================================
+NOTAS CLAVE PARA LA EVALUACIÓN (ALINEACIÓN CON LAS BASES DEL CONCURSO)
+================================================================================
+Para asegurar la máxima puntuación en la Fase 1 (Rúbrica de 100 puntos):
+1. Comprensión del problema (25 pts): Asegurarse de que el problema esté claramente delimitado, que se identifiquen beneficiarios y que la categoría esté perfectamente vinculada.
+2. Innovación y valor diferencial (25 pts): No limitarse a citar herramientas modernas; explicar por qué la solución propuesta es superior y definir criterios medibles de validación.
+3. Arquitectura y viabilidad (25 pts): Demostrar que los componentes elegidos son coherentes, que los datos requeridos están disponibles y que el MVP es viable de construir entre el 25 de octubre y el 25 de noviembre.
+4. Defensa virtual (25 pts): Preparar la presentación de 5 minutos sintetizando estos puntos y practicar respuestas técnicas para los 3 minutos de preguntas del Tribunal.
+================================================================================

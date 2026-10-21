@@ -1,0 +1,122 @@
+NEUROCIENCIAS: CONCEPTOS, DATOS E IDEAS PARA EL CONCURSO Organizado a
+partir del chat original
+
+1.  ¿QUÉ ESTUDIA LA NEUROCIENCIA? La neurociencia estudia cómo el
+    sistema nervioso procesa información, desde moléculas y neuronas
+    individuales hasta circuitos, conducta y enfermedades.
+
+Para un proyecto de programación se pueden explorar datos y
+comportamientos relacionados con: - Conectividad neuronal. - Actividad
+de neuronas. - Señales EEG. - Movimiento, mirada, voz, memoria y
+atención.
+
+2.  FUENTES Y RECURSOS MENCIONADOS EN EL CHAT Estas referencias fueron
+    mencionadas en la conversación. Antes de usarlas, comprobar acceso,
+    condiciones de uso, licencia, formato de los datos y adecuación al
+    proyecto.
+
+A. FlyWire / conectoma de la mosca - El chat describe un mapa de
+conexiones del sistema nervioso central de una mosca adulta, con
+resolución sináptica. - Posible uso: explorar neuronas y rutas de
+conexión, visualizarlas en 3D y animar recorridos de señal. - Idea
+asociada: “Google Maps del cerebro de la mosca”. - Referencias nombradas
+en el chat: FlyWire Codex, BANC y artículos sobre el conectoma de la
+mosca.
+
+B. Allen Brain Observatory - El chat menciona registros de actividad
+neuronal de ratón en distintas regiones cerebrales mientras el animal
+observaba estímulos visuales. - Posible uso: mostrar estímulos junto a
+la actividad neuronal registrada y experimentar con la relación entre
+estímulo y respuesta. - Herramienta nombrada: AllenSDK para Python. -
+Referencia mencionada: Allen Brain Observatory – circuits.
+
+C. TRIBE v2 - El chat lo describe como un modelo de IA anunciado por
+Meta en marzo de 2026 para predecir respuestas cerebrales humanas a
+video, audio y texto. - Se indicó que su licencia CC BY-NC no permite
+uso comercial. - Antes de integrarlo, verificar la publicación original,
+la licencia exacta, requisitos de cómputo y condiciones para uso en un
+concurso. - No debe describirse como una tecnología que “lee
+pensamientos”; una predicción de respuesta a estímulos no equivale a
+leer la mente.
+
+D. Datasets EEG - El chat menciona conjuntos públicos de datos EEG,
+incluidos registros relacionados con imaginación motora. - Posible uso:
+visualizar señales o probar un clasificador con datos ya recopilados. -
+Antes de elegir un dataset, revisar licencia, consentimiento, población,
+etiquetas, calidad y si permite el uso previsto.
+
+3.  IDEAS DE PROYECTO MENCIONADAS A. “¿Qué ve tu cerebro?” El usuario
+    introduce un video o frase y una visualización muestra predicciones
+    de actividad cerebral. Muy visual, pero puede exigir GPU y una
+    preparación cuidadosa de ejemplos.
+
+B. “Google Maps del cerebro de la mosca” Una visualización 3D anima
+rutas de conexión entre neuronas a partir de datos del conectoma.
+
+C. “Ver con los ojos de un ratón” Se reproduce un estímulo visual y se
+muestra al lado actividad neuronal registrada. Podría añadirse un
+experimento de decodificación, si los datos y el tiempo lo permiten.
+
+D. Simulador-juego de neuronas El usuario construye un pequeño circuito
+de neuronas simuladas y trata de lograr un comportamiento o aprendizaje
+sencillo. Reduce la dependencia de hardware externo.
+
+E. EEG en vivo Una interfaz utiliza un dispositivo EEG para controlar
+una acción o juego. Es llamativa, pero depende de comprar, conseguir y
+configurar el hardware.
+
+F. Teclado con la mirada Una persona selecciona letras mirando la
+pantalla y confirmando con parpadeos u otro mecanismo. Aplicación
+potencial para accesibilidad; necesita pruebas de usabilidad y controles
+contra selecciones accidentales.
+
+G. Detección de somnolencia Analiza parpadeo, bostezos o inclinación de
+la cabeza para mostrar alertas. Debe evaluarse en condiciones reales y
+no prometer que evita accidentes.
+
+H. Juego de rehabilitación La cámara sigue ejercicios de manos o rostro
+y muestra el progreso a lo largo de las sesiones. Requiere colaboración
+profesional si se pretende aplicarlo en rehabilitación clínica.
+
+I. Evaluación de dibujo de reloj El usuario dibuja un reloj y la app
+analiza características del dibujo. No debe utilizarse para afirmar que
+una persona tiene deterioro cognitivo sin evaluación clínica validada.
+
+J. Ilusiones ópticas interactivas El sistema presenta ilusiones,
+registra respuestas y explica aspectos de la percepción visual.
+
+K. Cerebro convertido en música o arte Una señal EEG se transforma en
+sonido o arte generativo. Es visual y expresivo, aunque el valor
+científico depende de cómo se interpreten las señales.
+
+L. Asistente de estudio Un juego mide indicadores sencillos de
+rendimiento durante tareas y sugiere pausas o cambios de dificultad.
+Evitar afirmar que la cámara puede medir directamente la fatiga mental o
+diagnosticar TDAH.
+
+M. Diario privado de indicadores Registra tendencias de variables
+observables, con consentimiento y procesamiento local. Hay que
+distinguir correlaciones de conclusiones médicas.
+
+4.  POSIBLES ÁREAS DE INVESTIGACIÓN MENCIONADAS
+
+-   Párkinson: movimiento, velocidad de golpeteo de dedos y
+    características de la voz.
+-   Accidente cerebrovascular (ACV): asimetría facial, debilidad de un
+    brazo y alteraciones del habla; los síntomas repentinos requieren
+    atención urgente, no una prueba lúdica.
+-   Deterioro cognitivo: memoria y orientación espacial.
+-   Atención e impulsividad: respuestas ante estímulos que requieren
+    actuar o inhibirse.
+-   Lectura: errores y patrones oculares, sin asumir que el seguimiento
+    ocular por sí solo diagnostica dislexia.
+-   Autismo: investigación de patrones de mirada en tareas específicas;
+    no inferir diagnóstico individual a partir de una app.
+-   Conmoción cerebral: seguimiento ocular y otros signos, siempre como
+    apoyo y no como sustituto de evaluación médica.
+
+5.  CRITERIO PARA ESCOGER Para un concurso corto, conviene priorizar una
+    demostración comprensible, datos que se puedan obtener legalmente,
+    una función concreta y un prototipo viable. Una visualización de
+    datos científicos puede ser más defendible que una afirmación médica
+    ambiciosa que no pueda validarse.
