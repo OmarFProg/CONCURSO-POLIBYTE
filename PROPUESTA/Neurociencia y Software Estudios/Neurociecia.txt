@@ -1,5 +1,7 @@
 Neurociencia: teoría, patologías neurológicas en Latinoamérica y estudios en Ecuador
-Esta investigación está orientada al Polibyte Innovation Challenge 2026, especialmente a la categoría Neurociencias y al desarrollo de una aplicación como Yuyay, que utiliza minijuegos, visión por computador y análisis de indicadores motores y cognitivos.
+Esta investigación está orientada al Polibyte Innovation Challenge 2026, 
+especialmente a la categoría Neurociencias y al desarrollo de una aplicación, 
+que utiliza minijuegos, visión por computador y análisis de indicadores motores y cognitivos.
 
 La idea es comprender tres aspectos: qué estudia la neurociencia, cuáles son los problemas neurológicos más relevantes en Latinoamérica y qué investigaciones realizadas en Ecuador podrían servir como fundamento científico para un proyecto de programación.
 1. Fundamentos teóricos de la neurociencia

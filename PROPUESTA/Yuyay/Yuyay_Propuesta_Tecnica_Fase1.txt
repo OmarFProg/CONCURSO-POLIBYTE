@@ -1,0 +1,155 @@
+ESCUELA SUPERIOR POLITÉCNICA DE CHIMBORAZO
+FACULTAD DE INFORMÁTICA Y ELECTRÓNICA · CARRERA DE SOFTWARE
+CLUB ACADÉMICO POLIBYTE
+PROPUESTA TÉCNICA FASE 1
+PoliByte Innovation Challenge 2026
+I DATOS GENERALES DEL PROYECTO Y TEMÁTICA
+
+[TABLA]
+Campo | Información
+Proyecto | Yuyay tamizaje neurológico con minijuegos
+Categoría principal | Neurociencias
+Equipo | Los JackersMainsters
+[/TABLA]
+
+
+Yuyay propone un prototipo experimental para registrar 
+medidas de coordinación motora, 
+estabilidad, 
+expresión facial, 
+voz, 
+memoria espacial y 
+atención. Su relación con Neurociencias está en los procesos que explora; la visión por computador es el medio de medición. El MVP no acreditará capacidad diagnóstica ni de tamizaje clínico.
+II NÓMINA DE INTEGRANTES DEL EQUIPO
+
+[TABLA]
+Rol | Nombres y apellidos | Institución y nivel | Correo electrónico
+Líder | Alexander Rafael Villalva Dumancela | ESPOCH - Ingeniería de Software - Octavo semestre | alexander.villalva@espoch.edu.ec
+Miembro | Andres Alexander Gaibor Apunte | ESPOCH - Ingeniería de Software - Octavo semestre | andresa.gaibor@espoch.edu.ec
+Miembro | Omar Santiago Figueroa Diaz | ESPOCH - Ingeniería de Software - Octavo semestre | omar.figueroa@espoch.edu.ec
+[/TABLA]
+
+
+1 PLANTEAMIENTO DE LA PROBLEMÁTICA Y PROPUESTA DE VALOR
+Problema y beneficiarios
+La observación de movimientos, expresión y desempeño cognitivo requiere instrucciones claras 
+y un registro consistente. Las tareas manuales y los juegos digitales aislados dificultan 
+reunir mediciones comparables en una sola sesión. 
+El equipo plantea estudiar si un portátil común puede facilitar esta captura mediante actividades breves y comprensibles.
+Los usuarios iniciales serán adultos voluntarios acompañados por el equipo en un entorno académico. 
+Los beneficiarios potenciales, tras validación posterior, 
+    serían profesionales de salud y adultos mayores. 
+    La necesidad inmediata es obtener registros trazables, comunicar errores de captura 
+    y explicar los límites de las mediciones sin atribuir enfermedades a los participantes.
+
+Propuesta de valor y flujo de uso
+Yuyay reunirá cinco minijuegos con cámara, micrófono y teclado en una PWA en español. Aportará un flujo común de instrucciones, controles de calidad, resultados por dimensión y exportación de un informe. El procesamiento será local; tras instalar y verificar los recursos necesarios, funcionará sin conexión y sin servicios externos de inferencia.
+La sesión comenzará con consentimiento y prueba de dispositivos. El usuario completará los juegos y recibirá valores con unidades, calidad de captura y una explicación mediante plantillas. No se mostrarán probabilidades de enfermedad, rangos normales por edad ni semáforos clínicos sin evidencia que los sustente. Una captura insuficiente se indicará como no evaluable y podrá repetirse.
+
+[TABLA]
+Minijuego | Función demostrable y salida
+La pinza | Abrir y cerrar pulgar e índice por mano; contar ciclos y registrar amplitud normalizada y variación del ritmo.
+Sostén la bandeja | Mantener manos y brazos visibles estando sentado; registrar desplazamiento y estabilidad. La frecuencia oscilatoria se contrastará con señales sintéticas.
+Sonríe y habla | Comparar posiciones faciales relativas al sonreír y registrar duración e intensidad relativa de una vocal. No identificar disartria ni enfermedad.
+El vuelo del cóndor | Recordar tres ubicaciones y recorrer un mapa 2D; registrar aciertos, tiempo y longitud de recorrido.
+Semáforo | Responder a un estímulo y omitir otro, distinguidos también por forma; registrar latencia, omisiones y respuestas incorrectas.
+[/TABLA]
+
+
+2 COMPONENTE DE INNOVACIÓN E INTELIGENCIA ARTIFICIAL
+La innovación propuesta es integrar tareas motoras y cognitivas 
+    con medición local y control de calidad en una batería accesible. 
+    El fundamento neurocientífico es la exploración del 
+        control motor, 
+        coordinación, 
+        memoria espacial, 
+        atención e 
+        inhibición. 
+    
+    Estas tareas no son equivalentes a escalas clínicas ni permiten inferir por sí solas una enfermedad [2].
+    MediaPipe aportará modelos preentrenados para localizar puntos de manos, rostro y postura [1]. 
+    Frente a un registro manual de coordenadas, 
+    permitirá extraer trayectorias durante la interacción. 
+    Algoritmos deterministas calcularán ciclos, distancias, tiempos y simetría geométrica. 
+    Se documentarán versiones y configuración y se compararán las salidas con conteos manuales y secuencias de referencia.
+Para ajustarnos a la disponibilidad del equipo, el MVP no incluirá un modelo generativo, 
+entrenamiento de un clasificador de voz ni un escenario 3D. 
+El informe usará plantillas vinculadas a las métricas. 
+La precisión diagnóstica y la interpretación clínica quedan fuera de las conclusiones de esta fase.
+
+3 ARQUITECTURA DEL SISTEMA Y STACK TECNOLÓGICO LIBRE
+
+Figura 1 Arquitectura de Yuyay como PWA local y offline
+La PWA ejecutará los juegos, MediaPipe y el análisis de audio en el navegador. 
+El motor de métricas utilizará Web Workers para evitar bloquear la interfaz. 
+IndexedDB, mediante Dexie.js, conservará las sesiones autorizadas. 
+El service worker y Cache Storage permitirán utilizar la aplicación y los modelos precargados sin conexión. 
+Bun y Vite se emplearán para desarrollo y compilación; 
+no se requiere un servidor durante el uso. La instalación inicial deberá completar y verificar la descarga de recursos.
+Selección del stack
+
+[TABLA]
+Capa | Herramientas y justificación
+Interfaz | React, TypeScript y Vite; juegos con Canvas o SVG e interfaz accesible.
+Lógica y cálculo | TypeScript y Web Workers; métricas independientes y pruebas reproducibles.
+Visión y audio | MediaPipe Tasks Vision y Web Audio API; captura y procesamiento local.
+Persistencia | IndexedDB con Dexie.js; sesiones, métricas y calidad. Sin conservar audio ni video.
+PWA y desarrollo | Service worker con Workbox y Cache Storage para recursos offline. Bun para dependencias y comandos; Vite para compilación.
+[/TABLA]
+
+
+Equipos y condiciones de ejecución
+Recursos declarados: MacBook Air M1; PC con procesador identificado por el equipo como Ryzen 5 9600X y 16 GB de RAM; equipos de Omar: portátil ASUS (Intel Core i5-7200U, 12 GB RAM DDR4, Intel HD Graphics 620, SSD 480 GB) y PC de escritorio (Intel Core i5-6400, 8 GB RAM DDR3, NVIDIA GT 710). La denominación exacta del Ryzen y los dispositivos de captura se comprobarán en la primera semana. No se asume GPU dedicada. Se elegirá el equipo de demostración según mediciones de rendimiento y disponibilidad de cámara y micrófono.
+
+Validación técnica y criterios medibles
+Las siguientes cifras son metas propuestas, no resultados obtenidos. Las pruebas iniciales usarán señales sintéticas, secuencias de prueba y revisión manual. El reclutamiento de voluntarios y la revisión por profesionales de salud están pendientes de gestión; cualquier estudio con personas requerirá consentimiento y revisión institucional cuando corresponda. No se calcularán sensibilidad ni especificidad clínicas con esta evidencia.
+
+[TABLA]
+Prueba | Criterio propuesto
+Pinza y métricas faciales | Error de conteo de ciclos ≤10 % en 10 secuencias anotadas; verificar simetría con puntos sintéticos conocidos y tolerancia numérica documentada.
+Oscilación de referencia | Error de frecuencia ≤0,5 Hz en señales sintéticas de 3, 5 y 8 Hz con marcas de tiempo. Probar aparte el efecto del muestreo irregular de cámara.
+Cóndor y Semáforo | Aciertos y errores coincidentes con el 100 % de guiones automatizados. El tiempo representa respuesta del sistema completo, sin atribuir precisión clínica.
+Condiciones difíciles | Detectar y comunicar todos los fallos del conjunto declarado: permiso denegado, mano o rostro ausente y micrófono sin señal. No emitir métricas de captura inválida.
+Rendimiento y flujo | Meta ≥20 fotogramas/s en el módulo visual activo; registrar modelo, resolución y equipo. Completar cinco juegos y perfil en ≤6 minutos bajo condiciones de prueba.
+Funcionamiento local | Ejecutar el flujo con red desconectada tras instalar recursos; comprobar ausencia de peticiones externas y exportación de resultados.
+[/TABLA]
+
+
+Alcance y viabilidad en cinco semanas
+Se interpreta una dedicación de 6 horas semanales por integrante: 
+18 horas de equipo por semana y 90 horas en total. 
+Esta estimación exige versiones mínimas de los cinco juegos. 
+El tiempo de gestión con voluntarios se revisará al disponer de acceso; 
+no se compromete una muestra clínica.
+
+[TABLA]
+Semana | Entregable | Horas de equipo
+1 | Estructura React y Bun, PWA, dispositivos, prueba de MediaPipe y protocolo. | 18
+2 | La pinza y Semáforo con métricas y pruebas unitarias. | 18
+3 | Bandeja y Sonríe y habla en su versión básica. | 18
+4 | Cóndor 2D, perfil, almacenamiento e integración del flujo. | 18
+5 | Pruebas de error, rendimiento, ejecución local, documentación y ensayo. | 18
+[/TABLA]
+
+
+Distribución provisional: Alexander coordinará e integrará persistencia, informes y soporte offline; 
+Andrés desarrollará visión y métricas; 
+Omar implementará interfaz, Cóndor y Semáforo. 
+
+Todos revisarán los módulos y prepararán la defensa. 
+El repositorio documentará modelos, licencias, resultados y ejecución; 
+se respetará el congelamiento del 25 de noviembre establecido en las bases [3].
+Límites y riesgos. 
+Iluminación, encuadre, micrófono y latencia afectan los valores. 
+No se establecerán umbrales de salud con datos simulados ni se prometerá detección de 
+ACV, 
+párkinson o 
+deterioro cognitivo. 
+
+La ampliación clínica requerirá asesoría y validación posteriores.
+Si las pruebas iniciales revelan retrasos, el equipo revisará y comunicará el alcance antes de comprometer 
+funciones adicionales.
+Referencias
+[1] Google AI Edge. MediaPipe Tasks Vision para Web: guías Hand, Face y Pose Landmarker. developers.google.com/edge/mediapipe/solutions/vision
+[2] Parkinson’s Foundation. Getting Diagnosed. parkinson.org/understanding-parkinsons/getting-diagnosed
+[3] Club Académico PoliByte. Bases oficiales del PoliByte Innovation Challenge 2026, secciones 6.1, 7 y Anexo A.

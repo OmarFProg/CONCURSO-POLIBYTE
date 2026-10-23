@@ -1,0 +1,54 @@
+medidas de coordinación motora,(neurociencia, neurologia)
+
+para cada subtiguiente topico, en terminos de neurociencia y neurologia y yuyay
+    que se evalua?, a que estudio corresponde
+        expresión facial
+        voz
+        atención
+        que se evalua
+
+quienes son potenciales usuarios: 
+usuarios directo: medicos, de que areas?
+    usuarios indirectos
+
+diagrama funcional/tecnologico del sistema propuesto y
+    de cada uno de los juestos
+
+Se conoce el motor que se utilizara?
+se conoce el escenario de despliegue
+
+definir en terminos de neurociencias, 
+    control motor, 
+    coordinación, 
+    memoria espacial, 
+    atención e 
+    inhibición.
+patologias relacionadas, 
+    formas de deteccion 
+
+    MediaPipe
+    service worker y Cache Storage
+    Bun y Vite
+    MediaPipe Tasks Vision y Web Audio API
+    Persistencia | IndexedDB con Dexie.js; sesiones, métricas y calidad. Sin conservar audio ni video.
+
+acalaraciones
+    el MVP no incluirá un modelo generativo
+    entrenamiento de un clasificador de voz 
+    un escenario 3D.
+
+    La precisión diagnóstica y la interpretación clínica quedan fuera de las conclusiones de esta fase.
+
+plantillas vinculadas a las métricas
+    cuales on, dar ejemplos
+
+
+objeto:
+    El vuelo del cóndor | Recordar tres ubicaciones y recorrer un mapa 2D; registrar aciertos, tiempo y longitud de recorrido(ampliar, ilustrar textualmente)
+    Semáforo | Responder a un estímulo y omitir otro, distinguidos también por forma; registrar latencia, omisiones y respuestas incorrectas.(ampliar, ilustrar textualmente)
+[/TABLA]
+
+Cóndor y Semáforo
+
+
+

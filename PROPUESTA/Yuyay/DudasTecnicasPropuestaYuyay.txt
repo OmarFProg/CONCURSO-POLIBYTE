@@ -1,0 +1,1010 @@
+================================================================================
+DOCUMENTO DE RESOLUCIÓN DE DUDAS TÉCNICAS Y DEFINICIONES NEUROCIENTÍFICAS
+PROYECTO: YUYAY — TAMIZAJE NEUROLÓGICO CON MINIJUEGOS (PROPUESTA FASE 1)
+EQUIPO: Los JackersMainsters (ESPOCH)
+================================================================================
+
+ÍNDICE DE CONTENIDOS
+1. Medidas evaluadas por dimensión: Neurociencia, Neurología, Estudios de Referencia y Yuyay
+2. Potenciales Usuarios: Directos (Áreas Médicas) e Indirectos
+3. Diagrama Funcional y Tecnológico del Sistema y de cada Minijuego
+4. Motor del Sistema y Escenario de Despliegue
+5. Glosario Neurocientífico: Definiciones, Patologías y Formas de Detección
+6. Definiciones del Stack Tecnológico (MediaPipe, Web Audio, PWA, Bun/Vite, Dexie.js)
+7. Aclaraciones de Alcance del MVP y Límites Clínicos
+8. Plantillas Vinculadas a las Métricas: Estructura y Ejemplos Concretos
+9. Ampliación e Ilustración Textual Detallada: "El vuelo del cóndor" y "Semáforo"
+10. Referencias Científicas y Técnicas Validadas
+
+================================================================================
+1. MEDIDAS EVALUADAS POR DIMENSIÓN (NEUROCIENCIA, NEUROLOGÍA, ESTUDIOS Y YUYAY)
+================================================================================
+
+A continuación se detalla qué proceso explora cada dimensión, cómo se interpreta
+en neurociencia y neurología clínica, a qué escala o estudio científico validado
+corresponde y qué registra exactamente el prototipo Yuyay.
+
+--------------------------------------------------------------------------------
+1.1. COORDINACIÓN MOTORA FINA Y CONTROL POSTURAL ("La pinza" y "Sostén la bandeja")
+--------------------------------------------------------------------------------
+* ¿Qué se evalúa en Neurociencia y Neurología?
+  - En "La pinza": Se evalúa la destreza motora fina distal, la velocidad de
+    ejecución repetitiva, la regularidad del ritmo y el fenómeno de "decremento"
+    (reducción progresiva de la amplitud o velocidad conforme avanza la tarea),
+    así como la asimetría intermanual. En neurología, la lentitud del movimiento
+    voluntario y la caída progresiva de su amplitud se denomina BRADICINESIA
+    (e hipocinesia), mediada por los circuitos de los ganglios basales y la vía
+    nigroestriatal dopaminérgica.
+  - En "Sostén la bandeja": Se evalúa el mantenimiento del tono postural antigravitatorio
+    de las extremidades superiores (vía corticoespinal y propiocepción) y la
+    presencia de oscilaciones involuntarias rítmicas (temblor postural o de
+    reposo), moduladas por redes cerebelo-tálamo-corticales y ganglios basales.
+
+* ¿A qué estudio o escala clínica corresponde?
+  - "La pinza" corresponde al Ítem 3.4 (Finger Tapping / Golpeteo de dedos) de
+    la escala clínica estándar MDS-UPDRS Parte III (Movement Disorder Society -
+    Unified Parkinson's Disease Rating Scale) [Goetz et al., 2008], y a su
+    adaptación digital mediante visión por computador validada con MediaPipe
+    Hands [Kasemsap et al., PLOS ONE, 2025] y la prueba SMART (Slow Motion
+    Analysis of Repetitive Tapping) [medRxiv, 2021].
+  - "Sostén la bandeja" corresponde a:
+    a) La prueba de deriva pronadora / caída de brazo (ítem motor de la escala
+       NIHSS e ítem "A" - Arm - del protocolo de tamizaje de ACV BE-FAST)
+       [Aroor et al., Stroke, 2017].
+    b) Los ítems 3.15 (Temblor postural de las manos) y 3.17 (Amplitud del
+       temblor de reposo) de la MDS-UPDRS, y estudios de diferenciación espectral
+       de frecuencias de temblor (4-6 Hz en párkinson vs. 5-12 Hz en temblor
+       esencial/fisiológico) [Zhang et al., 2017].
+
+* ¿Qué evalúa y registra Yuyay?
+  - En "La pinza": Localiza los puntos (landmarks) de la punta del pulgar (4) y
+    del índice (8) normalizados por el tamaño de la palma; cuenta los ciclos de
+    apertura/cierre por mano, mide la amplitud media normalizada y calcula el
+    coeficiente de variación del intervalo entre ciclos (ritmo).
+  - En "Sostén la bandeja": Registra el desplazamiento vertical y horizontal de
+    muñecas y brazos (estabilidad postural) y estima la frecuencia oscilatoria
+    dominante mediante transformada rápida de Fourier (FFT) sobre la serie
+    temporal de coordenadas (contrastada con señales sintéticas de 3, 5 y 8 Hz).
+
+--------------------------------------------------------------------------------
+1.2. EXPRESIÓN FACIAL ("Sonríe y habla" — Componente Visual)
+--------------------------------------------------------------------------------
+* ¿Qué se evalúa en Neurociencia y Neurología?
+  - Se evalúa la integridad y simetría de la inervación motora facial (nervio
+    craneal VII / facial y su control cortical motor contralateral), así como la
+    amplitud de la mímica voluntaria.
+  - En neurología clínica se buscan dos signos principales:
+    1) Paresia facial central (asimetría de la mitad inferior del rostro al
+       sonreír, donde una comisura labial se eleva menos que la otra), signo
+       cardinal de isquemia o lesión en la corteza motora o cápsula interna.
+    2) Hipomimia ("fascies de máscara"): reducción global de la expresividad y
+       amplitud de movimientos faciales y parpadeo por disfunción de ganglios
+       basales.
+
+* ¿A qué estudio o escala clínica corresponde?
+  - Signo "F" (Face / Rostro) de la escala prehospitalaria BE-FAST para detección
+    temprana de Accidente Cerebrovascular (ACV) [Aroor et al., Stroke, 2017] e
+    ítem 4 (Parálisis facial) de la escala NIHSS (National Institutes of Health
+    Stroke Scale).
+  - Ítem 3.2 (Expresión facial / Hipomimia) de la escala MDS-UPDRS Parte III
+    [Goetz et al., 2008].
+
+* ¿Qué evalúa y registra Yuyay?
+  - Utiliza MediaPipe Face Landmarker (malla facial de 478 puntos) para comparar
+    las posiciones geométricas relativas de las comisuras labiales (izquierda vs.
+    derecha respecto al eje medio facial) en reposo y durante la sonrisa,
+    reportando un índice geométrico de simetría y desplazamiento relativo.
+
+--------------------------------------------------------------------------------
+1.3. VOZ Y FONACIÓN ("Sonríe y habla" — Componente Acústico)
+--------------------------------------------------------------------------------
+* ¿Qué se evalúa en Neurociencia y Neurología?
+  - Se evalúa la coordinación fonorrespiratoria y el control neuromuscular fino
+    de la laringe, cuerdas vocales y tracto articulatorio (nervios craneales X
+    vago, IX glosofaríngeo y XII hipogloso, modulados por ganglios basales,
+    cerebelo y corteza motora bulbar).
+  - En neurología, las alteraciones incluyen:
+    1) Hipofonía (disminución del volumen/intensidad vocal) y fonación breve o
+       inestable (disfonía hipocinética típica de la enfermedad de Parkinson).
+    2) Disartria (alteración en la articulación y control motor del habla por
+       ACV o trastornos neurodegenerativos).
+
+* ¿A qué estudio o escala clínica corresponde?
+  - Pruebas de fonación sostenida de la vocal /a/ empleadas en el Oxford
+    Parkinson's Disease Detection Dataset (UCI Machine Learning Repository)
+    [Little et al., IEEE TBME, 2009], el corpus en español PC-GITA [Orozco-Arroyave
+    et al., LREC, 2014], el ítem 3.1 (Habla) de la MDS-UPDRS y el signo "S"
+    (Speech) de la escala BE-FAST.
+
+* ¿Qué evalúa y registra Yuyay?
+  - En el alcance del MVP Fase 1, captura mediante Web Audio API la emisión
+    sostenida de una vocal y registra dos métricas físicas directas y trazables:
+    1) Duración continua de la fonación (en segundos).
+    2) Intensidad relativa (nivel RMS en decibelios relativos a escala completa,
+       dBFS, y su estabilidad).
+  - Aclaración explícita de alcance: El MVP registra estas variables acústicas
+    objetivas sin afirmar la identificación clínica de disartria ni diagnosticar
+    enfermedad.
+
+--------------------------------------------------------------------------------
+1.4. MEMORIA ESPACIAL Y ORIENTACIÓN ("El vuelo del cóndor")
+--------------------------------------------------------------------------------
+* ¿Qué se evalúa en Neurociencia y Neurología?
+  - Se evalúa la memoria de trabajo visoespacial, la codificación alocéntrica
+    (construcción de un mapa cognitivo del entorno) y la navegación orientada a
+    metas. Estos procesos dependen críticamente del hipocampo (células de lugar),
+    la corteza entorrinal (células de cuadrícula o "grid cells"), la corteza
+    retrosplenial y la corteza parietal posterior.
+  - En neurología, la desorientación topográfica y la pérdida de eficiencia al
+    navegar rutas son marcadores preclínicos tempranos del deterioro cognitivo
+    leve (DCL) y de la enfermedad de Alzheimer, dado que la patología tau y el
+    daño sináptico comienzan en la corteza entorrinal e hipocampo años antes de
+    los fallos severos de memoria episódica verbal.
+
+* ¿A qué estudio o escala clínica corresponde?
+  - Al paradigma de navegación espacial digital del proyecto global "Sea Hero
+    Quest" [Coutrot et al., Current Biology, 2018; Coughlan et al., PNAS, 2019],
+    que demostró que la longitud y eficiencia de la trayectoria distinguen el
+    envejecimiento normal del riesgo genético (APOE ε4) de enfermedad de
+    Alzheimer, así como a pruebas clásicas de memoria visoespacial (Corsi
+    Block-Tapping Task).
+
+* ¿Qué evalúa y registra Yuyay?
+  - Presenta brevemente tres ubicaciones objetivo en un mapa 2D, las oculta y
+    solicita al usuario recorrer el mapa hacia dichas ubicaciones en orden.
+    Registra: número de aciertos (ubicaciones alcanzadas en orden), tiempo de
+    resolución (en segundos) y longitud total del recorrido comparada con la
+    distancia euclidiana óptima.
+
+--------------------------------------------------------------------------------
+1.5. ATENCIÓN E INHIBICIÓN DE RESPUESTA ("Semáforo")
+--------------------------------------------------------------------------------
+* ¿Qué se evalúa en Neurociencia y Neurología?
+  - Se evalúa la atención sostenida (vigilancia), la velocidad de procesamiento
+    visomotor y el control inhibitorio (capacidad ejecutiva de frenar o suprimir
+    una respuesta motora automática o prepotente ante un estímulo de parada).
+  - Neuroanatómicamente depende de la red fronto-estriatal, en particular del
+    giro frontal inferior derecho (rIFG / corteza prefrontal ventrolateral), el
+    área motora presuplementaria (pre-SMA), la corteza prefrontal dorsolateral
+    (DLPFC) y la corteza cingulada anterior (ACC, detección de conflicto y error).
+
+* ¿A qué estudio o escala clínica corresponde?
+  - Al paradigma neuropsicológico clásico Go/No-Go (Ir / No-Ir) [Konishi et al.,
+    Journal of Neuroscience, 1998; Chikazoe, Current Opinion in Neurology, 2010;
+    Aron et al., Trends in Cognitive Sciences, 2014; Parametric Go/No-Go Test,
+    Bezdjian et al., 2014] y a subpruebas de función ejecutiva como la Batería
+    de Evaluación Frontal (FAB - Frontal Assessment Battery, subprueba de
+    control inhibitorio Go/No-Go) [Dubois et al., Neurology, 2000].
+
+* ¿Qué evalúa y registra Yuyay?
+  - Presenta estímulos visuales diferenciados tanto por color como por forma
+    geométrica (para evitar sesgos por daltonismo). El usuario debe presionar una
+    tecla ante el estímulo "Go" y abstenerse de presionar ante el estímulo
+    "No-Go". Yuyay registra:
+    1) Latencia de respuesta (tiempo de reacción en milisegundos en ensayos Go).
+    2) Errores de omisión (no responder al estímulo Go -> indicador de inatención).
+    3) Errores de comisión / respuestas incorrectas (responder al estímulo No-Go
+       -> indicador de fallo en la inhibición / impulsividad motora).
+
+
+================================================================================
+2. POTENCIALES USUARIOS: DIRECTOS E INDIRECTOS
+================================================================================
+
+El proyecto distingue claramente entre los usuarios de la Fase 1 (entorno
+académico controlado) y los usuarios potenciales tras una validación clínica
+posterior:
+
+2.1. USUARIOS EN LA FASE ACTUAL (MVP / FASE 1)
+* Operadores de prueba: Los propios integrantes del equipo investigador en un
+  entorno académico controlado (ESPOCH).
+* Participantes iniciales: Adultos voluntarios sanos acompañados por el equipo,
+  bajo consentimiento informado previo, más pruebas con señales sintéticas y
+  secuencias de referencia anotadas.
+
+2.2. USUARIOS DIRECTOS POTENCIALES (OPERADORES PROFESIONALES TRAS VALIDACIÓN)
+Son los profesionales que administran la batería, supervisan la calidad de
+captura e interpretan el informe técnico estandarizado:
+1) Médicos de Atención Primaria y Medicina Familiar / Comunitaria:
+   - Especialmente en centros de salud de primer nivel y zonas rurales (como
+     médicos rurales del MSP en provincias sin neurólogos disponibles), quienes
+     necesitan instrumentos objetivos y rápidos para documentar signos motores o
+     cognitivos y decidir una referencia oportuna al segundo o tercer nivel.
+2) Médicos Neurólogos:
+   - Para el seguimiento longitudinal cuantitativo de pacientes (p. ej.,
+     comparar la evolución de ciclos de pinza, estabilidad postural o tiempos de
+     reacción entre consultas sucesivas con métricas trazables).
+3) Médicos Geriatras:
+   - En la valoración geriátrica integral (evaluación funcional motora y
+     cognitiva periódica del adulto mayor).
+4) Neuropsicólogos y Psicólogos Clínicos:
+   - Como apoyo digital estandarizado en la exploración de atención sostenida,
+     control inhibitorio (Go/No-Go) y memoria visoespacial.
+5) Fisioterapeutas, Terapeutas Ocupacionales y Fonoaudiólogos (Terapeutas del
+   Lenguaje):
+   - Para registrar medidas objetivas de rehabilitación motora fina, control
+     postural de miembros superiores y duración/intensidad de fonación.
+6) Personal de Enfermería Comunitaria y Promotores de Salud:
+   - En campañas preventivas de salud pública para guiar la captura estandarizada.
+
+2.3. USUARIOS INDIRECTOS / BENEFICIARIOS FINALES
+1) Adultos mayores y población en riesgo:
+   - Personas que interactúan con los cinco minijuegos a través de una interfaz
+     amigable, accesible y en español, beneficiándose de una captura no invasiva,
+     breve (<= 6 minutos) y sin desplazamiento a hospitales distantes.
+2) Familiares y cuidadores:
+   - Quienes acompañan al participante y reciben explicaciones claras sobre qué
+     se midió y cuáles son los límites de la prueba.
+3) Investigadores académicos en Neurociencias e Ingeniería Biomédica/Software:
+   - Que disponen de una plataforma local y reproducible para capturar variables
+     cinemáticas, acústicas y de tiempo de reacción sin depender de hardware
+     especializado costoso.
+
+
+================================================================================
+3. DIAGRAMA FUNCIONAL Y TECNOLÓGICO DEL SISTEMA Y DE CADA MINIJUEGO
+================================================================================
+
+3.1. DIAGRAMA FUNCIONAL Y TECNOLÓGICO GENERAL DE YUYAY (PWA LOCAL Y OFFLINE)
+--------------------------------------------------------------------------------
+
++------------------------------------------------------------------------------+
+|                  DISPOSITIVOS DE ENTRADA (PORTÁTIL COMÚN)                    |
+|     [ Cámara Web ]              [ Micrófono ]          [ Teclado / Ratón ]   |
++-----------+---------------------------+-------------------------+------------+
+            |                           |                         |
+            v                           v                         v
++------------------------------------------------------------------------------+
+|               NAVEGADOR WEB — APLICACIÓN WEB PROGRESIVA (PWA)                |
+|                                                                              |
+|  1. CAPA DE INTERFAZ Y FLUJO (React + TypeScript + Canvas/SVG)               |
+|     [Consentimiento] -> [Prueba de Dispositivos] -> [5 Minijuegos] -> [Vista]|
+|                                                                              |
+|  2. CAPA DE CAPTURA Y MODELOS PREENTRENADOS (Ejecución Local)                |
+|     +-----------------------------------+  +------------------------------+  |
+|     | MediaPipe Tasks Vision (WASM/GPU) |  | Web Audio API (AudioContext) |  |
+|     | - Hand Landmarker (21 pts/mano)   |  | - AnalyserNode / PCM Buffer  |  |
+|     | - Face Landmarker (478 pts)       |  | - Nivel RMS y detección voz  |  |
+|     | - Pose Landmarker (33 pts)        |  +--------------+---------------+  |
+|     +-----------------+-----------------+                 |                  |
+|                       | (Coordenadas + Timestamps)        | (Muestras Audio) |
+|                       v                                   v                  |
+|  3. CAPA DE LÓGICA, CONTROL DE CALIDAD Y CÁLCULO (Web Workers + TypeScript)  |
+|     +---------------------------------------------------------------------+  |
+|     | - Validador de Calidad: encuadre, presencia de mano/rostro, señal   |  |
+|     |   de micrófono y tasa de fotogramas (FPS >= 20).                    |  |
+|     | - Algoritmos Deterministas: conteo de ciclos, amplitud normalizada, |  |
+|     |   FFT (frecuencia oscilatoria), simetría geométrica, latencia y     |  |
+|     |   longitud de trayectoria 2D.                                       |  |
+|     | - Motor de Plantillas: vincula métricas + calidad -> texto claro.   |  |
+|     +----------------------------------+----------------------------------+  |
+|                                        | (Solo métricas numéricas y estado;  |
+|                                        |  NUNCA se guarda video ni audio)    |
+|                                        v                                     |
+|  4. CAPA DE PERSISTENCIA Y SOPORTE OFFLINE                                   |
+|     +----------------------------------+  +-------------------------------+  |
+|     | IndexedDB con Dexie.js           |  | Service Worker (Workbox) +    |  |
+|     | - Sesiones autorizadas           |  | Cache Storage                 |  |
+|     | - Métricas por juego y calidad   |  | - Precarga de App + Modelos   |  |
+|     | - Exportación de informe (JSON/  |  |   .task para uso 100% offline |  |
+|     |   vista imprimible)              |  +-------------------------------+  |
+|     +----------------------------------+                                     |
++------------------------------------------------------------------------------+
+  * Desarrollo y Empaquetado (Tiempo de compilación): Bun + Vite (sin servidor
+    de inferencia externo durante el uso).
+
+
+3.2. DIAGRAMAS FUNCIONALES DE CADA UNO DE LOS 5 MINIJUEGOS
+--------------------------------------------------------------------------------
+
+A) MINIJUEGO 1: "LA PINZA" (Coordinación motora fina bimanual)
+   [Cámara Web]
+        | (Frames de video)
+        v
+   [MediaPipe Hand Landmarker] --> Extrae 21 puntos 3D/2D por mano
+        |
+        v
+   [Control de Calidad] --> ¿Mano completa en cuadro y FPS suficientes?
+        |-- No --> Marcar captura "No evaluable" y solicitar repetir
+        |-- Sí (Por cada mano: derecha e izquierda)
+        v
+   [Web Worker: Cálculo Cinemático]
+     1. Distancia d(t) = ||Punto_4 (Pulgar) - Punto_8 (Índice)||
+     2. Normalización: d_norm(t) = d(t) / ||Punto_0 (Muñeca) - Punto_9 (MCP Medio)||
+     3. Detección de picos y valles en d_norm(t)
+        |
+        v
+   [Salidas Registradas] -> Ciclos totales, Amplitud media normalizada,
+                            Variación del ritmo (CV de intervalos).
+
+B) MINIJUEGO 2: "SOSTÉN LA BANDEJA" (Estabilidad postural y oscilación)
+   [Cámara Web]
+        | (Frames de video con marcas de tiempo t_i)
+        v
+   [MediaPipe Pose + Hand Landmarker] --> Posición de hombros, codos y muñecas
+        |
+        v
+   [Control de Calidad] --> ¿Ambos brazos y manos visibles en encuadre?
+        |-- No --> Indicar pérdida de encuadre y permitir repetir
+        |-- Sí
+        v
+   [Web Worker: Estabilidad y Espectro]
+     1. Desplazamiento vertical/horizontal respecto a posición inicial (deriva)
+     2. Desviación estándar de posición (índice de estabilidad)
+     3. Remuestreo uniforme + Ventana Hann + FFT -> Frecuencia pico (Hz)
+        |
+        v
+   [Salidas Registradas] -> Desplazamiento (deriva), Estabilidad postural,
+                            Frecuencia oscilatoria estimada (Hz).
+
+C) MINIJUEGO 3: "SONRÍE Y HABLA" (Simetría facial geométrica y voz sostenida)
+   [Cámara Web]                              [Micrófono]
+        |                                         |
+        v                                         v
+   [MediaPipe Face Landmarker (478 pts)]     [Web Audio API (AnalyserNode)]
+        |                                         |
+        v                                         v
+   [Control Calidad: Rostro centrado]        [Control Calidad: Señal > umbral ruido]
+        |                                         |
+        v                                         v
+   [Cálculo de Simetría Geométrica]          [Cálculo Acústico Determinista]
+     - Eje medio facial (puente nasal-mentón)  - Detección de inicio/fin de vocal
+     - Comparación de distancia/elevación      - Duración continua (s)
+       de comisuras labiales (izq vs der)      - Intensidad relativa media (dBFS)
+        \                                         /
+         +-------------------+-------------------+
+                             |
+                             v
+   [Salidas Registradas] -> Razón de simetría facial al sonreír, Duración de
+                            vocal (s) e Intensidad relativa (dBFS).
+
+D) MINIJUEGO 4: "EL VUELO DEL CÓNDOR" (Memoria espacial en mapa 2D)
+   [Pantalla Canvas/SVG 2D] + [Teclado / Ratón]
+        |
+        v
+   [Fase 1: Codificación] --> Muestra mapa 2D con punto inicial P0 y 3 objetivos
+                              (O1, O2, O3) durante tiempo controlado.
+        |
+        v
+   [Fase 2: Recorrido]    --> Se ocultan los marcadores; el usuario desplaza al
+                              cóndor por el mapa 2D hacia O1 -> O2 -> O3.
+        |
+        v
+   [Cálculo de Trayectoria]
+     - Verifica proximidad a cada objetivo O_k (acierto si d <= radio_umbral)
+     - Suma segmentos recorridos: L_real = sum(||p(t_i) - p(t_{i-1})||)
+     - Calcula tiempo total desde inicio hasta finalizar los 3 puntos
+        |
+        v
+   [Salidas Registradas] -> Aciertos (0 a 3), Tiempo total (s), Longitud de
+                            recorrido (px / unidades normalizadas) y eficiencia.
+
+E) MINIJUEGO 5: "SEMÁFORO" (Atención sostenida e inhibición Go/No-Go)
+   [Generador de Estímulos (Canvas/SVG)] + [Teclado / Pantalla]
+        |
+        v
+   [Secuencia de Ensayos con marcas performance.now()]
+     - Estímulo GO (ej. Círculo Verde): Usuario DEBE presionar barra espaciadora
+     - Estímulo NO-GO (ej. Octágono/Triángulo Rojo): Usuario NO DEBE presionar
+        |
+        v
+   [Evaluador Determinista de Eventos]
+     - GO + Presiona a tiempo    -> Acierto Go; registra Latencia = t_key - t_stim
+     - GO + No presiona          -> Error de Omisión (Inatención)
+     - NO-GO + Presiona          -> Error de Comisión / Respuesta incorrecta (Impulsividad)
+     - NO-GO + No presiona       -> Inhibición correcta
+        |
+        v
+   [Salidas Registradas] -> Latencia media/mediana (ms), Total de omisiones,
+                            Total de respuestas incorrectas (comisiones).
+
+
+================================================================================
+4. ¿SE CONOCE EL MOTOR QUE SE UTILIZARÁ Y EL ESCENARIO DE DESPLIEGUE?
+================================================================================
+
+4.1. ¿SE CONOCE EL MOTOR QUE SE UTILIZARÁ?
+Sí, la arquitectura define explícitamente los motores por capa (sin motores 3D
+pesados como Unity o Unreal para garantizar ligereza y portabilidad web):
+* Motor de Interfaz y Renderizado 2D: React 18/19 + TypeScript sobre API nativa
+  HTML5 Canvas 2D y SVG para el renderizado de los cinco minijuegos.
+* Motor de Visión por Computador (IA Local): Google MediaPipe Tasks Vision
+  (`@mediapipe/tasks-vision`) ejecutado en el navegador mediante WebAssembly
+  (WASM) y aceleración WebGL cuando esté disponible (`HandLandmarker`,
+  `FaceLandmarker`, `PoseLandmarker`).
+* Motor de Procesamiento de Audio: Web Audio API nativa del navegador
+  (`AudioContext`, `MediaStreamAudioSourceNode`, `AnalyserNode`).
+* Motor de Cálculo de Métricas: Motor propio determinista escrito en TypeScript
+  y ejecutado en hilos secundarios mediante Web Workers para no bloquear el hilo
+  principal de la interfaz (manteniendo >= 20 FPS).
+* Motor de Base de Datos Local: IndexedDB gestionado a través de Dexie.js.
+* Motor de Entorno de Desarrollo y Empaquetado: Bun (gestor de paquetes,
+  ejecutor de scripts y test runner) + Vite (empaquetador de producción).
+
+4.2. ¿SE CONOCE EL ESCENARIO DE DESPLIEGUE?
+Sí, está completamente definido tanto para las pruebas de desarrollo como para
+la demostración en vivo (Gran Final):
+* Tipo de Despliegue: Aplicación Web Progresiva (PWA) 100 % local y autónoma
+  (client-side).
+* Condición de Red: Tras la instalación inicial y la verificación automática de
+  que los recursos estáticos y los modelos `.task` de MediaPipe están guardados
+  en Cache Storage (vía Service Worker con Workbox), la aplicación se ejecuta
+  con la red completamente desconectada (modo avión / Wi-Fi apagado), sin
+  ningún servidor externo de inferencia ni backend en la nube.
+* Hardware del Escenario de Ejecución y Demostración:
+  Se ejecutará sobre uno de los portátiles/equipos declarados por el equipo,
+  seleccionado en la Semana 1 según pruebas de FPS y captura:
+  1) MacBook Air M1.
+  2) PC con procesador AMD Ryzen (declarado como Ryzen 5 9600X) y 16 GB de RAM.
+  3) Equipos de Omar:
+     - Portátil ASUS Q304UAK (Intel Core i5-7200U @ 2.50 GHz, 12 GB RAM DDR4,
+       Intel HD Graphics 620, SSD 480 GB).
+     - PC de escritorio Biostar H110MHV3 (Intel Core i5-6400 @ 2.70 GHz, 8 GB
+       RAM DDR3, GPU NVIDIA GeForce GT 710, HDD 2 TB).
+* Periféricos requeridos: Únicamente cámara web estándar, micrófono y teclado/
+  pantalla del equipo, sin sensores vestibles (wearables) ni GPU dedicada
+  obligatoria.
+
+
+================================================================================
+5. GLOSARIO NEUROCIENTÍFICO: DEFINICIONES, PATOLOGÍAS Y FORMAS DE DETECCIÓN
+================================================================================
+
+--------------------------------------------------------------------------------
+5.1. CONTROL MOTOR
+--------------------------------------------------------------------------------
+* Definición en Neurociencias:
+  Conjunto de procesos computacionales y neurofisiológicos mediante los cuales
+  el sistema nervioso central (corteza motora primaria M1, corteza premotora,
+  área motora suplementaria, ganglios basales, tronco encefálico y médula
+  espinal) planifica, inicia, parametriza (fuerza, dirección, amplitud) y
+  mantiene la postura y los movimientos voluntarios, integrando retroalimentación
+  sensorial y propioceptiva.
+* Patologías relacionadas:
+  - Enfermedad de Parkinson (bradicinesia, acinesia, rigidez, temblor de reposo).
+  - Accidente Cerebrovascular / ACV (hemiparesia, deriva pronadora del brazo,
+    paresia facial central).
+  - Temblor esencial (temblor postural y cinético de 5-12 Hz).
+  - Esclerosis lateral amiotrófica (ELA) y esclerosis múltiple.
+* Formas de detección:
+  - Clínica tradicional: Observación visual subjetiva mediante escalas ordinales
+    (MDS-UPDRS Parte III de 0 a 4 puntos; escala NIHSS; prueba de Mingazzini o
+    deriva de extremidades superiores; electromiografía de superficie y
+    acelerometría triaxial en laboratorio).
+  - En Yuyay (exploratoria): Extracción de trayectorias articulares con
+    MediaPipe para cuantificar estabilidad de brazos, frecuencia de oscilación
+    (FFT) y simetría facial geométrica.
+
+--------------------------------------------------------------------------------
+5.2. COORDINACIÓN MOTORA
+--------------------------------------------------------------------------------
+* Definición en Neurociencias:
+  Capacidad de sincronizar espacial y temporalmente la activación de múltiples
+  músculos agonistas y antagonistas para producir movimientos suaves, precisos,
+  rítmicos y eficientes. Depende estrechamente del cerebelo (comparador de error
+  entre la orden motora u "efference copy" y la señal sensorial real), los
+  ganglios basales (temporización interna del ritmo) y las áreas motoras
+  corticales.
+* Patologías relacionadas:
+  - Ataxias cerebelosas (dismetría, disdiadococinesia, descomposición del
+    movimiento).
+  - Enfermedad de Parkinson (arritmicidad en movimientos alternantes o
+    repetitivos, festinación y decremento en la pinza índice-pulgar).
+  - Dispraxias y secuelas motoras post-ACV.
+* Formas de detección:
+  - Clínica tradicional: Prueba dedo-nariz, movimientos rápidos alternantes
+    (diadococinesia), prueba de golpeteo de dedos (Finger Tapping, MDS-UPDRS
+    3.4) y prueba del tablero de clavijas (Nine-Hole Peg Test).
+  - En Yuyay (exploratoria): Minijuego "La pinza", midiendo el número de ciclos
+    de apertura-cierre pulgar-índice, la amplitud normalizada y la variación del
+    ritmo entre repeticiones.
+
+--------------------------------------------------------------------------------
+5.3. MEMORIA ESPACIAL
+--------------------------------------------------------------------------------
+* Definición en Neurociencias:
+  Sistema neurocognitivo encargado de codificar, almacenar, mantener en el
+  corto plazo y recuperar información sobre la ubicación de objetos, rutas y
+  configuraciones geométricas del entorno. Opera en marcos de referencia
+  egocéntricos (respecto al propio cuerpo, vía corteza parietal y estriado) y
+  alocéntricos (mapa cognitivo independiente de la posición del observador,
+  mediado por células de lugar del hipocampo y células de cuadrícula de la
+  corteza entorrinal).
+* Patologías relacionadas:
+  - Enfermedad de Alzheimer (incluyendo su fase preclínica y el Deterioro
+    Cognitivo Leve amnésico y multidominio, donde la corteza entorrinal es una
+    de las primeras estructuras afectadas por ovillos neurofibrilares).
+  - Demencia vascular y lesiones parieto-temporales derechas (desorientación
+    topográfica).
+* Formas de detección:
+  - Clínica tradicional: Test de Bloques de Corsi (Corsi Block-Tapping Task),
+    Figura Compleja de Rey-Osterrieth, subpruebas visoespaciales del MoCA
+    (Montreal Cognitive Assessment) y laberintos físicos o virtuales (Morris
+    Water Maze traslacional, Sea Hero Quest).
+  - En Yuyay (exploratoria): Minijuego "El vuelo del cóndor", que registra
+    aciertos de recuerdo de tres ubicaciones en un mapa 2D, tiempo empleado y
+    longitud total de la trayectoria frente a la ruta óptima.
+
+--------------------------------------------------------------------------------
+5.4. ATENCIÓN
+--------------------------------------------------------------------------------
+* Definición en Neurociencias:
+  Mecanismo neurocognitivo de selección y asignación de recursos de procesamiento
+  neural hacia estímulos relevantes del entorno o tareas internas, manteniendo
+  un estado de alerta y vigilancia a lo largo del tiempo (atención sostenida).
+  Según el modelo de redes atencionales de Posner y Petersen, involucra la red
+  de alerta (locus coeruleus - norepinefrina, corteza frontal y parietal
+  derecha), la red de orientación (colículo superior, pulvinar, unión
+  temporoparietal) y la red de control ejecutivo (corteza prefrontal y cingulada
+  anterior).
+* Patologías relacionadas:
+  - Trastorno por Déficit de Atención e Hiperactividad (TDAH).
+  - Deterioro cognitivo vascular, enfermedad de cuerpos de Lewy (fluctuaciones
+    atencionales marcadas) y enfermedad de Alzheimer.
+  - Síndromes confusionales (delirium), fatiga neurológica (p. ej. en esclerosis
+    múltiple) y traumatismo craneoencefálico (TCE).
+* Formas de detección:
+  - Clínica tradicional: Continuous Performance Task (CPT de Conners), Trail
+    Making Test Parte A (TMT-A), Test de Cancelación (d2) y medición de tiempos
+    de reacción simple y de elección.
+  - En Yuyay (exploratoria): En "Semáforo", se cuantifica mediante la latencia
+    de respuesta (tiempo de reacción ante estímulos objetivo) y la tasa de
+    omisiones (ensayos válidos en los que el usuario no responde por lapsos de
+    vigilancia).
+
+--------------------------------------------------------------------------------
+5.5. INHIBICIÓN (CONTROL INHIBITORIO)
+--------------------------------------------------------------------------------
+* Definición en Neurociencias:
+  Función ejecutiva central (componente del modelo de Miyake y Friedman) que
+  permite suprimir deliberadamente respuestas motoras prepotentes, automáticas
+  o habituales cuando el contexto lo exige, así como resistir la interferencia
+  de distractores. Se sustenta en la vía hiperdirecta e indirecta de los
+  ganglios basales (corteza prefrontal ventrolateral derecha / rIFG y pre-SMA
+  -> núcleo subtalámico -> globo pálido interno -> freno sobre el tálamo motor).
+* Patologías relacionadas:
+  - Demencia frontotemporal (variante conductual, caracterizada por
+    desinhibición temprana).
+  - TDAH y trastornos del control de impulsos.
+  - Lesiones vasculares o traumáticas del lóbulo frontal (síndrome disejecutivo).
+  - Enfermedad de Parkinson (alteraciones ejecutivas fronto-estriatales).
+* Formas de detección:
+  - Clínica tradicional: Paradigma Go/No-Go, Stop-Signal Task (SST), Test de
+    Stroop (inhibición de lectura automática) y subprueba Go/No-Go de la Frontal
+    Assessment Battery (FAB).
+  - En Yuyay (exploratoria): En "Semáforo", se cuantifica directamente a través
+    de las respuestas incorrectas o errores de comisión (presionar ante el
+    estímulo inhibitorio No-Go) y su relación con la velocidad de respuesta.
+
+
+================================================================================
+6. DEFINICIONES DEL STACK TECNOLÓGICO Y SU ROL EN YUYAY
+================================================================================
+
+6.1. MEDIAPIPE Y MEDIAPIPE TASKS VISION
+* ¿Qué es?
+  MediaPipe es un framework de código abierto desarrollado por Google AI Edge
+  para construir pipelines multimodales de aprendizaje automático en tiempo
+  real. `MediaPipe Tasks Vision` (`@mediapipe/tasks-vision`) es su biblioteca
+  oficial para web (JavaScript/TypeScript) que ejecuta modelos ligeros
+  preentrenados (formato `.task` / TFLite) directamente en el navegador del
+  cliente usando WebAssembly (WASM) y aceleración gráfica WebGL.
+* ¿Qué modelos utiliza Yuyay?
+  1) `HandLandmarker`: Detecta las manos en el cuadro de video y devuelve 21
+     coordenadas tridimensionales normalizadas (x, y, z) por mano (nudillos,
+     falanges y puntas de dedos). Se usa en "La pinza" y "Sostén la bandeja".
+  2) `FaceLandmarker`: Detecta una malla tridimensional de 478 puntos de
+     referencia faciales (cejas, ojos, nariz, contorno y comisuras de labios).
+     Se usa en "Sonríe y habla".
+  3) `PoseLandmarker`: Localiza 33 puntos corporales (hombros, codos, muñecas,
+     torso). Se usa en "Sostén la bandeja" para evaluar la postura de brazos.
+
+6.2. WEB AUDIO API
+* ¿Qué es?
+  Estándar nativo de los navegadores web modernos para procesar, analizar y
+  sintetizar audio en tiempo real mediante un grafo de nodos de procesamiento
+  (`AudioContext`), sin requerir plugins ni enviar el sonido a un servidor.
+* ¿Cómo se usa en Yuyay?
+  En el minijuego "Sonríe y habla", captura el flujo del micrófono autorizado
+  con `navigator.mediaDevices.getUserMedia({ audio: true })`, lo conecta a un
+  `AnalyserNode` y extrae ventanas de muestras en el dominio del tiempo (PCM) y
+  de la frecuencia. Con ello verifica si existe señal por encima del umbral de
+  silencio y calcula la duración continua de la vocal y su intensidad relativa
+  (RMS / dBFS).
+
+6.3. SERVICE WORKER (WORKBOX) Y CACHE STORAGE
+* ¿Qué son?
+  - Service Worker: Es un script en segundo plano que el navegador ejecuta de
+    forma independiente a la página web, actuando como un proxy de red local
+    capaz de interceptar peticiones HTTP y servir recursos aunque no exista
+    conexión a internet. Workbox es el conjunto de librerías de Google que
+    automatiza y asegura la generación del Service Worker.
+  - Cache Storage: Es la API de almacenamiento de pares petición/respuesta del
+    navegador donde el Service Worker guarda archivos estáticos y binarios.
+* ¿Cómo se usan en Yuyay?
+  Durante la instalación inicial de la PWA, el Service Worker descarga, verifica
+  y almacena en Cache Storage todo el código HTML/JS/CSS de la aplicación, las
+  fuentes e iconos y, crucialmente, los archivos binarios de los modelos de
+  MediaPipe (`.task`) y los binarios `.wasm`. Así, en el uso posterior (y en la
+  demostración con red desconectada), todas las solicitudes se resuelven
+  localmente con cero peticiones externas.
+
+6.4. BUN Y VITE
+* ¿Qué son?
+  - Bun: Es un entorno de ejecución (runtime) moderno y ultrarrápido para
+    JavaScript y TypeScript (escrito en Zig sobre JavaScriptCore) que integra en
+    una sola herramienta el gestor de paquetes (`bun install`), el ejecutor de
+    scripts (`bun run`) y el corredor de pruebas unitarias (`bun test`).
+  - Vite: Es una herramienta de compilación (build tool) y servidor de
+    desarrollo frontend de alto rendimiento que empaqueta el código React +
+    TypeScript y los Web Workers en archivos estáticos optimizados para
+    producción.
+* ¿Cómo se usan en Yuyay?
+  Se emplean exclusivamente durante el desarrollo, la ejecución de pruebas
+  unitarias reproducibles de las métricas y la compilación de la PWA. Durante el
+  uso real de la aplicación por los participantes no se requiere ningún servidor
+  de backend ni de inferencia.
+
+6.5. PERSISTENCIA: INDEXEDDB CON DEXIE.JS (SIN CONSERVAR AUDIO NI VIDEO)
+* ¿Qué son?
+  - IndexedDB: Es la base de datos transaccional NoSQL (orientada a objetos)
+    integrada nativamente en el navegador del usuario, capaz de almacenar datos
+    estructurados de forma persistente en el disco local.
+  - Dexie.js: Es una biblioteca minimalista y tipada para TypeScript que envuelve
+    a IndexedDB con una API declarativa basada en Promesas y consultas indexadas.
+* ¿Qué guarda y por qué NO conserva audio ni video?
+  - Guarda únicamente: identificador de sesión autorizada, marca de tiempo,
+    datos básicos de configuración/perfil, indicadores de calidad de captura por
+    juego (ej. FPS promedio, estado "evaluado" o "no evaluable") y las métricas
+    numéricas calculadas.
+  - Privacidad por diseño: Los fotogramas de la cámara y los buffers del
+    micrófono se procesan al vuelo en memoria volátil (RAM) y se descartan
+    inmediatamente. Nunca se escriben archivos de video ni grabaciones de voz en
+    IndexedDB ni se transmiten por red, protegiendo la intimidad biométrica del
+    participante conforme a la Ley Orgánica de Protección de Datos Personales.
+
+
+================================================================================
+7. ACLARACIONES DE ALCANCE DEL MVP Y LÍMITES CLÍNICOS
+================================================================================
+
+La propuesta técnica establece delimitaciones explícitas de alcance por rigor
+científico, honestidad técnica y viabilidad en las 5 semanas (90 horas totales):
+
+7.1. ¿POR QUÉ EL MVP NO INCLUIRÁ UN MODELO GENERATIVO (LLM)?
+* Los modelos de lenguaje generativos (LLMs locales como WebLLM u Ollama)
+  consumen varios gigabytes de RAM/VRAM (crítico en equipos de 8 a 12 GB sin GPU
+  dedicada como los de prueba), incrementan drásticamente el tiempo de descarga
+  y carga inicial, e introducen el riesgo de "alucinaciones" (generar afirmaciones
+  médicas no contenidas en los datos).
+* Además, las bases oficiales del concurso penalizan incluir modelos generativos
+  sin demostrar cuantitativamente qué problema específico resuelven frente a una
+  alternativa determinista. Por ello, Yuyay utiliza plantillas estructuradas y
+  deterministas vinculadas directamente a las métricas, garantizando fidelidad
+  del 100 %, latencia instantánea y cero interpretaciones clínicas inventadas.
+
+7.2. ¿POR QUÉ EL MVP NO INCLUIRÁ ENTRENAMIENTO DE UN CLASIFICADOR DE VOZ?
+* Entrenar un clasificador supervisado de patología vocal (p. ej. sano vs.
+  párkinson) válido para uso real requiere un corpus clínico en español grabado
+  con micrófonos de consumo equivalentes a los de los portátiles de prueba y
+  validación clínica con pacientes diagnosticados.
+* Los datasets públicos abiertos más comunes (como el de Oxford en la UCI)
+  fueron grabados en inglés en cabinas acústicas de laboratorio; aplicar un
+  modelo entrenado allí sobre el micrófono de una laptop en un auditorio produce
+  un sesgo de dominio acústico severo. Por rigor técnico, el MVP mide y reporta
+  variables físicas verificables (duración en segundos e intensidad relativa de
+  la vocal) en lugar de emitir una probabilidad diagnóstica no validada.
+
+7.3. ¿POR QUÉ EL MVP NO INCLUIRÁ UN ESCENARIO 3D?
+* El minijuego "El vuelo del cóndor" evalúa memoria espacial de ubicaciones y
+  eficiencia de ruta. Esas mismas variables neuropsicológicas se miden con
+  exactitud matemática en un plano cartesiano 2D (Canvas/SVG).
+* Prescindir de un motor 3D (como Three.js/WebGL pesado) reduce la carga de
+  desarrollo dentro del presupuesto de 90 horas, evita caídas de rendimiento en
+  gráficos integrados (como Intel HD Graphics 620) y disminuye la confusión en
+  el manejo de cámara 3D para usuarios adultos no habituados a videojuegos.
+
+7.4. ¿POR QUÉ LA PRECISIÓN DIAGNÓSTICA Y LA INTERPRETACIÓN CLÍNICA QUEDAN FUERA?
+* En medicina y neuropsicología, acreditar "precisión diagnóstica" (sensibilidad,
+  especificidad, valor predictivo positivo/negativo y curvas ROC/AUC clínicas)
+  exige un estudio clínico prospectivo con pacientes diagnosticados por
+  especialistas (estándar de oro), grupo de control emparejado por edad, comité
+  de ética en investigación con seres humanos y registro sanitario (ARCSA).
+* En una Fase 1 académica de 5 semanas, lo científicamente honesto y verificable
+  es validar la EXACTITUD METROLÓGICA Y TÉCNICA del instrumento (por ejemplo:
+  que el error de conteo de ciclos sea <= 10 % frente a secuencias anotadas y
+  que el error de frecuencia sea <= 0,5 Hz frente a señales sintéticas de 3, 5 y
+  8 Hz), dejando explícito que las métricas registradas no constituyen un
+  diagnóstico médico.
+
+
+================================================================================
+8. PLANTILLAS VINCULADAS A LAS MÉTRICAS: ESTRUCTURA Y EJEMPLOS CONCRETOS
+================================================================================
+
+8.1. ¿QUÉ SON LAS PLANTILLAS VINCULADAS A LAS MÉTRICAS?
+Son estructuras de texto deterministas y parametrizadas (escritas en TypeScript)
+que reciben como entrada el objeto JSON de resultados de una sesión (valores
+numéricos con sus unidades físicas y el estado del control de calidad de
+captura) y construyen el informe final sin usar generación libre de texto, sin
+atribuir enfermedades y sin mostrar semáforos clínicos no validados.
+
+Cada plantilla aplica tres reglas lógicas:
+1) Regla de Calidad de Captura: Si `calidad.esValida === false`, la plantilla
+   bloquea el reporte de métricas numéricas, informa la causa técnica detectada
+   (ej. iluminación insuficiente, mano fuera de encuadre, tasa de cuadros < 20
+   FPS o micrófono sin señal) y marca la actividad como "No evaluable (repetible)".
+2) Regla de Presentación de Métricas con Unidades: Inserta los valores exactos
+   medidos junto con sus unidades (`ciclos`, `s`, `Hz`, `ms`, `px` o unidades
+   normalizadas) y explica en lenguaje claro qué midió la tarea.
+3) Regla de Descargo y Límite Experimental: Añade de forma invariable la nota de
+   que los valores reflejan el desempeño en la sesión bajo las condiciones de la
+   cámara/micrófono del equipo y no representan un diagnóstico ni un rango
+   clínico de salud.
+
+8.2. EJEMPLOS CONCRETOS DE PLANTILLAS POR MINIJUEGO
+
+* EJEMPLO 1 — Plantilla para "La pinza" (Captura Válida):
+  "Actividad 1: La pinza (Coordinación motora de dedos)
+   - Estado de captura: Válida ({fps_medio} fotogramas/s, encuadre completo).
+   - Mano derecha: {ciclos_der} ciclos completados en {duracion_s} s | Amplitud
+     media normalizada: {amp_der} (relación apertura/tamaño palmar) | Variación
+     del ritmo (CV): {cv_der} %.
+   - Mano izquierda: {ciclos_izq} ciclos completados en {duracion_s} s | Amplitud
+     media normalizada: {amp_izq} | Variación del ritmo (CV): {cv_izq} %.
+   - Qué significa esta medida: Registra cuántas veces se abrió y cerró el
+     pulgar e índice, qué tan amplia fue la apertura respecto al tamaño de la
+     mano y qué tan constante se mantuvo el ritmo entre repeticiones."
+
+* EJEMPLO 2 — Plantilla para "Sostén la bandeja" (Captura Válida):
+  "Actividad 2: Sostén la bandeja (Estabilidad de manos y brazos)
+   - Estado de captura: Válida ({fps_medio} fotogramas/s).
+   - Desplazamiento vertical medio: Brazo derecho {desp_der} u.n. | Brazo
+     izquierdo {desp_izq} u.n.
+   - Índice de dispersión postural: {estabilidad_std} u.n.
+   - Frecuencia oscilatoria dominante estimada: {frecuencia_hz} Hz (calculada
+     sobre ventana de {ventana_s} s con muestreo medio de {fps_medio} Hz).
+   - Qué significa esta medida: Describe cuánto se desplazaron las manos respecto
+     a su posición inicial y la frecuencia principal de oscilación detectada por
+     la cámara durante la postura sentada."
+
+* EJEMPLO 3 — Plantilla para "Sonríe y habla" (Captura Válida):
+  "Actividad 3: Sonríe y habla (Geometría facial y emisión vocal)
+   - Estado de captura: Cámara y micrófono verificados (relación señal/umbral
+     correcta).
+   - Simetría geométrica de sonrisa: Índice de relación izquierda/derecha de
+     {indice_simetria} (desplazamiento relativo de comisuras respecto al eje
+     facial medio).
+   - Emisión de vocal sostenida: Duración continua de {duracion_vocal_s} s con
+     una intensidad relativa media de {intensidad_dbfs} dBFS (variación:
+     {std_dbfs} dB).
+   - Qué significa esta medida: Compara geométricamente el desplazamiento de
+     ambos lados de la boca al sonreír y mide cuánto tiempo y con qué estabilidad
+     de volumen se sostuvo la vocal en el micrófono. Este registro no evalúa ni
+     identifica disartria ni patologías neurológicas."
+
+* EJEMPLO 4 — Plantilla para "El vuelo del cóndor" y "Semáforo":
+  "Actividad 4: El vuelo del cóndor (Memoria espacial 2D)
+   - Ubicaciones recordadas y alcanzadas en orden: {aciertos} de 3.
+   - Tiempo total de recorrido: {tiempo_total_s} s.
+   - Longitud del recorrido: {longitud_real} unidades (distancia directa de
+     referencia: {longitud_optima} unidades; razón de recorrido: {razon_ruta}).
+   Actividad 5: Semáforo (Atención y respuesta selectiva)
+   - Ensayos presentados: {total_go} estímulos de acción y {total_nogo} estímulos
+     de omisión.
+   - Latencia mediana de respuesta del sistema: {latencia_mediana_ms} ms (rango
+     intercuartílico: {iqr_ms} ms).
+   - Omisiones ante estímulo activo: {omisiones} | Respuestas ante estímulo de
+     omisión: {respuestas_incorrectas}."
+
+* EJEMPLO 5 — Plantilla de Control de Calidad (Captura Inválida / No Evaluable):
+  "Actividad {numero}: {nombre_juego}
+   - Estado de captura: NO EVALUABLE.
+   - Motivo técnico detectado: {motivo_fallo} (ej. 'La mano salió del encuadre
+     durante 3,2 segundos' / 'Frecuencia de captura de 11 fotogramas/s, inferior
+     al mínimo requerido de 20 fotogramas/s' / 'El micrófono no registró señal
+     por encima del umbral de ruido').
+   - Acción: No se emiten métricas numéricas para evitar registros erróneos. La
+     actividad puede repetirse tras ajustar la posición o el dispositivo."
+
+
+================================================================================
+9. AMPLIACIÓN E ILUSTRACIÓN TEXTUAL DETALLADA: "EL VUELO DEL CÓNDOR" Y "SEMÁFORO"
+================================================================================
+
+--------------------------------------------------------------------------------
+9.1. MINIJUEGO 4: "EL VUELO DEL CÓNDOR"
+--------------------------------------------------------------------------------
+* Objetivo funcional y neurocognitivo:
+  Evaluar la memoria de trabajo visoespacial y la eficiencia de navegación en un
+  plano bidimensional (2D): codificar la posición de tres objetivos en un mapa,
+  retenerlos en memoria una vez que se ocultan y desplazar al cóndor para
+  visitarlos en el orden indicado (1 -> 2 -> 3).
+
+* Ampliación de la mecánica paso a paso:
+  1) Fase de Instrucción (5 s): Se explica al participante que verá un mapa
+     andino 2D con el punto de partida del cóndor [C] y tres nidos/mesetas
+     numerados del [1] al [3]. Debe memorizar dónde están.
+  2) Fase de Observación / Codificación (ej. 6 a 8 s): Se muestran en pantalla
+     las ubicaciones [1], [2] y [3] sobre una cuadrícula 2D con referencias
+     visuales estáticas del paisaje (montañas/ríos en SVG/Canvas).
+  3) Fase de Recorrido / Evocación (hasta completar o agotar tiempo máximo, ej.
+     45 s): Los números [1], [2] y [3] desaparecen. El usuario mueve al cóndor
+     usando las teclas de dirección (flechas / WASD) o clic/toque en pantalla
+     para dirigirse en orden a la ubicación 1, luego a la 2 y finalmente a la 3,
+     confirmando cada parada (o activándose al entrar en el radio de tolerancia R
+     de cada objetivo).
+
+* Ilustración textual de las fases en pantalla (Mapa 2D en Canvas/SVG):
+
+  [FASE A: OBSERVACIÓN / MEMORIZACIÓN (Marcadores visibles)]
+  +------------------------------------------------------------+
+  | Memoriza el orden de las 3 ubicaciones (Tiempo: 05 s)      |
+  |------------------------------------------------------------|
+  |    /\  /\                         [2] Meseta Norte         |
+  |   /  \/  \  Cordillera                   (x2, y2)          |
+  |                                                            |
+  |         [1] Laguna Oeste                                   |
+  |             (x1, y1)                        ~~~ Río ~~~    |
+  |                                                            |
+  |                                      [3] Valle Este        |
+  |       (C) <-- Cóndor (Inicio)            (x3, y3)          |
+  |       (x0, y0)                                             |
+  +------------------------------------------------------------+
+
+  [FASE B: RECORRIDO / NAVEGACIÓN (Marcadores ocultos)]
+  +------------------------------------------------------------+
+  | Guía al cóndor en orden: Objetivo actual -> Ubicación 1    |
+  |------------------------------------------------------------|
+  |    /\  /\                              .  (Oculto 2)       |
+  |   /  \/  \  Cordillera               .   .                 |
+  |                                    .       .               |
+  |         (C) <== ¡Acierto 1!        .         .             |
+  |          :                            .     ~~~ Río ~~~    |
+  |         :  (Trayectoria registrada     .                   |
+  |        :    punto a punto p(t))         .                  |
+  |       o <-- Inicio (x0, y0)              . (Oculto 3)      |
+  +------------------------------------------------------------+
+
+* Definición matemática de las métricas registradas:
+  1) Aciertos (A in {0, 1, 2, 3}):
+     Un objetivo O_k = (x_k, y_k) se contabiliza como acertado si la posición del
+     cóndor p(t) cumple ||p(t) - O_k||_2 <= R_umbral siguiendo la secuencia k =
+     1, 2, 3.
+  2) Tiempo de resolución (T_total en segundos):
+     T_total = (t_fin - t_inicio_navegacion) / 1000, medido con
+     `performance.now()`.
+  3) Longitud de recorrido (L_real) y Distancia Óptima de Referencia (L_opt):
+     - L_real = sum_{i=1}^{N} sqrt( (x_i - x_{i-1})^2 + (y_i - y_{i-1})^2 )
+     - L_opt  = ||O_1 - P_0||_2 + ||O_2 - O_1||_2 + ||O_3 - O_2||_2
+     Si L_real es cercana a L_opt, la trayectoria fue directa; si L_real >> L_opt,
+     hubo búsqueda errática o desvíos espaciales.
+
+* Validación técnica comprometida en la propuesta:
+  Se verifica mediante guiones automatizados (pruebas unitarias y de integración
+  en Bun/TypeScript que inyectan trayectorias conocidas de coordenadas y tiempos)
+  comprobando que el conteo de aciertos, errores y longitud coincida al 100 % con
+  el resultado esperado del guion.
+
+--------------------------------------------------------------------------------
+9.2. MINIJUEGO 5: "SEMÁFORO"
+--------------------------------------------------------------------------------
+* Objetivo funcional y neurocognitivo:
+  Evaluar la atención sostenida, la velocidad de respuesta visomotora y la
+  inhibición de respuestas automáticas mediante un paradigma Go/No-Go accesible.
+
+* Por qué los estímulos se distinguen TAMBIÉN POR FORMA (Accesibilidad):
+  Aproximadamente el 8 % de los hombres y el 0,5 % de las mujeres presentan
+  deficiencia en la visión del color (daltonismo rojo-verde / deuteranomalía o
+  protanomalía). Si el juego dependiera solo del color verde vs. rojo, un
+  participante con daltonismo cometería errores por percepción visual y no por
+  déficit de atención o inhibición. Por ello, Yuyay codifica redundantemente cada
+  estímulo con COLOR + FORMA GEOMÉTRICA + SÍMBOLO INTERNO:
+  - Estímulo GO (Responder): Círculo Verde con símbolo "+" o flecha de avance.
+  - Estímulo NO-GO (Omitir): Octágono (o Triángulo) Rojo con barra horizontal
+    "-" o mano de alto.
+
+* Ampliación de la mecánica paso a paso:
+  1) Se presenta una secuencia de N ensayos (por ejemplo, 25 a 30 estímulos en
+     ~45 segundos), donde la mayoría (~70-75 %) son estímulos GO para generar
+     una tendencia motora automática ("prepotente") y el resto (~25-30 %) son
+     estímulos NO-GO intercalados pseudoaleatoriamente.
+  2) Cada estímulo permanece visible durante una ventana temporal fija (ej.
+     800 a 1000 ms), seguida de un intervalo entre estímulos (ISI) variable (ej.
+     500 a 900 ms) para evitar respuestas anticipadas por ritmo fijo.
+  3) Ante el estímulo GO (Círculo Verde), el participante debe presionar la
+     barra espaciadora (o botón grande en pantalla) lo más rápido posible.
+  4) Ante el estímulo NO-GO (Octágono Rojo), el participante debe frenar el
+     impulso y NO presionar nada hasta que pase el estímulo.
+
+* Ilustración textual de los ensayos en pantalla:
+
+  [ENSAYO TIPO "GO" — ACCIÓN REQUERIDA]          [ENSAYO TIPO "NO-GO" — OMISIÓN REQUERIDA]
+  +-------------------------------------+        +-------------------------------------+
+  |        Estímulo 12 de 25            |        |        Estímulo 13 de 25            |
+  |                                     |        |                                     |
+  |             .-------.               |        |              _______                |
+  |            /         \              |        |             /       \               |
+  |           |   VERDE   |             |        |            /  ROJO   \              |
+  |           |    (+)    |             |        |           |   (---)   |             |
+  |            \         /              |        |            \         /              |
+  |             '-------'               |        |             \_______/               |
+  |          (Forma: CÍRCULO)           |        |          (Forma: OCTÁGONO)          |
+  |                                     |        |                                     |
+  |  [ PRESIONA ESPACIO AHORA ]         |        |  [ NO PRESIONES NADA ]              |
+  +-------------------------------------+        +-------------------------------------+
+   -> Si presiona en t = 412 ms:                  -> Si NO presiona:
+      Acierto Go (Latencia = 412 ms)                 Omisión correcta (Inhibición exitosa)
+   -> Si NO presiona antes del límite:            -> Si presiona por impulso:
+      Error de Omisión (+1 omisión)                  Respuesta incorrecta (+1 comisión)
+
+* Definición matemática de las métricas registradas:
+  1) Latencia de respuesta (ms):
+     Para cada ensayo GO válido donde el usuario responde en el instante
+     `t_respuesta` tras mostrarse el estímulo en `t_estimulo`:
+     `Latencia_i = t_respuesta - t_estimulo` (usando `performance.now()`).
+     Se reporta la mediana y la media de las latencias de aciertos GO.
+     Nota técnica: Como advierte la propuesta, este valor representa el tiempo de
+     respuesta del sistema completo (pantalla + percepción + ejecución motora +
+     evento de teclado del navegador), sin atribuirle precisión neurofisiológica
+     de laboratorio.
+  2) Omisiones (Conteo entero):
+     Número de ensayos GO en los que finalizó la ventana de tiempo sin que se
+     registrara pulsación.
+  3) Respuestas incorrectas / Errores de comisión (Conteo entero):
+     Número de ensayos NO-GO en los que el usuario presionó la tecla o también
+     pulsaciones anticipadas fuera de ventana.
+
+* Validación técnica comprometida en la propuesta:
+  Ejecución de guiones automatizados de eventos simulados (secuencias con tiempos
+  de pulsación exactos, omisiones deliberadas y pulsaciones en No-Go), exigiendo
+  una coincidencia del 100 % en el conteo de aciertos, omisiones y respuestas
+  incorrectas.
+
+
+================================================================================
+10. REFERENCIAS CIENTÍFICAS Y TÉCNICAS VALIDADAS
+================================================================================
+
+[1] Google AI Edge (2026). MediaPipe Tasks Vision for Web: Hand, Face, and Pose
+    Landmarker Guides. https://developers.google.com/edge/mediapipe/solutions/vision
+[2] Parkinson's Foundation (2026). Getting Diagnosed: Clinical Evaluation of
+    Parkinson's Disease. https://www.parkinson.org/understanding-parkinsons/getting-diagnosed
+[3] Goetz, C. G., Tilley, B. C., Shaftman, S. R., et al. (2008). Movement
+    Disorder Society-sponsored revision of the Unified Parkinson's Disease
+    Rating Scale (MDS-UPDRS): Scale presentation and clinimetric testing
+    results. Movement Disorders, 23(15), 2129-2170.
+[4] Kasemsap, N., et al. (2025). Screening for Parkinson's disease using
+    computer vision and MediaPipe Hands on smartphone finger-tapping videos.
+    PLOS ONE, 20(8), e0330373.
+[5] Aroor, S., Singh, R., & Goldstein, L. B. (2017). BE-FAST (Balance, Eyes,
+    Face, Arm, Speech, Time): Reducing the proportion of strokes missed using
+    the FAST mnemonic. Stroke, 48(2), 479-481.
+[6] Zhang, J., Xing, Y., Ma, X., & Feng, L. (2017). Differential diagnosis of
+    Parkinson disease, essential tremor, and enhanced physiological tremor with
+    the tremor analysis of EMG. Parkinson's Disease, 2017, 1597907.
+[7] Little, M. A., McSharry, P. E., Hunter, E. J., Spielman, J., & Ramig, L. O.
+    (2009). Suitability of dysphonia measurements for telemonitoring of
+    Parkinson's disease. IEEE Transactions on Biomedical Engineering, 56(4),
+    1015-1022. (Oxford Parkinson's Disease Detection Dataset, UCI).
+[8] Coutrot, A., Silva, R., Manley, E., et al. (2018). Global determinants of
+    navigation ability (Sea Hero Quest). Current Biology, 28(17), 2861-2866.
+[9] Coughlan, G., Coutrot, A., Khondoker, M., et al. (2019). Toward
+    personalized cognitive diagnostics of at-genetic-risk Alzheimer's disease
+    (Sea Hero Quest). Proceedings of the National Academy of Sciences (PNAS),
+    116(19), 9285-9292.
+[10] Konishi, S., Nakajima, K., Uchida, I., et al. (1998). No-go dominant brain
+     activity in human inferior prefrontal cortex revealed by functional
+     magnetic resonance imaging. Journal of Neuroscience, 18(10), 3728-3736.
+[11] Chikazoe, J. (2010). Localizing performance of go/no-go tasks to
+     prefrontal cortical subregions. Current Opinion in Neurology, 23(6),
+     665-670.
+[12] Aron, A. R., Robbins, T. W., & Poldrack, R. A. (2014). Inhibition and the
+     right inferior frontal cortex: one decade on. Trends in Cognitive Sciences,
+     18(4), 177-185.
+[13] Bezdjian, S., Baker, L. A., & Lozano, D. I. (2014). Factor structure,
+     construct validity, and age- and education-based normative data for the
+     Parametric Go/No-Go Test. Journal of Clinical and Experimental
+     Neuropsychology, 36(6), 567-581.
+[14] Club Académico PoliByte (2026). Bases oficiales del PoliByte Innovation
+     Challenge 2026, secciones 6.1, 7 y Anexo A. ESPOCH.
