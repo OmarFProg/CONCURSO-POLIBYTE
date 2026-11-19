@@ -1,0 +1,39 @@
+Speech (5:00)
+
+Problema (0:00 a 0:40) · diapositiva 2
+"Buenas tardes. En Ecuador hay 94 neurólogos en el sistema público, 0,54 por cada 100 000 habitantes, y ocho provincias no tienen ninguno. Quien nota un temblor, una torpeza o un olvido espera meses para que lo evalúen, o nunca llega. Lo que falta es una forma barata de decidir a quién conviene derivar primero."
+
+Solución (0:40 a 1:20) · diapositiva 3
+"Presentamos Yuyay, que en kichwa quiere decir pensar y recordar. 
+Es una aplicación web instalable que convierte cinco minijuegos en un tamizaje neurológico. 
+Usa solo la cámara, el micrófono y el teclado del dispositivo. 
+Es tamizaje, no diagnóstico: orienta a consultar y no reemplaza al médico."
+
+Qué mide cada juego (1:20 a 2:20) · diapositiva 4
+"Cada juego mide algo concreto. 
+    En La pinza 
+        se abren y cierran pulgar e índice, 
+        y registramos ciclos, amplitud y variación del ritmo, 
+        que es la lógica clásica de la bradicinesia. 
+    En Sostén la bandeja 
+        medimos desplazamiento y estabilidad de manos y brazos, 
+            y contrastamos la frecuencia con señales sintéticas. 
+    En Sonríe y habla 
+        comparamos posiciones faciales relativas 
+        y medimos duración e intensidad de una vocal. 
+        No identificamos disartria ni enfermedad. 
+    El vuelo del cóndor 
+        mide navegación espacial, 
+        con eficiencia de ruta y error angular. 
+    Semáforo 
+        mide atención e inhibición con tiempo de reacción y errores."
+
+Arquitectura (2:20 a 3:30) · diapositiva 5
+"Todo corre en el navegador, como PWA. 
+La cámara alimenta MediaPipe, que ubica manos, cuerpo y cara en el propio dispositivo. De esos puntos sacamos las métricas con código propio y las guardamos en IndexedDB. El informe tiene dos niveles. Siempre hay una plantilla determinista. Opcionalmente, un modelo de lenguaje local redacta la explicación, y lo comparamos con la plantilla para justificar que aporta algo. Ningún video ni audio sale del dispositivo, y funciona sin internet. Elegimos esto por privacidad, por costo cero de servidor y por las zonas con mala conectividad. No hay backend que mantener."
+
+Factibilidad (3:30 a 4:30) · diapositiva 6
+"Sabemos lo que cabe en el plazo. El núcleo del MVP son tres juegos: [los tres que elijan]. Los otros dos quedan como ampliación. Ya tenemos versiones jugables de demostración de los cinco, así que no partimos de cero. El código se congela el 25 de noviembre y la final es el 27. Cada juego tiene criterios de validación medibles, por ejemplo recuperar una frecuencia conocida con señales sintéticas y repetir la medición con la misma persona."
+
+Límites y cierre (4:30 a 5:00) · diapositiva 7
+"Somos honestos con los límites: todavía no hay rangos de referencia por edad, así que el MVP muestra valores descriptivos y nunca un veredicto. La validación con voluntarios irá con consentimiento informado. Yuyay no pretende diagnosticar. Pretende que una persona en una provincia sin neurólogo sepa que conviene consultar. Gracias."

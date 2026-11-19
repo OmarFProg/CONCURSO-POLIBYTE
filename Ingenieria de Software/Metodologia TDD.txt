@@ -1,0 +1,3 @@
+https://www.ibm.com/es-es/think/topics/test-driven-development
+con superpowers
+https://github.com/obra/superpowers

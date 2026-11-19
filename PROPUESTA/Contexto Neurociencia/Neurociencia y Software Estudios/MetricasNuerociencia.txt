@@ -1,0 +1,57 @@
+Voy a investigar qué datos, herramientas y avances recientes de neurociencia se pueden aprovechar en un concurso.
+
+Se buscó en la web
+
+La neurociencia estudia cómo el sistema nervioso procesa información: desde moléculas y neuronas individuales hasta circuitos completos, conducta y enfermedades. Para un concurso de programación conviene pensarla como cuatro tipos de datos abiertos que puedes usar, y todos se prestan a algo muy visual.
+
+Qué hay disponible (gratis)
+
+Conectomas (el "mapa de cables" del cerebro): FlyWire y Harvard publicaron un diagrama de conexiones de todo el sistema nervioso central de una mosca adulta, a resolución de sinapsis. Se explora en FlyWire Codex: puedes buscar neuronas, trazar rutas sinápticas en 3D y exportar los datos, con solo una cuenta gratuita. 
+flywire
+casrai
+Actividad de neuronas reales: el Allen Brain Observatory registró con sondas Neuropixels casi 100 000 neuronas de ratón en corteza, hipocampo y tálamo, mientras los animales veían desde rejillas hasta imágenes naturales y películas. Se accede con el paquete de Python AllenSDK. 
+brain-map
+brain-map
+Modelos de IA del cerebro humano: en marzo de 2026 Meta lanzó TRIBE v2, 
+que predice cómo responde el cerebro humano a video, audio y texto, 
+generando mapas de actividad sin necesidad de un escáner fMRI. 
+Ojo: su licencia CC BY-NC no permite uso comercial. 
+pasqualepillitteri
+pasqualepillitteri
+EEG / interfaces cerebro-computadora: 
+hay muchos datasets públicos, 
+por ejemplo uno con 60 horas de registros y más de 60 000 ejemplos de imaginación motora. 
+ieu
+
+Ideas para competir (de más a menos "wow")
+
+"¿Qué ve tu cerebro?": el usuario sube un video o escribe una frase y ve un cerebro 3D iluminarse según la predicción de TRIBE v2. Muy impactante en una demo; necesitas GPU, así que precalcula algunos ejemplos.
+"Google Maps del cerebro de la mosca": eliges un estímulo (olor, luz) y la app anima el camino de la señal neurona por neurona hasta el músculo, con Three.js. Nadie más tendrá datos de un cerebro completo real.
+"Ver con los ojos de un ratón": reproduces la película que vio el ratón y, al lado, sus neuronas parpadean como luces en tiempo real. Extra: un modelo que adivina qué imagen veía solo mirando las neuronas.
+Simulador-juego de neuronas en el navegador: construyes un pequeño circuito (modelo de neuronas con disparos) y debes lograr que "aprenda" algo. No depende de datos externos, ideal si el concurso es corto.
+EEG en vivo: si consiguen un casco tipo Muse u OpenBCI, controlar algo con la mente. 
+Es lo que suele ganar: en el hackathon Neurospark 2025 venció "Brain-Unrotting", 
+que buscaba pasar del scroll pasivo al control activo. Riesgo: depender del hardware. 
+umh
+
+Cómo ganarle a los demás
+
+Datos reales + una demo de 30 segundos que se entienda sin explicar.
+Un problema humano concreto (educación en colegios de Ecuador, rehabilitación, accesibilidad), 
+no solo "visualización bonita".
+No prometas "leer la mente": los jurados lo detectan. 
+TRIBE v2, por ejemplo, no lee pensamientos; va del estímulo a la respuesta cerebral prevista. 
+pasqualepillitteri
+
+Para afinar la recomendación, 
+¿cuánto dura el concurso, cuántos son en el equipo y tienen acceso a algún casco EEG o GPU?
+
+Sources:
+
+The BANC: Drosophila Brain and Nerve Cord
+Fruit fly connectome: no central command
+Allen Brain Observatory – circuits
+Meta TRIBE v2 (EN)
+Meta TRIBE v2 (ES)
+Large EEG motor imagery dataset
+UMH 2025 Hackathon: Neurospark

@@ -1,0 +1,17 @@
+
+
+estamos en estacion omar ambato, prestos a trabajar en el proyecto planteado en D:\FLASH 7 SEP 2026\ESPOCH OCTAVO\CONCURSO POLIBYTE\PROPUESTA\PROPUESTA.txt,
+se cuenta con los equipos: D:\FLASH 7 SEP 2026\ESPOCH OCTAVO\CONCURSO POLIBYTE\AnalisisFactibilidad\Equipos Omar,
+se requiere trabajar en pc OMARFIGUEROA, donde se tiene VSC, y se puede clonar el proyecto
+sin embargo es posible que en Pc1(DESKTOP-ML70LGD) se tengan archivos y configuraciones avanzadas con respecto
+a la implementacion actual existente en pc2(OMARFIGUEROA); 
+por tanto primero se requeriria estabilizar la implementacion actual de pc1 en pc2;
+tener en cuenta que el actual repositorio esta conectado a el repo gh: https://github.com/OmarFProg/CONCURSO-POLIBYTE.git;
+tanto en Pc1, como en pc2, es posible, dado que se trata del repositorio que el equipo de desarrollo
+ uso para fase de definicion y planeacion del proyecto, es posible que existan desincronia entre ellos, sin embargo;
+ los organizadores del concurso nos han hecho parte de un repositorio oficial en el que se iran cargando los avances del proyecto, reporitorio: https://github.com/Polibyte/pb2026-jackersmainsters.git;
+ teniendo en cuenta D:\FLASH 7 SEP 2026\ESPOCH OCTAVO\CONCURSO POLIBYTE\Ingenieria de Software\PlanTentativoDesarrolloYuyay.txt; validar la pertinencia de trabajr una sesion desde pc2 estacion omar ambato, sea hacia el repo de planeacion o hacia el repo oficial; considerando avisos a equipo de desarrollo q deban realizarnse, o la ejecucion de una implementacion independiente en estacion omar, de la que se les hara parte al equipo a fin de que validen, todo esto respecto a estado de implementacion del repo oficial; 
+ entonces generar un plan por fases para estabilizacion de repo en estacion Omar a fin de inciar una sesion de desarrollo; incluir diagnostico de tecnologias requeridas en pc2, almacenar plan en 
+ D:\FLASH 7 SEP 2026\ESPOCH OCTAVO\CONCURSO POLIBYTE\ImplementacionesOmar
+
+

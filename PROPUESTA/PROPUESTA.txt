@@ -1,0 +1,217 @@
+PROPUESTA TÉCNICA — FASE 1
+Edición Especial Auspiciada por el Ing. Edwin Llauca — Premio: Laptop de Alta Gama
+
+I. DATOS GENERALES DEL PROYECTO Y TEMÁTICA
+
+Nombre del Proyecto / Solución: Yuyay: tamizaje neurológico con minijuegos
+Temática Oficial Única: Neurociencias
+Nombre del Equipo: Los JackersMainsters
+
+Yuyay propone un prototipo experimental para registrar medidas de coordinación 
+    motora, 
+    estabilidad, 
+    expresión facial, 
+    voz, 
+    memoria espacial y 
+    atención. 
+    
+    Su relación con Neurociencias está en 
+        los procesos que explora; 
+        la visión por computador es el medio de medición. 
+        El MVP no acreditará capacidad diagnóstica ni de tamizaje clínico.
+
+II. NÓMINA DE INTEGRANTES DEL EQUIPO (MÁXIMO 4 MIEMBROS)
+
+Rol en Equipo | Nombres y Apellidos | Universidad de Origen | Carrera / Semestre | Correo Electrónico
+Líder de Equipo | Alexander Rafael Villalva Dumancela | ESPOCH | Ingeniería de Software / Octavo semestre | alexander.villalva@espoch.edu.ec
+Desarrollador / Miembro 2 | Andres Alexander Gaibor Apunte | ESPOCH | Ingeniería de Software / Octavo semestre | andresa.gaibor@espoch.edu.ec
+Miembro 3 | Omar Santiago Figueroa Díaz | ESPOCH | Ingeniería de Software / Octavo semestre | omar.figueroa@espoch.edu.ec
+
+1. PLANTEAMIENTO DE LA PROBLEMÁTICA Y PROPUESTA DE VALOR
+
+Pautas de Orientación: 
+Explique con precisión técnica la necesidad u oportunidad que aborda el proyecto 
+    en base a la temática 
+        única 
+            oficial 
+                definida por la organización. 
+    ¿Cuál es el problema raíz y quiénes son los beneficiarios directos?
+
+        La observación de movimientos, expresión y desempeño cognitivo requiere 
+            instrucciones claras y un registro consistente. 
+            Las tareas manuales y los juegos digitales aislados 
+                dificultan reunir mediciones comparables en una sola sesión. 
+                    "Consultar fuentes academicas validadas que sostengan esta aseveracion, declaracion, afirmacion"
+            
+            El equipo plantea estudiar si una computadora o teléfono inteligente común 
+                puede facilitar esta captura mediante actividades breves y comprensibles.
+
+            Los usuarios iniciales serán adultos voluntarios acompañados por el equipo en un entorno académico. 
+                Los beneficiarios potenciales, tras validación posterior, 
+                serían profesionales de salud y adultos mayores. 
+            
+            La necesidad inmediata es obtener registros trazables, 
+                comunicar errores de captura y 
+                explicar los límites de las mediciones 
+                    sin atribuir enfermedades a los participantes.
+
+
+Pautas de Orientación: Detalle la propuesta de valor diferencial de su solución. 
+¿Por qué es una solución superior o innovadora 
+    frente a 
+        alternativas existentes en el mercado o enfoques tradicionales?
+
+        "que existe actualmente en el mercado? QUE SE ASEMEJE, que tenga enfoque tradicional" 
+
+Yuyay reunirá 
+    cinco minijuegos con 
+        cámara, 
+        micrófono y 
+        teclado 
+    en una Progressive Web App (PWA) en español. 
+    Aportará un flujo común de 
+        instrucciones, 
+        controles de calidad, 
+        resultados por dimensión 
+        y exportación de un informe. 
+        
+        El procesamiento será local; 
+        tras instalar y verificar los recursos necesarios, 
+        funcionará sin conexión y sin servicios externos de inferencia.
+           
+           "especificaciones de recursos necesarios, 
+                que modelo, esquema de despliegue"
+
+La sesión comenzará con consentimiento y prueba de dispositivos. 
+    El usuario completará los juegos y recibirá valores con unidades, 
+    calidad de captura y una explicación mediante plantillas. 
+    No se mostrarán probabilidades de enfermedad, 
+        rangos normales por edad ni semáforos clínicos 
+            sin evidencia que los sustente. 
+    Una captura insuficiente se indicará como no evaluable y podrá repetirse.
+
+Minijuego | Función demostrable y salida
+La pinza | 
+    Abrir y cerrar pulgar e índice por mano; 
+        contar ciclos y registrar amplitud normalizada y variación del ritmo.
+Sostén la bandeja | 
+    Mantener manos y brazos visibles estando sentado; 
+        registrar desplazamiento y estabilidad. 
+            La frecuencia oscilatoria se contrastará con señales sintéticas.
+    Sonríe y habla | 
+        Comparar posiciones faciales relativas al sonreír 
+            y registrar duración e intensidad relativa de una vocal. 
+                No identificar disartria ni enfermedad.
+    El vuelo del cóndor | 
+        Recordar tres ubicaciones y recorrer un mapa 2D; 
+            registrar aciertos, tiempo y longitud de recorrido.
+    Semáforo |
+        Responder a un estímulo y omitir otro, 
+            distinguidos también por forma; 
+                registrar latencia, 
+                    omisiones y respuestas incorrectas.
+
+2. COMPONENTE DE INNOVACIÓN E INTELIGENCIA ARTIFICIAL
+
+Pautas de Orientación: 
+Describa el núcleo innovador de la solución. 
+Indique cómo se incorpora la Inteligencia Artificial (
+    modelos de lenguaje, 
+    visión computacional, 
+    agentes autónomos, 
+    árboles de decisión, 
+    análisis predictivo 
+    o heurísticas avanzadas) 
+        u otra tecnología disruptiva para resolver el problema de manera inteligente.
+
+La innovación propuesta es 
+    integrar tareas motoras y cognitivas 
+        con medición local y control de calidad en una batería accesible. 
+        El fundamento neurocientífico es la exploración del 
+            control motor, 
+            coordinación, 
+            memoria espacial, 
+            atención e inhibición. 
+        Estas tareas no son equivalentes a 
+            escalas clínicas 
+            ni permiten inferir por sí solas una enfermedad [2].
+
+MediaPipe aportará modelos preentrenados 
+    para localizar puntos de manos, rostro y postura [1]. 
+        Frente a un registro manual de coordenadas, 
+            permitirá extraer trayectorias durante la interacción. 
+        Algoritmos deterministas calcularán 
+            ciclos, 
+            distancias, 
+            tiempos 
+            y simetría geométrica. 
+        Se documentarán versiones y configuración y 
+            se compararán las salidas con conteos manuales y secuencias de referencia.
+
+Para ajustarnos a la disponibilidad del equipo, el MVP no incluirá un modelo generativo, entrenamiento de un clasificador de voz ni un escenario 3D. El informe usará plantillas vinculadas a las métricas. La precisión diagnóstica y la interpretación clínica quedan fuera de las conclusiones de esta fase.
+
+3. ARQUITECTURA DEL SISTEMA Y STACK TECNOLÓGICO LIBRE
+
+Pautas de Orientación: Presente el diagrama de arquitectura lógica y conceptual del sistema (capas de frontend, backend almacenamiento, autenticación y servicios de IA). Inserte una imagen o diagrama legible en este espacio.
+
+[Diagrama de arquitectura: Yuyay como PWA local y offline]
+Dispositivo del usuario — PWA en el navegador
+- Procesamiento 100% local: Sin conexión salvo en la instalación; sin peticiones externas
+- Interfaz y minijuegos: Salida a pantalla; Canvas / SVG accesibles
+- Soporte offline: Service Worker + Workbox; Cache Storage; app y modelos
+- Cámara: MediaPipe Tasks Vision; Hand / Face / Pose Landmarker
+- Micrófono: Web Audio API; Duración e intensidad relativa
+- Teclado / pantalla: Respuestas y recorrido; Latencia, omisiones, aciertos
+- Motor de métricas y calidad: TypeScript + Web Workers; Métricas por dimensión y control de calidad
+- Perfil e informe: Plantillas explicativas; Exportación de resultados
+- Persistencia local: IndexedDB + Dexie.js; Sesiones, métricas y calidad
+Herramientas de desarrollo y compilación: Bun + Vite; Service Worker (Workbox); Pruebas reproducibles con señales sintéticas
+
+Figura 1. Arquitectura de Yuyay como PWA local y offline, elaborada con Excalidraw Whiteboard
+
+La PWA ejecutará los juegos, MediaPipe y el análisis de audio en el navegador. El motor de métricas utilizará Web Workers para evitar bloquear la interfaz. IndexedDB, mediante Dexie.js, conservará las sesiones autorizadas. El service worker y Cache Storage permitirán utilizar la aplicación y los modelos precargados sin conexión. Bun y Vite se emplearán para desarrollo y compilación; no se requiere un servidor durante el uso. La instalación inicial deberá completar y verificar la descarga de recursos.
+
+Pautas de Orientación: Justifique la selección del stack tecnológico libre (lenguajes de programación, frameworks, librerías y bases de datos). Recuerde que no se exige ninguna plataforma de nube de pago (despliegue local, niveles gratuitos o contenedores permitidos).
+
+• Frontend / Interfaz de Usuario: React, TypeScript y Vite; juegos con Canvas o SVG e interfaz accesible.
+• Backend / Lógica y cálculo: TypeScript, Node.js, Bun y Web Workers; métricas independientes y pruebas reproducibles.
+• Visión y audio (IA / ML): MediaPipe Tasks Vision y Web Audio API: captura y procesamiento local.
+• Persistencia y Base de Datos: IndexedDB con Dexie.js; sesiones, métricas y calidad. Sin conservar audio ni video.
+• Entorno de Ejecución / Despliegue: PWA local con service worker (Workbox) y Cache Storage para recursos offline. Bun para dependencias y comandos; Vite para compilación.
+
+Equipos y condiciones de ejecución
+
+Recursos declarados: MacBook Air M1; PC con procesador identificado por el equipo como Ryzen 5 9600X y 16 GB de RAM; PC con Intel Core i5 de sexta generación y 8 GB de RAM. Los dispositivos de captura se comprobarán en la primera semana. No se asume GPU dedicada. Se elegirá el equipo de demostración según mediciones de rendimiento y disponibilidad de cámara y micrófono.
+
+Validación técnica y criterios medibles
+
+Las siguientes cifras son metas propuestas, no resultados obtenidos. Las pruebas iniciales usarán señales sintéticas, secuencias de prueba y revisión manual. El reclutamiento de voluntarios y la revisión por profesionales de salud están pendientes de gestión; cualquier estudio con personas requerirá consentimiento y revisión institucional cuando corresponda. No se calcularán sensibilidad ni especificidad clínicas con esta evidencia.
+
+Prueba | Criterio propuesto
+Pinza y métricas faciales | Error de conteo de ciclos ≤10 % en 10 secuencias anotadas; verificar simetría con puntos sintéticos conocidos y tolerancia numérica documentada.
+Oscilación de referencia | Error de frecuencia ≤0,5 Hz en señales sintéticas de 3, 5 y 8 Hz con marcas de tiempo. Probar aparte el efecto del muestreo irregular de cámara.
+Cóndor y Semáforo | Aciertos y errores coincidentes con el 100 % de guiones automatizados. El tiempo representa respuesta del sistema completo, sin atribuir precisión clínica.
+Condiciones difíciles | Detectar y comunicar todos los fallos del conjunto declarado: permiso denegado, mano o rostro ausente y micrófono sin señal. No emitir métricas de captura inválida.
+Rendimiento y flujo | Meta ≥20 fotogramas/s en el módulo visual activo; registrar modelo, resolución y equipo. Completar cinco juegos y perfil en ≤6 minutos bajo condiciones de prueba.
+Funcionamiento local | Ejecutar el flujo con red desconectada tras instalar recursos; comprobar ausencia de peticiones externas y exportación de resultados.
+
+Alcance y viabilidad en cinco semanas
+
+Se interpreta una dedicación de 6 horas semanales por integrante: 18 horas de equipo por semana y 90 horas en total. Esta estimación exige versiones mínimas de los cinco juegos. El tiempo de gestión con voluntarios se revisará al disponer de acceso; no se compromete una muestra clínica.
+
+Semana | Entregable | Horas de equipo
+1 | Estructura React y Bun, PWA, dispositivos, prueba de MediaPipe y protocolo. | 18
+2 | La pinza y Semáforo con métricas y pruebas unitarias. | 18
+3 | Bandeja y Sonríe y habla en su versión básica. | 18
+4 | Cóndor 2D, perfil, almacenamiento e integración del flujo. | 18
+5 | Pruebas de error, rendimiento, ejecución local, documentación y ensayo. | 18
+
+Distribución provisional: Omar se encargará de la documentación de base neurocientífica y coordinará e integrará persistencia, informes y soporte offline; Andrés desarrollará visión y métricas; Alexander implementará interfaz, Cóndor y Semáforo. Todos revisarán los módulos y prepararán la defensa. El repositorio documentará modelos, licencias, resultados y ejecución; se respetará el congelamiento del 25 de noviembre establecido en las bases [3].
+
+Límites y riesgos: Iluminación, encuadre, micrófono y latencia afectan los valores. No se establecerán umbrales de salud con datos simulados ni se prometerá detección de ACV, párkinson o deterioro cognitivo. La ampliación clínica requerirá asesoría y validación posteriores. Si las pruebas iniciales revelan retrasos, el equipo revisará y comunicará el alcance antes de comprometer funciones adicionales.
+
+Referencias
+
+[1] Google AI Edge. MediaPipe Tasks Vision para Web: guías Hand, Face y Pose Landmarker. developers.google.com/edge/mediapipe/solutions/vision
+[2] Parkinson's Foundation. Getting Diagnosed. parkinson.org/understanding-parkinsons/getting-diagnosed
+[3] Club Académico PoliByte. Bases oficiales del PoliByte Innovation Challenge 2026, secciones 6.1, 7 y Anexo A.

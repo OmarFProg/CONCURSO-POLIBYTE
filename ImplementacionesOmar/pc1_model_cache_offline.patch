@@ -1,0 +1,300 @@
+diff --git a/src/features/install/use-asset-install.ts b/src/features/install/use-asset-install.ts
+index ff4f3ee..dede879 100644
+--- a/src/features/install/use-asset-install.ts
++++ b/src/features/install/use-asset-install.ts
+@@ -1,7 +1,11 @@
+ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+-import { type InstallProgress, installModels, type ModelSpec } from '../../pwa/model-cache'
+-
+-type ChecksumsFile = Record<string, { sha256: string; bytes: number }>
++import {
++  type ChecksumsMap,
++  type InstallProgress,
++  installModels,
++  loadChecksumsWithCache,
++  type ModelSpec,
++} from '../../pwa/model-cache'
+ 
+ const modelFiles = [
+   'hand_landmarker.task',
+@@ -9,7 +13,7 @@ const modelFiles = [
+   'pose_landmarker_lite.task',
+ ] as const
+ 
+-function toSpecs(checksums: ChecksumsFile): ModelSpec[] {
++function toSpecs(checksums: ChecksumsMap): ModelSpec[] {
+   return modelFiles.flatMap((name) => {
+     const entry = checksums[name]
+     if (!entry) return []
+@@ -34,9 +38,7 @@ export function useAssetInstall(onDone: () => void) {
+     running.current = true
+     try {
+       setProgress({ total: 0, done: 0, current: '', status: 'downloading', failed: [] })
+-      const response = await fetch('/models/checksums.json', { cache: 'no-store' })
+-      if (!response.ok) throw new Error(`checksums HTTP ${response.status}`)
+-      const checksums = (await response.json()) as ChecksumsFile
++      const checksums = await loadChecksumsWithCache('/models/checksums.json')
+       const result = await installModels(toSpecs(checksums), setProgress)
+       if (result.status === 'ready') doneRef.current()
+     } catch (error) {
+diff --git a/src/pwa/model-cache.test.ts b/src/pwa/model-cache.test.ts
+index 2a77e34..03236eb 100644
+--- a/src/pwa/model-cache.test.ts
++++ b/src/pwa/model-cache.test.ts
+@@ -1,9 +1,13 @@
+ import { describe, expect, it, vi } from 'vitest'
+ import {
++  CACHE_NAME,
++  type ChecksumsMap,
+   type InstallDeps,
+   type InstallProgress,
+   installModels,
++  loadChecksumsWithCache,
+   type ModelSpec,
++  verifyCachedModels,
+ } from './model-cache'
+ 
+ async function sha256Hex(data: Uint8Array): Promise<string> {
+@@ -182,4 +186,137 @@ describe('installModels', () => {
+     expect(result.failed).toEqual([])
+     expect(result.done).toBe(data.byteLength)
+   })
++
++  it('installModels almacena el recurso verificado tanto en cacheKey interno como en spec.url para lectura offline directa', async () => {
++    const data = new TextEncoder().encode('modelo-offline')
++    const spec: ModelSpec = {
++      name: 'hand_landmarker.task',
++      url: '/models/hand_landmarker.task',
++      bytes: data.byteLength,
++      sha256: await sha256Hex(data),
++    }
++    const fetchMock = vi.fn(async () => new Response(new Uint8Array(data), { status: 200 }))
++    const { caches, store } = makeMemoryCaches()
++
++    const result = await installModels(
++      [spec],
++      () => {},
++      makeDeps(fetchMock as typeof fetch, caches),
++    )
++
++    expect(result.status).toBe('ready')
++    expect(CACHE_NAME).toBe('yuyay-models-v1')
++    expect(store.has('https://yuyay.local/models/hand_landmarker.task')).toBe(true)
++    expect(store.has('/models/hand_landmarker.task')).toBe(true)
++  })
++})
++
++describe('soporte offline de checksums y caché', () => {
++  it('loadChecksumsWithCache guarda checksums.json en caché cuando hay red y usa la copia en caché cuando fetch falla sin conexión', async () => {
++    const checksums: ChecksumsMap = {
++      'hand_landmarker.task': { sha256: 'abc123', bytes: 10 },
++    }
++    const { caches } = makeMemoryCaches()
++    const onlineFetch = vi.fn(
++      async () =>
++        new Response(JSON.stringify(checksums), {
++          status: 200,
++          headers: { 'Content-Type': 'application/json' },
++        }),
++    )
++
++    const first = await loadChecksumsWithCache('/models/checksums.json', {
++      fetch: onlineFetch as typeof fetch,
++      caches,
++    })
++    expect(first).toEqual(checksums)
++
++    const offlineFetch = vi.fn(async () => {
++      throw new TypeError('Sin conexión')
++    })
++    const cached = await loadChecksumsWithCache('/models/checksums.json', {
++      fetch: offlineFetch as typeof fetch,
++      caches,
++    })
++    expect(cached).toEqual(checksums)
++  })
++
++  it('loadChecksumsWithCache lanza error explícito cuando fetch falla y no hay copia en caché', async () => {
++    const { caches } = makeMemoryCaches()
++    const offlineFetch = vi.fn(async () => {
++      throw new TypeError('Sin conexión')
++    })
++
++    await expect(
++      loadChecksumsWithCache('/models/checksums.json', {
++        fetch: offlineFetch as typeof fetch,
++        caches,
++      }),
++    ).rejects.toThrow('No se pudo obtener checksums.json ni desde la caché local')
++  })
++
++  it('verifyCachedModels devuelve ready: true cuando los modelos están en caché con hash válido y ready: false con missing cuando falta alguno, sin llamar fetch', async () => {
++    const data1 = new TextEncoder().encode('modelo-1')
++    const data2 = new TextEncoder().encode('modelo-2')
++    const spec1: ModelSpec = {
++      name: 'hand_landmarker.task',
++      url: '/models/hand_landmarker.task',
++      bytes: data1.byteLength,
++      sha256: await sha256Hex(data1),
++    }
++    const spec2: ModelSpec = {
++      name: 'face_landmarker.task',
++      url: '/models/face_landmarker.task',
++      bytes: data2.byteLength,
++      sha256: await sha256Hex(data2),
++    }
++    const { caches, store } = makeMemoryCaches()
++    const onlineFetch = vi.fn(async (input: RequestInfo | URL) => {
++      const url = String(input)
++      return new Response(new Uint8Array(url.includes('hand') ? data1 : data2), { status: 200 })
++    })
++
++    await installModels(
++      [spec1, spec2],
++      () => {},
++      makeDeps(onlineFetch as typeof fetch, caches),
++    )
++
++    const offlineFetch = vi.fn(async () => {
++      throw new Error('No debe llamar a fetch durante verifyCachedModels')
++    })
++
++    const okResult = await verifyCachedModels(
++      [spec1, spec2],
++      makeDeps(offlineFetch as typeof fetch, caches),
++    )
++    expect(offlineFetch).not.toHaveBeenCalled()
++    expect(okResult).toEqual({
++      ready: true,
++      cached: ['hand_landmarker.task', 'face_landmarker.task'],
++      missing: [],
++    })
++
++    store.delete('https://yuyay.local/models/face_landmarker.task')
++    const missingResult = await verifyCachedModels(
++      [spec1, spec2],
++      makeDeps(offlineFetch as typeof fetch, caches),
++    )
++    expect(missingResult).toEqual({
++      ready: false,
++      cached: ['hand_landmarker.task'],
++      missing: ['face_landmarker.task'],
++    })
++
++    const corruptedSpec: ModelSpec = { ...spec1, sha256: 'f'.repeat(64) }
++    const corruptedResult = await verifyCachedModels(
++      [corruptedSpec],
++      makeDeps(offlineFetch as typeof fetch, caches),
++    )
++    expect(corruptedResult).toEqual({
++      ready: false,
++      cached: [],
++      missing: ['hand_landmarker.task'],
++    })
++  })
+ })
+diff --git a/src/pwa/model-cache.ts b/src/pwa/model-cache.ts
+index 081bb80..b36760a 100644
+--- a/src/pwa/model-cache.ts
++++ b/src/pwa/model-cache.ts
+@@ -13,7 +13,9 @@ export interface InstallProgress {
+   failed: string[]
+ }
+ 
+-const CACHE_NAME = 'yuyay-models-v1'
++export type ChecksumsMap = Record<string, { sha256: string; bytes: number }>
++
++export const CACHE_NAME = 'yuyay-models-v1'
+ 
+ type ProgressCallback = (p: InstallProgress) => void
+ 
+@@ -98,20 +100,72 @@ async function downloadAndVerifyOnce(
+     .join('')
+   if (hash !== spec.sha256) {
+     await cache.delete(cacheKey(spec.name))
++    await cache.delete(spec.url)
+     return false
+   }
+-  await cache.put(
+-    cacheKey(spec.name),
+-    new Response(ab, {
+-      headers: {
+-        'Content-Type': 'application/octet-stream',
+-        'Content-Length': String(bytes.byteLength),
+-      },
+-    }),
+-  )
++  const cachedResponse = new Response(ab, {
++    headers: {
++      'Content-Type': 'application/octet-stream',
++      'Content-Length': String(bytes.byteLength),
++    },
++  })
++  await cache.put(cacheKey(spec.name), cachedResponse.clone())
++  await cache.put(spec.url, cachedResponse)
+   return true
+ }
+ 
++export async function loadChecksumsWithCache(
++  url = '/models/checksums.json',
++  deps: Pick<InstallDeps, 'fetch' | 'caches'> = defaultDeps,
++): Promise<ChecksumsMap> {
++  const cache = await deps.caches.open(CACHE_NAME)
++
++  try {
++    const response = await deps.fetch(url, { cache: 'no-cache' })
++    if (response.ok) {
++      const checksums = (await response.json()) as ChecksumsMap
++      const cachedResponse = new Response(JSON.stringify(checksums), {
++        headers: { 'Content-Type': 'application/json' },
++      })
++      await cache.put(cacheKey('checksums.json'), cachedResponse.clone())
++      await cache.put(url, cachedResponse)
++      return checksums
++    }
++  } catch {
++    // Sin conexión o error de red: se intenta recuperar la copia en caché local.
++  }
++
++  const cached = (await cache.match(cacheKey('checksums.json'))) ?? (await cache.match(url))
++  if (cached) {
++    return (await cached.json()) as ChecksumsMap
++  }
++
++  throw new Error('No se pudo obtener checksums.json ni desde la caché local')
++}
++
++export async function verifyCachedModels(
++  specs: ModelSpec[],
++  deps: InstallDeps = defaultDeps,
++): Promise<{ ready: boolean; cached: string[]; missing: string[] }> {
++  const cache = await deps.caches.open(CACHE_NAME)
++  const cached: string[] = []
++  const missing: string[] = []
++
++  for (const spec of specs) {
++    if (await isCachedAndVerified(spec, cache, deps.digest)) {
++      cached.push(spec.name)
++    } else {
++      missing.push(spec.name)
++    }
++  }
++
++  return {
++    ready: specs.length > 0 && missing.length === 0,
++    cached,
++    missing,
++  }
++}
++
+ export async function installModels(
+   specs: ModelSpec[],
+   onProgress: ProgressCallback,
+@@ -174,6 +228,7 @@ export async function installModels(
+     if (!ok) {
+       progress.failed.push(spec.name)
+       await cache.delete(cacheKey(spec.name))
++      await cache.delete(spec.url)
+     }
+   }
+ 

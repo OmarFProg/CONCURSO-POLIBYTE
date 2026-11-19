@@ -1,0 +1,28 @@
+PWA
+    Una PWA (Progressive Web App o Aplicación Web Progresiva) 
+        es un tipo de software desarrollado utilizando 
+            tecnologías web estándar (HTML, CSS y JavaScript) que 
+        ofrece una experiencia de uso prácticamente idéntica a 
+            la de una aplicación nativa móvil o de escritorio.
+
+        Su objetivo es combinar el alcance y la accesibilidad de una página web 
+    con el rendimiento, la interacción y las capacidades del hardware de una aplicación instalada.
+
+Componentes técnicos clave
+    Para que un sitio web califique técnicamente como una PWA, depende de tres pilares fundamentales:
+
+    Service Workers:    
+        Scripts que el navegador ejecuta en segundo plano,
+        separados del hilo principal de la página. Permiten:
+            Caché avanzada y funcionamiento offline: 
+                Interceptan peticiones de red y devuelven contenido almacenado localmente si no hay conexión o esta es deficiente.
+
+Notificaciones push: Recepción de alertas del servidor incluso si la aplicación no está abierta.
+
+Sincronización en segundo plano: Envío de acciones o datos en cuanto se recupera la conexión.
+
+Web App Manifest (manifest.json): Archivo de configuración en formato JSON que especifica los metadatos de la aplicación: nombre, iconos para diferentes resoluciones, color de tema, pantalla de carga (splash screen) y modo de visualización (por ejemplo, standalone, para ejecutarse sin la barra de direcciones del navegador).
+
+HTTPS obligatorio: Por motivos de seguridad, 
+los Service Workers y las APIs modernas que interactúan con el hardware requieren conexiones cifradas 
+(excepto en localhost durante desarrollo).

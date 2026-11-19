@@ -1,0 +1,329 @@
+================================================================================
+PLAN DE ESTABILIZACIÓN E IMPLEMENTACIÓN EN PC1 (DESKTOP-ML70LGD) — ESTACIÓN OMAR
+PROYECTO: Yuyay — Tamizaje neurológico experimental con minijuegos (PoliByte 2026)
+EQUIPO  : Los JackersMainsters (ESPOCH - Ingeniería de Software, 8.º Semestre)
+ESTACIÓN: PC1 (DESKTOP-ML70LGD) — Estación única de trabajo de Omar Figueroa
+FECHA   : 19 de noviembre de 2026 (Objetivo Code Freeze: 25 de noviembre de 2026)
+================================================================================
+
+REFERENCIAS BASE VERIFICADAS:
+- Propuesta Técnica   : PROPUESTA/PROPUESTA.txt
+- Plan de Desarrollo  : Ingenieria de Software/PlanTentativoDesarrolloYuyay.txt
+- Documentación Ing.  : Ingenieria de Software/ (00_Indice a 06_Plan_Pruebas)
+- Plan Previo PC2     : ImplementacionesOmar/Plan_Estabilizacion_Estacion_Omar_PC2.md
+- Repo Oficial Código : https://github.com/Polibyte/pb2026-jackersmainsters.git
+- Repo Planeación     : https://github.com/OmarFProg/CONCURSO-POLIBYTE.git
+
+
+================================================================================
+1. DIAGNÓSTICO VERIFICADO EN PC1 (DESKTOP-ML70LGD) VS. REPOSITORIO OFICIAL
+================================================================================
+
+1.1. HARDWARE Y ENTORNO REAL EN PC1 (VERIFICADO EN SESIÓN ACTUAL)
+Al auditar la estación actual (`DESKTOP-ML70LGD`), se confirma que **PC1 ya cuenta
+con las especificaciones de hardware y software recomendadas** para desarrollar y
+validar Yuyay sin necesidad de migrar a PC2:
+- Equipo / CPU : `DESKTOP-ML70LGD` — Intel(R) Core(TM) i5-7200U @ 2.50 GHz (2C/4T)
+- Memoria RAM  : 11,88 GB (~12 GB RAM)
+- Herramientas :
+  * `git`      -> `2.50.1.windows.1` (OK)
+  * `bun`      -> `1.4.4` (OK, cumple `>= 1.4.3`)
+  * `node`     -> `v22.20.0` (OK, cumple `>= 22`)
+  * `npm`      -> `10.9.3` (OK)
+  * `code`     -> `1.147.0` (VS Code instalado)
+  * `linearis` -> `2026.8.0` (Instalado, PERO autenticado en workspace personal `OMA`
+                  y no en el workspace del equipo `alexander-villalva` / equipo `ALE`)
+  * `gh`       -> No instalado (opcional; no es bloqueante)
+
+1.2. ESTADO DE LOS REPOSITORIOS EN PC1 VS. REPOSITORIO OFICIAL
+Se verificaron tres repositorios distintos:
+
+A) REPOSITORIO DE PLANEACIÓN (`https://github.com/OmarFProg/CONCURSO-POLIBYTE.git`)
+   - Ubicación en PC1: `D:\FLASH 7 SEP 2026\ESPOCH OCTAVO\CONCURSO POLIBYTE`
+   - Rama `main` en `21746b7`, con cambios locales sin commitear (`PROPUESTA.txt`,
+     `Ingenieria de Software/`, `Entorno/`, `ImplementacionesOmar/`, `PROPUESTA/mockups/`).
+   - Uso exclusivo: documentación, propuesta, ingeniería de software y bitácoras.
+     NO debe mezclarse con el código fuente de la PWA.
+
+B) CLON ANTIGUO EN PC1 (`https://github.com/AndresGaibor/yuyay.git`)
+   - Ubicación en PC1: `D:\FLASH 7 SEP 2026\ESPOCH OCTAVO\CONCURSO POLIBYTE\yuyay`
+   - Commit base `589fb73` (15/11/2026), rama `feat/informe-exportacion-offline`.
+   - **ESTÁ OBSOLETO** respecto al repositorio oficial del concurso.
+   - **AVANCE LOCAL VALIOSO POR RESCATAR:** Contiene trabajo sin commitear de Omar
+     (`+211/-17` líneas) en:
+     * `src/pwa/model-cache.ts` (`loadChecksumsWithCache` y `verifyCachedModels`
+       para operación 100 % sin red)
+     * `src/pwa/model-cache.test.ts` (+137 líneas de pruebas)
+     * `src/features/install/use-asset-install.ts`
+     * `docs/superpowers/plans/2026-11-16-omar-informe-offline.md` y
+       `specs/002-informe-exportacion-offline/`
+
+C) REPOSITORIO OFICIAL DEL CONCURSO (`https://github.com/Polibyte/pb2026-jackersmainsters.git`)
+   - **Fuente oficial de verdad para el código de Yuyay.**
+   - Rama `main` en `e81431a` (PR #12).
+   - Rama `dev` en `3e26d61` (PR #13).
+   - **Avance real verificado en rama `dev` (`3e26d61`):**
+     1. Landmarkers implementados (`ALE-8`): `FaceLandmarker` y `PoseLandmarker`
+        con verificación local de checksums.
+     2. 3 de 5 minijuegos implementados y conectados en `src/app/App.tsx`:
+        - `src/features/games/pinza/PinzaScreen.tsx` (`ALE-13`)
+        - `src/features/games/bandeja/BandejaScreen.tsx` (`ALE-14`)
+        - `src/features/games/sonrisa/SonrisaScreen.tsx` (`ALE-15`)
+     3. Pendientes en `Placeholder.tsx`:
+        - `src/features/games/condor/Placeholder.tsx` (Alexander)
+        - `src/features/games/semaforo/Placeholder.tsx` (Alexander)
+        - `src/features/report/Placeholder.tsx` (`ReportPlaceholder` -> **OMAR**)
+     4. `src/pwa/model-cache.ts` en `dev` aún NO tiene `loadChecksumsWithCache` ni
+        `verifyCachedModels` desarrollados por Omar en PC1.
+     5. Reglas de flujo obligatorias en `AGENTS.md` y `.github/workflows/ci.yml`:
+        - Rama de trabajo: `dev` (push con `git push origin HEAD:dev`).
+        - Hook `.githooks/pre-push` bloquea pushes directos a `main`.
+        - El CI en PRs hacia `main` (job `linear`) exige `ALE-<número>` en el título.
+        - Linear manda: proyecto `YUYAY`, workspace `alexander-villalva`, equipo `ALE`.
+
+1.3. DESFASE DE CONTRATO DETECTADO ENTRE DOCUMENTACIÓN Y CÓDIGO OFICIAL (`dev`)
+Al inspeccionar `evaluation.ts` de `pinza`, `bandeja` y `sonrisa` en `dev` (`3e26d61`),
+se detectaron diferencias menores de unidades respecto a `PlanTentativoDesarrolloYuyay.txt`
+(sección 4.3). El módulo de informes de Omar DEBE alinearse al contrato real de `dev`:
+
+- `pinza`:
+  * `pinza.cycles`          -> unit: `'ciclos'`
+  * `pinza.amplitude`       -> unit: `'u.a.'`    (en PlanTentativo decía `u.n.`)
+  * `pinza.rhythmVariation` -> unit: `'u.a.'`    (en PlanTentativo decía `proporción`)
+- `bandeja`:
+  * `bandeja.rms`               -> unit: `'u.a.'` (en PlanTentativo decía `u.n.`)
+  * `bandeja.dominantFrequency` -> unit: `'Hz'`
+  * `bandeja.duration`          -> unit: `'s'`    (en PlanTentativo decía `ms`)
+- `sonrisa`:
+  * `sonrisa.symmetryRatio`  -> unit: `'u.a.'`   (en PlanTentativo decía `u.n.`)
+  * `sonrisa.vowelDuration`  -> unit: `'ms'`     (en PlanTentativo decía `s`)
+  * `sonrisa.vowelIntensity` -> unit: `'dBFS'`
+- `condor` (pendiente en `dev`, contrato objetivo):
+  * `condor.hits` (`'aciertos'`), `condor.duration` (`'s'`), `condor.length` (`'px'`),
+    `condor.optimalLength` (`'px'`)
+- `semaforo` (pendiente en `dev`, contrato objetivo):
+  * `semaforo.medianLatency` (`'ms'`), `semaforo.omissions` (`'ensayos'`),
+    `semaforo.falseAlarms` (`'ensayos'`)
+
+
+================================================================================
+2. ALCANCE PENDIENTE DE OMAR (SEGÚN PROPUESTA, INGENIERÍA DE SOFTWARE Y PLAN)
+================================================================================
+
+De acuerdo con `PROPUESTA/PROPUESTA.txt`, `PlanTentativoDesarrolloYuyay.txt` (sección 7.3)
+y `04_Product_Backlog_y_Tablero_Kanban_TDD.md`, las tareas pendientes que corresponden
+a Omar y que aportan avance directo e independiente sin colisionar con los minijuegos
+de Alexander (`condor`, `semaforo`) son:
+
+1. [PBI-013 / BKL-001] Estabilización de acceso, Linear (`ALE`) y clon oficial en PC1.
+2. [Rescate Offline] Portar mejora TDD de `src/pwa/model-cache.ts` +
+   `use-asset-install.ts` desde el clon antiguo de PC1 al repo oficial (`dev`).
+3. [PBI-023 / BKL-007] TDD Motor determinista de plantillas del informe
+   (`src/features/report/report-templates.test.ts` -> `report-templates.ts`):
+   - Cubrir las 5 dimensiones (`pinza`, `bandeja`, `sonrisa`, `condor`, `semaforo`).
+   - Mostrar valores con unidades exactas cuando `status === 'ok'`.
+   - Bloqueo estricto de `"No evaluable"` (nunca emitir `0` si `status === 'not-evaluable'`
+     o `value === null`), mostrando causas técnicas desde `qualityFlags`.
+   - Incluir `copy.app.disclaimer` y cumplir `bun run language` (0 términos clínicos).
+4. [PBI-024 / BKL-007] TDD Pantalla de Informe (`ReportScreen.test.tsx` ->
+   `ReportScreen.tsx` reemplazando `ReportPlaceholder` en `src/app/App.tsx`):
+   - Leer `listMeasurements(sessionId)` y `latestDeviceCheck(sessionId)` desde Dexie.
+   - Renderizar tarjetas accesibles (`src/design/ui`, botones >= 48 px, `aria-live="polite"`).
+   - Flujo para repetir actividades marcadas como `"No evaluable"` o pendientes.
+5. [PBI-027 y PBI-028 / BKL-011] TDD Exportación local y borrado de sesión
+   (`export-report.test.ts` -> `export-report.ts`):
+   - Exportar `.json` auditable sin blobs de audio/video ni landmarks crudos.
+   - Vista de impresión / Guardar PDF (`window.print()` + estilos `@media print`).
+   - Botón *"Borrar mis resultados"* que limpie la sesión y mediciones en Dexie.
+6. [PBI-030 y PBI-031 / BKL-012 y BKL-013] Validación QA Hardware y Offline en PC1:
+   - Medir FPS reales (`>= 20 FPS`) y tiempo total de sesión (`<= 6 min`) en PC1
+     (`Core i5-7200U / 12 GB RAM`).
+   - Probar casos difíciles (permiso denegado, mano/rostro ausente, mic sin señal)
+     y operación 100 % offline tras instalar modelos (`0` peticiones externas).
+   - Documentar resultados en `docs/validacion-mvp.md` y actualizar `README.md`.
+
+
+================================================================================
+3. PLAN POR FASES PARA LA SESIÓN DE IMPLEMENTACIÓN EN PC1 (DESKTOP-ML70LGD)
+================================================================================
+
+--------------------------------------------------------------------------------
+FASE 0: RESPALDO Y SINCRONIZACIÓN DE REPOSITORIOS LOCALES EN PC1 (15 min)
+--------------------------------------------------------------------------------
+Objetivo: Asegurar que el avance local de `model-cache` no se pierda y limpiar
+el repositorio de planeación `CONCURSO-POLIBYTE`.
+
+1. Generar parche del avance local de Omar desde el clon antiguo `yuyay/`:
+   ```powershell
+   cd "D:\FLASH 7 SEP 2026\ESPOCH OCTAVO\CONCURSO POLIBYTE\yuyay"
+   git diff > ..\ImplementacionesOmar\pc1_model_cache_offline.patch
+   ```
+2. Sincronizar el repo de planeación (`OmarFProg/CONCURSO-POLIBYTE.git`) sin subir
+   la carpeta `yuyay/`:
+   - Verificar `.gitignore` en `D:\FLASH 7 SEP 2026\ESPOCH OCTAVO\CONCURSO POLIBYTE`
+     para confirmar que `yuyay/` no sea versionado.
+   - Hacer commit y `git push origin main` de la documentación actualizada
+     (`PROPUESTA/PROPUESTA.txt`, `Ingenieria de Software/`, `ImplementacionesOmar/`).
+
+--------------------------------------------------------------------------------
+FASE 1: ESTABILIZACIÓN DEL REPO OFICIAL Y LINEAR (`ALE`) EN PC1 (15-20 min)
+--------------------------------------------------------------------------------
+Objetivo: Dejar `Polibyte/pb2026-jackersmainsters.git` clonado en una ruta
+dedicada de PC1, con hooks activos, Linear autenticado y suite base en verde.
+
+1. Clonar el repo oficial FUERA de `CONCURSO POLIBYTE` (por ejemplo en `D:\YuyayOficial`
+   o `D:\FLASH 7 SEP 2026\ESPOCH OCTAVO\pb2026-jackersmainsters`):
+   ```powershell
+   cd "D:\FLASH 7 SEP 2026\ESPOCH OCTAVO"
+   git clone https://github.com/Polibyte/pb2026-jackersmainsters.git
+   cd pb2026-jackersmainsters
+   git config core.hooksPath .githooks
+   git fetch origin
+   git checkout dev
+   ```
+2. Instalar dependencias y validar línea base en PC1:
+   ```powershell
+   bun install --frozen-lockfile
+   bun run check
+   ```
+   Criterio de salida: `typecheck`, `lint`, `language`, `pm:check`, `test` y `build`
+   deben pasar al 100 % en verde.
+3. Re-autenticar `linearis` al workspace oficial del equipo (`alexander-villalva`):
+   - Obtener/usar la API Key personal de Omar del workspace `alexander-villalva`
+     (Linear -> Settings -> API -> Personal API keys).
+   - Ejecutar:
+     ```powershell
+     linearis auth login
+     linearis projects read YUYAY
+     linearis issues list --project YUYAY --team ALE
+     ```
+   - Verificar o crear los issues `ALE-*` correspondientes a Omar (ej. Informe por
+     plantillas, Exportación y Soporte Offline de modelos) y asignarlos con `--assignee me`.
+4. Aviso al equipo (Andrés y Alexander):
+   - Confirmar permisos de escritura (`Write`) en `Polibyte/pb2026-jackersmainsters.git`.
+   - Informar que se integrará en `dev` (o rama `ALE-XX-<tema>` -> `dev`) el soporte
+     offline de `model-cache.ts` y el módulo `src/features/report/`.
+   - Confirmar que no se tocarán `session-flow.ts`, `db.ts`, `vite.config.ts` ni
+     `public/models/` sin coordinación previa.
+
+--------------------------------------------------------------------------------
+FASE 2: PORTADO DEL AVANCE OFFLINE DE PC1 AL REPO OFICIAL (20-30 min)
+--------------------------------------------------------------------------------
+Objetivo: Incorporar en el repo oficial las mejoras ya probadas de Omar para
+operación sin red en la instalación de modelos.
+
+1. Crear rama trazable desde `dev` (si se requiere aislamiento, según `AGENTS.md`):
+   ```powershell
+   git checkout -b ALE-XX-cache-modelos-offline
+   ```
+2. Aplicar e integrar el parche `pc1_model_cache_offline.patch` sobre
+   `src/pwa/model-cache.ts`, `src/pwa/model-cache.test.ts` y
+   `src/features/install/use-asset-install.ts` (revisando conflictos si los hubiera).
+3. Verificar con TDD y puertas de calidad:
+   ```powershell
+   bunx vitest run src/pwa/model-cache.test.ts
+   bun run check
+   ```
+4. Actualizar issue en Linear (`linearis issues discuss` / `update`), fusionar a `dev`
+   y hacer `git push origin HEAD:dev` (o abrir PR si el equipo prefiere revisión previa).
+
+--------------------------------------------------------------------------------
+FASE 3: SESIÓN DE IMPLEMENTACIÓN TDD — MOTOR DE PLANTILLAS Y PANTALLA DE INFORME
+(Bloque central de implementación: ~2 a 3 horas)
+--------------------------------------------------------------------------------
+Objetivo: Reemplazar `ReportPlaceholder` por un informe real, determinista y
+auditable conectado a Dexie, manteniendo WIP = 1.
+
+1. **Ciclo TDD 1 — Motor de Plantillas (`report-templates.test.ts` -> `report-templates.ts`):**
+   - **Rojo:** Crear `src/features/report/report-templates.test.ts` cubriendo:
+     a) Las 5 dimensiones (`pinza`, `bandeja`, `sonrisa`, `condor`, `semaforo`)
+        con las claves y unidades reales de `dev`:
+        - `pinza`: `cycles` (`ciclos`), `amplitude` (`u.a.`), `rhythmVariation` (`u.a.`)
+        - `bandeja`: `rms` (`u.a.`), `dominantFrequency` (`Hz`), `duration` (`s`)
+        - `sonrisa`: `symmetryRatio` (`u.a.`), `vowelDuration` (`ms`), `vowelIntensity` (`dBFS`)
+        - `condor`: `hits` (`aciertos`), `duration` (`s`), `length` (`px`), `optimalLength` (`px`)
+        - `semaforo`: `medianLatency` (`ms`), `omissions` (`ensayos`), `falseAlarms` (`ensayos`)
+     b) Regla `"No evaluable"` (RC-04): si `status === 'not-evaluable'` o `value === null`
+        o faltan mediciones, mostrar `"No evaluable"` (o `"Pendiente"` si no hay filas)
+        y listar los motivos legibles mapeados desde `qualityFlags` (ej. `hand-absent`,
+        `no-arms`, `face-absent`, `no-signal`, `low-fps`, `insufficient-cycles`,
+        `insufficient-window`). NUNCA emitir `0`.
+     c) Presencia obligatoria de `copy.app.disclaimer` y 0 términos clínicos (`bun run language`).
+   - Ejecutar `bunx vitest run src/features/report/report-templates.test.ts` (verificar Rojo).
+   - **Verde & Refactor:** Implementar `src/features/report/report-templates.ts` como
+     funciones puras deterministas hasta pasar el test al 100 %.
+
+2. **Ciclo TDD 2 — Pantalla de Informe (`ReportScreen.test.tsx` -> `ReportScreen.tsx`):**
+   - **Rojo:** Crear `src/features/report/ReportScreen.test.tsx` usando `fake-indexeddb`
+     para validar que `ReportScreen` consulta `listMeasurements(sessionId)` y
+     `latestDeviceCheck(sessionId)` desde Dexie, muestra el estado de cada actividad,
+     expone botón de *"Repetir actividad"* en las `"No evaluables"` y conserva las
+     reglas de accesibilidad (`>= 48 px`, `aria-live="polite"`).
+   - **Verde & Refactor:** Implementar `src/features/report/ReportScreen.tsx` usando
+     primitivas de `src/design/ui/` (`Card`, `Button`, `StatusBanner`) y textos en
+     `src/app/copy.ts`.
+   - Conectar `ReportScreen` en `src/app/App.tsx` (reemplazando `ReportPlaceholder`,
+     sin alterar `session-flow.ts` ni `db.ts`).
+   - Ejecutar `bun run check`.
+
+--------------------------------------------------------------------------------
+FASE 4: SESIÓN DE IMPLEMENTACIÓN TDD — EXPORTACIÓN LOCAL Y BORRADO DE DATOS
+(~1,5 horas)
+--------------------------------------------------------------------------------
+Objetivo: Completar `PBI-027` y `PBI-028` cumpliendo RC-03 (privacidad biométrica).
+
+1. **Ciclo TDD 3 — Exportación y Borrado (`export-report.test.ts` -> `export-report.ts`):**
+   - **Rojo:** Escribir tests verificando:
+     a) Serialización JSON determinista con metadatos de sesión, calidad de dispositivo,
+        resultados por dimensión y descargo experimental; asertando explícitamente que
+        NO contiene propiedades de video, audio ni landmarks crudos.
+     b) Función de supresión local (`deleteSessionData(sessionId)`) que elimine en
+        Dexie la sesión (`sessions`), chequeos (`deviceChecks`) y mediciones (`measurements`),
+        y limpie `yuyay.sessionId` en `localStorage`.
+   - **Verde & Refactor:** Implementar `src/features/report/export-report.ts`,
+     descarga de archivo `.json` vía `Blob`, botón *"Imprimir / Guardar PDF"*
+     (`window.print()` con estilos `@media print` en `global.css` / reporte) y botón
+     *"Borrar mis resultados"* en `ReportScreen.tsx`.
+2. **Gate de calidad:** Ejecutar `bun run check` completo (typecheck, lint, language,
+   pm:check, test, build) y `bun run build-storybook`.
+
+--------------------------------------------------------------------------------
+FASE 5: VALIDACIÓN OFFLINE, RENDIMIENTO EN PC1 Y CIERRE EN `dev` (45 min)
+--------------------------------------------------------------------------------
+Objetivo: Certificar funcionamiento offline y rendimiento real en `DESKTOP-ML70LGD`
+(Core i5-7200U / 12 GB RAM) para `docs/validacion-mvp.md` y el Code Freeze (25/11).
+
+1. Compilar y levantar vista previa de producción en PC1:
+   ```powershell
+   bun run build
+   bun run preview
+   ```
+2. En navegador Chromium (Edge/Chrome):
+   - Completar `Consent -> Devices -> Install` (verificar descarga y SHA-256).
+   - Activar modo **Offline** en DevTools (o desconectar Wi-Fi).
+   - Recargar la PWA, ejecutar los juegos disponibles, generar el informe, probar
+     exportación `.json`, vista de impresión y borrado local.
+   - Verificar en pestaña Network: **0 peticiones externas**.
+3. Registrar en `docs/validacion-mvp.md` (para el equipo):
+   - Equipo: `DESKTOP-ML70LGD` (Intel Core i5-7200U @ 2.50 GHz, 12 GB RAM, Windows).
+   - FPS observados en `Pinza`, `Bandeja` y `Sonrisa` (meta `>= 20 FPS`).
+   - Duración total de flujo y verificación de casos `"No evaluable"`.
+4. Commit, push a `dev` (`git push origin HEAD:dev`) y actualización de issues en Linear
+   (`linearis issues discuss` / `linearis issues update`).
+
+
+================================================================================
+4. CHECKLIST RÁPIDO DE ARRANQUE DE SESIÓN PARA OMAR (PC1)
+================================================================================
+[ ] 1. Parche de `model-cache` respaldado desde `yuyay/` y repo `CONCURSO-POLIBYTE` al día.
+[ ] 2. `Polibyte/pb2026-jackersmainsters.git` clonado en ruta dedicada, rama `dev`.
+[ ] 3. `git config core.hooksPath .githooks` activado en el clon oficial.
+[ ] 4. `bun install --frozen-lockfile && bun run check` en verde en PC1.
+[ ] 5. `linearis auth login` con workspace `alexander-villalva` (`YUYAY` / `ALE`).
+[ ] 6. Avisos enviados a Andrés y Alexander (permisos, issue `ALE-XX`, portado offline).
+[ ] 7. Parche offline portado y validado con `bun run check`.
+[ ] 8. TDD `report-templates` -> `ReportScreen` -> `export-report` completado y en `dev`.
+[ ] 9. Prueba offline y FPS en PC1 documentada antes del Code Freeze (25/11/2026).
+================================================================================
+FIN DEL PLAN DE ESTABILIZACIÓN E IMPLEMENTACIÓN PC1 — ESTACIÓN OMAR
+================================================================================

@@ -1,0 +1,859 @@
+================================================================================
+PLAN TENTATIVO DE DESARROLLO E INGENIERÍA DE SOFTWARE — PROYECTO YUYAY
+CONCURSO: PoliByte Innovation Challenge 2026 (Fase 2: Construcción de MVP y Final)
+CATEGORÍA: Neurociencias (con captura local mediante Visión por Computador y Audio)
+METODOLOGÍA ADOPTADA: TDD (Test-Driven Development) + KANBAN DISTRIBUIDO REMOTO
+EQUIPO: Los JackersMainsters (ESPOCH - Carrera de Software, 8.º Semestre)
+================================================================================
+
+CONTROL DOCUMENTAL DE INGENIERÍA DE SOFTWARE
+--------------------------------------------------------------------------------
+- Código de Documento : YUYAY-SW-PLAN-2026-V2.0 (Ajustado a TDD + Kanban)
+- Archivo             : Documentacion/PlanTentativoDesarrolloYuyay.txt
+- Fecha de Emisión    : 15 de noviembre de 2026
+- Estado del Repo Base: Commit 589fb73 (Rama main protegida, 31 tests en verde)
+- Hito Code Freeze    : Miércoles 25 de noviembre de 2026 (10 días restantes)
+- Pruebas en Auditorio: Jueves 26 de noviembre de 2026 (Auditorio FIE - ESPOCH)
+- Gran Final Presencial: Viernes 27 de noviembre de 2026 (Riobamba, Ecuador)
+- Modalidad de Equipo : Distribuido en distintas ciudades (Trabajo 100 % remoto
+                        bajo flujo Kanban y ciclos TDD con convergencia el 26/11)
+
+================================================================================
+ÍNDICE GENERAL
+================================================================================
+1. DIAGNÓSTICO DE LÍNEA BASE Y ANÁLISIS DEL PLAZO RESTANTE
+2. ANÁLISIS DE PRESTACIONES DE HARDWARE Y DISTRIBUCIÓN ESTRATÉGICA DE ROLES
+3. VALIDACIÓN Y SELECCIÓN METODOLÓGICA: POR QUÉ TDD + KANBAN (Y DESCARTE DE SDD)
+4. FASES DE INGENIERÍA DE SOFTWARE: DEFINICIÓN, REQUERIMENTACIÓN Y DISEÑO TDD
+5. PRODUCT BACKLOG PRIORIZADO (KANBAN) Y MATRIZ DE TRAZABILIDAD
+6. PLAN GENERAL DE DESARROLLO POR FASES (CRONOGRAMA 15/11 AL 27/11/2026)
+7. SUBPLANES DISTRIBUIDOS POR MIEMBRO (TRABAJO REMOTO CON CICLOS TDD)
+   7.1. Subplan Andrés Gaibor (Visión, Audio, Juegos Multimodales e Infraestructura)
+   7.2. Subplan Alexander Villalva (Liderazgo, Juegos 2D Interactivos y Flujo UI)
+   7.3. Subplan Omar Figueroa (Informe por Plantillas, Exportación, Offline y QA)
+8. HITOS DE INTEGRACIÓN (MILESTONES) Y PUERTAS DE CALIDAD (QUALITY GATES)
+9. DOCUMENTACIÓN PROPIA DE INGENIERÍA DE SOFTWARE A ENTREGAR
+10. MATRIZ DE GESTIÓN DE RIESGOS (HARDWARE, REMOTO, INTEGRACIÓN Y DEMO)
+
+
+================================================================================
+1. DIAGNÓSTICO DE LÍNEA BASE Y ANÁLISIS DEL PLAZO RESTANTE
+================================================================================
+
+1.1. AUDITORÍA DEL ESTADO ACTUAL DEL REPOSITORIO (AL 15 DE NOVIEMBRE DE 2026)
+Tras la revisión integral de los repositorios `CONCURSO POLIBYTE` y `yuyay`
+(clonado desde `https://github.com/AndresGaibor/yuyay.git`), se verifica que el
+proyecto cuenta con una base arquitectónica sólida y una suite inicial de
+pruebas automatizadas lista para operar bajo **TDD (Test-Driven Development)**:
+
+A) COMPONENTES YA IMPLEMENTADOS Y VERIFICADOS (LÍNEA BASE CONSOLIDADA):
+   1. Reglas de Dominio y Guardias Automatizados (`scripts/check-language.ts`,
+      `scripts/check-package-manager.ts`, `biome.json`):
+      - Reglas éticas y técnicas verificadas automáticamente en cada test/build.
+   2. Base del Shell PWA e Infraestructura Cliente:
+      - Shell React 19 + TypeScript 7 + Vite 8 + Tailwind CSS 4 + Bun 1.4+.
+      - Máquina de estados de sesión (`src/app/session-flow.ts` +
+        `src/app/session-flow.test.ts`) con flujo:
+        `consent` -> `devices` -> `install` -> `games` -> `report`.
+      - Pantallas funcionales de Consentimiento (`ConsentScreen.tsx`), Prueba de
+        Dispositivos (`DeviceCheckScreen.tsx`) e Instalación de Modelos con
+        verificación SHA-256 (`InstallScreen.tsx`, `src/pwa/model-cache.ts` +
+        `model-cache.test.ts`).
+      - Modelos MediaPipe vendoreados en `public/models/` (~47 MB:
+        `hand_landmarker.task`, `face_landmarker.task`, `pose_landmarker_lite.task`
+        y binarios `/models/wasm/`) con `checksums.json`.
+   3. Hueco (a) RESUELTO — Persistencia Local Dexie v2 (`src/features/storage/`):
+      - Base de datos IndexedDB con tablas `sessions`, `deviceChecks` y
+        `measurements` (`measurements.ts` + `measurements.test.ts`).
+   4. Hueco (b) RESUELTO — Web Worker de Métricas (`src/workers/`):
+      - `metric-dispatch.ts`, `metric.worker.ts` y puente tipado `run-in-worker.ts`
+        (+ `run-in-worker.test.ts`) que ejecuta funciones puras de
+        `src/metrics/{pinch,stability,reaction,path}.ts` sin bloquear la UI.
+   5. Hueco (f) RESUELTO — Suite TDD en Vitest y CI/CD (`.github/workflows/ci.yml`):
+      - Pipeline automatizado con Biome (`lint`), `typecheck` (`tsc -b`),
+        verificador de lenguaje no clínico (`language`), Vitest (31 tests en
+        verde), `build` y `build-storybook`.
+
+B) BRECHAS TÉCNICAS PENDIENTES (ALCANCE DE LOS PRÓXIMOS 10 DÍAS):
+   - Hueco (h) [BLOQUEANTE INMEDIATO]: Confirmar acceso de escritura de Omar
+     Figueroa en el repositorio privado de GitHub para clonar y abrir PRs.
+   - Hueco (d) [VISIÓN/AUDIO]: Implementar bajo TDD `src/vision/face-landmarker.ts`
+     y `src/vision/pose-landmarker.ts`, además de métricas puras complementarias
+     (frecuencia oscilatoria FFT en estabilidad, simetría facial geométrica y
+     duración/intensidad de vocal en `src/metrics/` y `src/audio/`).
+   - Hueco (c) [5 MINIJUEGOS]: Reemplazar los 5 `Placeholder.tsx` en
+     `src/features/games/{pinza,bandeja,sonrisa,condor,semaforo}/` por sus
+     implementaciones completas guiadas por pruebas conectadas al Worker y Dexie.
+   - Hueco (e) [INFORME Y EXPORTACIÓN]: Reemplazar `src/features/report/Placeholder.tsx`
+     por el motor determinista de plantillas vinculadas a métricas, con vista
+     de resultados, estado de calidad ("No evaluable") y exportación local
+     (JSON auditable + vista de impresión/PDF).
+   - Hueco (g) [VALIDACIÓN EN HARDWARE Y OFFLINE]: Ejecutar pruebas en los
+     equipos reales del equipo, medir y documentar FPS (>= 20 FPS), validar
+     precisión frente a secuencias sintéticas/anotadas y ensayar la demo.
+
+1.2. ANÁLISIS DEL TIEMPO PLAZO RESTANTE
+- Fecha actual         : Domingo 15 de noviembre de 2026 (noche).
+- Ventana de código    : Lunes 16 de noviembre al Miércoles 25 de noviembre de 2026.
+- Tiempo efectivo      : 10 días calendario hasta el Congelamiento de Código (Code Freeze).
+- Capacidad de equipo  : Estimando entre 2,5 y 3,5 horas diarias efectivas por
+                         integrante en sprint final (25 a 35 horas por miembro),
+                         se dispone de ~90 horas-persona efectivas para cerrar
+                         los huecos (c), (d), (e), (g) y (h).
+- Ventana de defensa   : Jueves 26 de noviembre (pruebas de audio/proyección en
+                         Auditorio FIE) y Viernes 27 de noviembre (Gran Final).
+
+
+================================================================================
+2. ANÁLISIS DE PRESTACIONES DE HARDWARE Y DISTRIBUCIÓN ESTRATÉGICA DE ROLES
+================================================================================
+
+Dado que los tres integrantes residen y trabajan desde distintas ciudades de
+manera remota, la asignación de tareas se alinea estrictamente con las
+capacidades de cómputo, memoria, almacenamiento y periféricos de cada estación
+de trabajo declarada en `AnalisisFactibilidad/`:
+
+2.1. AUDITORÍA TÉCNICA DE LOS EQUIPOS POR INTEGRANTE
+
++--------------------+-----------------------------------+---------------------------------------+
+| INTEGRANTE / ROL   | ESPECIFICACIONES DE HARDWARE      | CAPACIDAD TÉCNICA E IMPLICACIONES     |
++--------------------+-----------------------------------+---------------------------------------+
+| 1. ANDRÉS GAIBOR   | - Equipo: MacBook Air M1 (macOS)  | - FORTALEZAS: SoC Apple M1 con GPU    |
+| Rol: Arquitecto de | - RAM: 8 GB memoria unificada     |   integrada de alto desempeño en      |
+| Visión, Audio,     | - Cámara/Mic: FaceTime HD 720p +  |   WebGL/WASM para MediaPipe Tasks     |
+| Métricas e         |   arreglo de 3 micrófonos         |   Vision (>30 FPS estables). Cámara y |
+| Infraestructura    | - Host remoto: Servidor propio    |   micrófono integrados listos para    |
+|                    |   con nginx, Traefik, Sablier y   |   probar visión y voz en tiempo real. |
+|                    |   Cloudflare Access.              | - LÍMITE: 8 GB de RAM. Debe evitar    |
+|                    |                                   |   ejecutar contenedores pesados en    |
+|                    |                                   |   local mientras corre Chrome + IDE.  |
+|                    |                                   | - USO EN FINAL: Equipo Candidato #1   |
+|                    |                                   |   para la Demo en Vivo en el Auditorio|
++--------------------+-----------------------------------+---------------------------------------+
+| 2. ALEXANDER       | - Equipo: PC Escritorio           | - FORTALEZAS: Mayor potencia bruta de |
+|    VILLALVA        |   (DESKTOP-MO7Q55S, Windows 11)   |   CPU del equipo (Zen 5 @ 5.4 GHz) y  |
+| Rol: Líder de      | - CPU: AMD Ryzen 5 9600X          |   mayor holgura de memoria (16 GB     |
+| Equipo, Interfaz,  |   (6 núcleos / 12 hilos, Zen 5,   |   DDR5) + disco NVMe PCIe 4.0.        |
+| Juegos Cognitivos  |   3.9 GHz base - 5.4 GHz boost)   |   Ejecuta el ciclo TDD (`bun test`),  |
+| 2D e Integración   | - RAM: 16 GB DDR5 @ 5600 MHz      |   TypeScript 7, Vite y Storybook en   |
+|                    | - Disco: SSD M.2 NVMe PCIe 4.0    |   milisegundos.                       |
+|                    | - GPU: Integrada AMD Radeon RDNA2 | - LÍMITE: Al ser PC de escritorio, no |
+|                    |                                   |   es transportable al auditorio y     |
+|                    |                                   |   depende de periféricos USB para     |
+|                    |                                   |   cámara/micrófono.                   |
++--------------------+-----------------------------------+---------------------------------------+
+| 3. OMAR FIGUEROA   | - Equipo A (Principal recomendado)| - FORTALEZAS EQUIPO A: Portátil con   |
+| Rol: Motor de      |   Portátil ASUS Q304UAK           |   SSD de 480 GB, 12 GB de RAM, cámara |
+| Informes,          |   (OMARFIGUEROA, Windows 10/11):  |   y micrófono integrados. Es ideal    |
+| Persistencia,      |   Intel Core i5-7200U (2C/4T @    |   para desarrollar con TDD el módulo  |
+| Soporte Offline,   |   2.5 GHz), 12 GB RAM DDR4,       |   de informes, exportación, Dexie y   |
+| Exportación y QA   |   Intel HD Graphics 620, SSD 480G |   pruebas de Service Worker.          |
+|                    | - Equipo B (Secundario):          | - VALOR ESTRATÉGICO DE QA: El Core    |
+|                    |   Desktop (DESKTOP-ML70LGD):      |   i5-7200U con Intel HD 620 es el     |
+|                    |   Intel Core i5-6400 (4C/4T @     |   banco de pruebas perfecto para      |
+|                    |   2.7 GHz), 8 GB DDR3, GPU NVIDIA |   certificar que Yuyay cumple >=20 FPS|
+|                    |   GT 710, HDD 2 TB.               |   en un portátil convencional real.   |
+|                    |                                   | - LÍMITE EQUIPO B: HDD mecánico lento;|
+|                    |                                   |   usar Equipo A (ASUS SSD) para Bun.  |
++--------------------+-----------------------------------+---------------------------------------+
+
+2.2. DISTRIBUCIÓN DEFINITIVA DE ROLES Y RESPONSABILIDADES (SINCRONIZADA)
+Para evitar cuellos de botella por hardware y maximizar el paralelismo remoto:
+
+1) ANDRÉS GAIBOR (Especialista en Visión, Audio, Métricas e Infraestructura):
+   - Responsable de `src/vision/` (`hand-landmarker.ts`, `face-landmarker.ts`,
+     `pose-landmarker.ts`, `capture-loop.ts`), `src/audio/` (`mic-level.ts` y
+     captura de vocal sostenida) y ampliación TDD de `src/metrics/` + `src/workers/`.
+   - Responsable de implementar los minijuegos dependientes intensivamente de
+     cámara y micrófono en tiempo real:
+     * Minijuego 1: "La pinza" (`src/features/games/pinza/`) — en coordinación
+       con Alexander.
+     * Minijuego 2: "Sostén la bandeja" (`src/features/games/bandeja/`).
+     * Minijuego 3: "Sonríe y habla" (`src/features/games/sonrisa/`).
+   - Guardián de CI/CD, revisión de `CODEOWNERS` y despliegue en host propio.
+
+2) ALEXANDER VILLALVA (Líder del Equipo, Interfaz, Juegos 2D e Integración):
+   - Representante oficial ante el Comité PoliByte y coordinador del tablero
+     Kanban remoto y entregables académicos.
+   - Responsable de implementar bajo TDD en su estación Ryzen 5 9600X los
+     minijuegos de alta interactividad en Canvas/SVG 2D (que no requieren
+     webcam continua para su desarrollo base y pueden probarse al 100 % con
+     guiones deterministas en Vitest):
+     * Minijuego 4: "El vuelo del cóndor" (`src/features/games/condor/`).
+     * Minijuego 5: "Semáforo" (`src/features/games/semaforo/`).
+   - Co-responsable de la interfaz visual de "La pinza" y del pulido de UI/UX
+     accesible (`src/design/ui/` y Storybook).
+
+3) OMAR FIGUEROA (Responsable de Informes, Exportación, Offline y Validación QA):
+   - En su portátil ASUS Core i5-7200U (12 GB RAM, SSD):
+     * Implementación completa guiada por pruebas (TDD) del Módulo de Informe
+       por Plantillas Deterministas (`src/features/report/`), leyendo
+       `listMeasurements(sessionId)` y `latestDeviceCheck(sessionId)` desde Dexie.
+     * Implementación de la Exportación de Resultados (descarga local de archivo
+       JSON estructurado + vista formateada para impresión/PDF con `@media print`)
+       y flujo de repetición de actividades "No evaluables".
+     * Verificación de funcionamiento 100 % Offline (Service Worker + Cache
+       Storage `yuyay-models-v1` con red desconectada) y pruebas de rendimiento
+       (registro de FPS y tiempos de sesión <= 6 minutos en gama media-baja).
+
+
+================================================================================
+3. VALIDACIÓN Y SELECCIÓN METODOLÓGICA: POR QUÉ TDD + KANBAN (Y DESCARTE DE SDD)
+================================================================================
+
+3.1. DECISIÓN DE INGENIERÍA: TRANSICIÓN DE SDD A TDD + KANBAN DISTRIBUIDO
+Aunque en la configuración inicial de la Semana 1 se exploró el uso de *Spec-Driven
+Development (SDD / Spec Kit)*, el análisis operativo de factibilidad en las
+estaciones del equipo demuestra que **mantener SDD durante los 10 días finales
+es contraproducente** por tres razones técnicas verificadas:
+1. **Fricción multiplataforma en Windows (Estaciones Alexander y Omar):** Como
+   documenta `docs/instalacion.md`, los scripts de `.specify/scripts/bash` no
+   funcionan de forma nativa en Windows PowerShell (`OMARFIGUEROA` y
+   `DESKTOP-MO7Q55S`), obligando a mantener entornos adicionales (WSL/Git Bash)
+   y herramientas de agentes (`omp` / `specify-cli`) que ralentizan al equipo.
+2. **Duplicación burocrática en una ventana crítica de 10 días:** Contando ya
+   con la documentación formal de Ingeniería de Software (`SRS`, `Historias de
+   Usuario BDD`, `Casos de Uso UML`, `Product Backlog` y `SAD` en
+   `Documentacion/Ingenieria Software/`), obligar a redactar y sincronizar tres
+   archivos manuales (`spec.md`, `plan.md`, `tasks.md` en `specs/NNN-*`) antes
+   de cada componente consume tiempo crítico de codificación antes del 25/11.
+3. **Las pruebas unitarias y de integración (`Vitest`) son especificaciones
+   ejecutables superiores:** En un sistema metrológico y determinista como Yuyay,
+   la verdadera especificación sin ambigüedad es un **test automatizado en
+   Vitest**.
+
+Por ello, el equipo adopta oficialmente la combinación metodológica:
+**TDD (TEST-DRIVEN DEVELOPMENT — ESTÁNDAR IBM + FLUJO `obra/superpowers`) + KANBAN DISTRIBUIDO CON CORTES VERTICALES**
+
+Referencias metodológicas base (`Documentacion/Metodologia TDD.txt`):
+- **IBM Test-Driven Development (TDD):** https://www.ibm.com/es-es/think/topics/test-driven-development
+- **Framework `obra/superpowers` (TDD & Plans en `docs/superpowers/`):** https://github.com/obra/superpowers
+
+3.2. JUSTIFICACIÓN TÉCNICA DE TDD (IBM + SUPERPOWERS) Y KANBAN DADO EL ESCENARIO
+
+A) ¿Por qué TDD (Ciclo Rojo -> Verde -> Refactorización con `obra/superpowers`)
+   como núcleo de ingeniería de software en Yuyay?
+   1. Especificación y Planes orientados a TDD en `docs/superpowers/`: Siguiendo
+      el patrón ya validado en el repositorio (`docs/superpowers/specs/` y
+      `docs/superpowers/plans/2026-11-07-yuyay-estructura.md`), cada bloque de
+      trabajo se descompone en tareas atómicas donde es obligatorio ejecutar
+      los 5 pasos de TDD:
+      - **Paso 1 — Escribir el test que falla (Fase ROJO / Red):** Definir en
+        Vitest (`tests/` o `src/**/*.test.ts`) las entradas (fixtures sintéticas)
+        y la salida esperada, incluyendo tolerancias metrológicas y retorno de
+        `null` -> `"No evaluable"`.
+      - **Paso 2 — Verificar que falla:** Ejecutar `bun run test` y comprobar el
+        error esperado (`FAIL`).
+      - **Paso 3 — Implementar el código mínimo (Fase VERDE / Green):** Escribir
+        únicamente el código TypeScript 7 necesario para pasar la prueba.
+      - **Paso 4 — Verificar que pasa:** Ejecutar `bun run test` (`PASS`).
+      - **Paso 5 — Refactorizar y Verificación del Slice (Fase REFACTOR):**
+        Limpiar duplicación y ejecutar `bun run check` (`typecheck + lint +
+        language + test + build`) con resultado observable.
+   2. Desacoplamiento total de hardware (cámara/micrófono): Gracias a TDD con
+      fixtures JSON (`tests/fixtures/`) y `fake-indexeddb`, Alexander (en PC de
+      escritorio sin webcam integrada) y Omar (en portátil Core i5) pueden
+      desarrollar y probar el 100 % de la lógica de juegos, Web Workers,
+      persistencia Dexie e informes en milisegundos sin encender la cámara en
+      cada cambio.
+   3. Cumplimiento directo de la Rúbrica de la Gran Final (20 puntos en
+      Arquitectura y Calidad Técnica): Las bases de PoliByte evalúan
+      explícitamente "modularidad del código en GitHub, integración, pruebas
+      documentadas, trazabilidad y reproducibilidad". Cada requisito del SRS
+      queda respaldado por un archivo `*.test.ts` auditable.
+
+B) ¿Por qué Kanban Distribuido como motor de gestión de flujo remoto?
+   1. Flujo continuo en ventana corta (10 días): El trabajo se gestiona en un
+      tablero Kanban compartido (GitHub Projects / Issues vinculados a PRs),
+      eliminando la rigidez de sprints largos que no caben en 10 días.
+   2. Límite WIP (Work In Progress) estricto = 1 tarjeta activa por integrante:
+      Ningún miembro abre un segundo minijuego o módulo sin haber llevado su
+      tarjeta actual hasta `Done (PR Merged en main)`.
+   3. Columnas del Tablero Kanban-TDD de Yuyay:
+      `[1. Backlog]` -> `[2. Ready (Contrato Definido)]` -> `[3. TDD Red (Test Escrito)]`
+      -> `[4. TDD Green & Refactor (Código)]` -> `[5. Peer Review & CI Gate]` -> `[6. Done (Merged)]`
+
+C) Protocolo Operativo de Trabajo Remoto entre Ciudades:
+   - Sincronización Diaria (Daily Standup de 10-15 min, 21:00 UTC-5):
+     Cada miembro reporta en el canal del equipo:
+     1) Qué tarjeta Kanban y tests dejó en verde/fusionados hoy.
+     2) Qué tarjeta tomará mañana (respetando WIP = 1).
+     3) Si requiere coordinar un cambio en archivos núcleo protegidos
+        (`session-flow.ts`, `db.ts`, `vite.config.ts`, `public/models/`).
+   - Regla de Ramas y Pull Requests:
+     * Ramas por funcionalidad corta (< 48 horas): `feat/<tema>`, `fix/<tema>`,
+       `docs/<tema>`.
+     * Tamaño de PR < 400 líneas con los tests incluidos en el mismo PR.
+     * Todo PR exige CI en verde (`bun run check`) y 1 aprobación antes de
+       Squash & Merge.
+
+
+================================================================================
+4. FASES DE INGENIERÍA DE SOFTWARE: DEFINICIÓN, REQUERIMENTACIÓN Y DISEÑO TDD
+================================================================================
+
+El proceso de ingeniería de software de Yuyay vincula directamente los
+artefactos documentales (`Documentacion/Ingenieria Software/`) con los ciclos
+TDD en el repositorio (`Desarrollo/yuyay/`):
+
+4.1. FASE DE DEFINICIÓN Y REGLAS ÉTICO-TÉCNICAS INVARIABLES (RC)
+- RC-01 (No Clínico): Prohibido usar términos como "diagnóstico", "enfermedad",
+  "párkinson", "alzhéimer", "ACV", "disartria", "riesgo", "probabilidad",
+  "síntoma", "rango normal" o "semáforo clínico" en la UI o informes
+  (verificado automáticamente por el test estático `bun run language`).
+- RC-02 (100 % Local y Offline): Cero peticiones de red tras instalar recursos;
+  MediaPipe carga desde `/models/wasm` y `/models/*.task`.
+- RC-03 (Privacidad Biométrica): Prohibido almacenar o exportar blobs de video,
+  fotogramas crudos, buffers PCM de audio o mallas de landmarks crudas.
+- RC-04 (Regla "No evaluable"): Si la captura falla o es insuficiente, las
+  funciones de métricas retornan `null` y la UI/Informe muestra "No evaluable"
+  con opción de repetir la actividad; jamás se sustituye por `0`.
+- RC-05 (Determinismo TDD): Funciones en `src/metrics/` y `report-templates.ts`
+  puras, sin `Date.now()` ni `Math.random()` no semillado, probadas con fixtures
+  sintéticas en `tests/`.
+
+4.2. FASE DE REQUERIMENTACIÓN (CATÁLOGO DE REQUISITOS DEL MVP PARA FASE 2)
+
+A) REQUISITOS FUNCIONALES (RF):
+   - RF-01 (Shell, Consentimiento, Dispositivos e Instalación): Flujo base con
+     persistencia de sesión en Dexie y chequeo de calidad. [IMPLEMENTADO CON TESTS]
+   - RF-02 (Visión Multimodal — Manos, Rostro y Pose): Carga local de
+     `HandLandmarker`, `FaceLandmarker` y `PoseLandmarker` con control de FPS y
+     detección de presencia en encuadre. [PARCIAL: Falta Rostro y Pose]
+   - RF-03 (Minijuego 1 — "La pinza"): Guiar captura por mano (derecha/izquierda),
+     calcular ciclos de apertura/cierre pulgar-índice, amplitud media normalizada
+     y variación del ritmo (CV), mostrando unidades y calidad. [PENDIENTE UI]
+   - RF-04 (Minijuego 2 — "Sostén la bandeja"): Capturar estabilidad de brazos/
+     manos durante ventana temporal, calcular desplazamiento (RMS/deriva) y
+     frecuencia oscilatoria dominante (Hz) vía análisis espectral. [PENDIENTE]
+   - RF-05 (Minijuego 3 — "Sonríe y habla"): Evaluar simetría geométrica de
+     comisuras labiales al sonreír con `FaceLandmarker` y registrar duración (s)
+     e intensidad relativa (dBFS/RMS) de una vocal sostenida con Web Audio API.
+     [PENDIENTE]
+   - RF-06 (Minijuego 4 — "El vuelo del cóndor"): Mostrar mapa 2D con punto
+     inicial y 3 ubicaciones objetivo durante fase de observación, ocultarlas y
+     registrar en la fase de navegación: aciertos en orden (0-3), tiempo (s) y
+     longitud de recorrido frente a ruta óptima. [PENDIENTE UI]
+   - RF-07 (Minijuego 5 — "Semáforo"): Presentar secuencia de estímulos Go/No-Go
+     distinguidos por color, forma geométrica y símbolo interno; registrar
+     latencia mediana (ms), omisiones y respuestas incorrectas (comisiones).
+     [PENDIENTE UI]
+   - RF-08 (Persistencia de Mediciones por Juego): Guardar cada resultado válido
+     o "not-evaluable" en la tabla `measurements` de Dexie (`MeasurementRow`),
+     limpiando registros previos del juego si el participante decide repetirlo
+     (`clearMeasurementsForGame`). [IMPLEMENTADO CON TESTS, FALTA CONECTAR JUEGOS]
+   - RF-09 (Informe por Plantillas y Exportación): Construir el informe de
+     sesión leyendo Dexie, aplicando plantillas deterministas con unidades,
+     mostrando causas técnicas en capturas "No evaluables" y permitiendo
+     exportar el informe en JSON y vista imprimible/PDF. [PENDIENTE]
+
+B) REQUISITOS NO FUNCIONALES (RNF):
+   - RNF-01 (Rendimiento Visual): Sostener >= 20 FPS en el módulo visual activo
+     en los equipos objetivo sin GPU dedicada.
+   - RNF-02 (Duración de Sesión): Flujo completo de 5 minijuegos + consentimiento
+     ejecutable en <= 6 minutos (~45-60 s por actividad).
+   - RNF-03 (Accesibilidad): Contraste >= 4.5:1, objetivos táctiles/botones
+     >= 48 px, soporte de teclado, `aria-live` y redundancia forma+color en
+     "Semáforo" (accesible para daltonismo).
+   - RNF-04 (Exactitud Metrológica verificada por TDD):
+     * Error de conteo de ciclos de pinza <= 10 % en secuencias anotadas.
+     * Error de frecuencia oscilatoria <= 0,5 Hz en señales sintéticas de 3, 5 y 8 Hz.
+     * Coincidencia del 100 % en guiones automatizados de "Cóndor" y "Semáforo".
+
+4.3. FASE DE DISEÑO DE ARQUITECTURA Y CONTRATOS PARA TDD EN PARALELO
+Para que los tres miembros escriban sus pruebas TDD y código en paralelo desde
+distintas ciudades sin conflictos de merge, se fijan los siguientes contratos:
+
+1) Contrato de Componente de Minijuego (`src/app/App.tsx`):
+   - Todo minijuego exporta un componente que recibe `GameScreenProps`:
+     `{ onContinue: () => void }`.
+   - Obtiene el `sessionId` activo desde `window.localStorage.getItem('yuyay.sessionId')`.
+   - Antes de guardar un nuevo intento, invoca:
+     `await clearMeasurementsForGame(sessionId, gameId)`
+     seguido de `await saveMeasurements(rows)`.
+   - Si el resultado es `not-evaluable`, ofrece botón "Repetir actividad" y
+     botón "Continuar marcando como No evaluable".
+
+2) Estándar de Nombres de Métricas en `MeasurementRow` (`src/features/storage/measurements.ts`):
+   Para que Omar desarrolle con TDD el Informe mientras Andrés y Alexander
+   desarrollan con TDD los minijuegos, las claves `metric` y `unit` son:
+   - Juego `pinza`:
+     * `pinza.cycles` (`unit: 'ciclos'`)
+     * `pinza.amplitude` (`unit: 'u.n.'`)
+     * `pinza.rhythmVariation` (`unit: 'proporción'`)
+   - Juego `bandeja`:
+     * `bandeja.rms` (`unit: 'u.n.'`)
+     * `bandeja.dominantFrequency` (`unit: 'Hz'`)
+     * `bandeja.duration` (`unit: 'ms'`)
+   - Juego `sonrisa`:
+     * `sonrisa.symmetryRatio` (`unit: 'u.n.'`)
+     * `sonrisa.vowelDuration` (`unit: 's'`)
+     * `sonrisa.vowelIntensity` (`unit: 'dBFS'`)
+   - Juego `condor`:
+     * `condor.hits` (`unit: 'aciertos'`)
+     * `condor.duration` (`unit: 's'`)
+     * `condor.length` (`unit: 'px'`)
+     * `condor.optimalLength` (`unit: 'px'`)
+   - Juego `semaforo`:
+     * `semaforo.medianLatency` (`unit: 'ms'`)
+     * `semaforo.omissions` (`unit: 'ensayos'`)
+     * `semaforo.falseAlarms` (`unit: 'ensayos'`)
+
+
+================================================================================
+5. PRODUCT BACKLOG PRIORIZADO (KANBAN) Y MATRIZ DE TRAZABILIDAD TDD
+================================================================================
+
+Priorización mediante MoSCoW (M = Must Have, S = Should Have) y archivo de test
+que gobierna el ciclo TDD de cada tarjeta Kanban:
+
++---------+-----------------------------------------------+------+------------------------+-------------+----------+
+| ID ITEM | TARJETA KANBAN (FEATURE / CORTE VERTICAL)     | PRIO | ARCHIVO TEST TDD (RED) | RESPONSABLE | REVISOR  |
++---------+-----------------------------------------------+------+------------------------+-------------+----------+
+| BKL-001 | Habilitar acceso de escritura de Omar al repo | M/P0 | `bun run check` local  | Andrés      | Omar     |
+|         | privado y verificar clon en Estación Omar     |      |                        |             |          |
++---------+-----------------------------------------------+------+------------------------+-------------+----------+
+| BKL-002 | Congelar diccionario de claves `metric` en    | M/P0 | `measurements.test.ts` | Los 3       | Alexander|
+|         | `MeasurementRow` para desacoplar Informe      |      |                        |             |          |
++---------+-----------------------------------------------+------+------------------------+-------------+----------+
+| BKL-003 | Implementar `face-landmarker.ts` y            | M/P0 | `vision/*.test.ts`     | Andrés      | Alexander|
+|         | `pose-landmarker.ts` en `src/vision/`         |      |                        |             |          |
++---------+-----------------------------------------------+------+------------------------+-------------+----------+
+| BKL-004 | TDD de métricas puras: frecuencia FFT (3,5,8Hz| M/P0 | `stability.test.ts`,   | Andrés      | Omar     |
+|         | <=0,5Hz), simetría facial y vocal + Worker    |      | `facial.test.ts`       |             |          |
++---------+-----------------------------------------------+------+------------------------+-------------+----------+
+| BKL-005 | TDD de Minijuego 5 "Semáforo" (Go/No-Go       | M/P0 | `Semaforo.test.tsx`,   | Alexander   | Andrés   |
+|         | accesible por forma+color+símbolo)            |      | `reaction.test.ts`     |             |          |
++---------+-----------------------------------------------+------+------------------------+-------------+----------+
+| BKL-006 | TDD de Minijuego 4 "El vuelo del cóndor"      | M/P0 | `Condor.test.tsx`,     | Alexander   | Andrés   |
+|         | (Mapa 2D, 3 objetivos, ruta y tiempo)         |      | `path.test.ts`         |             |          |
++---------+-----------------------------------------------+------+------------------------+-------------+----------+
+| BKL-007 | TDD de Motor de Plantillas del Informe        | M/P0 | `report-templates.     | Omar        | Alexander|
+|         | (`src/features/report/`) y `ReportScreen.tsx` |      |  test.ts`              |             |          |
++---------+-----------------------------------------------+------+------------------------+-------------+----------+
+| BKL-008 | TDD de Minijuego 1 "La pinza" con cámara,     | M/P0 | `Pinza.test.tsx`,      | Andrés +    | Omar     |
+|         | `HandLandmarker`, Worker y guardado Dexie     |      | `pinch.test.ts`        | Alexander   |          |
++---------+-----------------------------------------------+------+------------------------+-------------+----------+
+| BKL-009 | TDD de Minijuego 2 "Sostén la bandeja" con    | M/P0 | `Bandeja.test.tsx`,    | Andrés      | Alexander|
+|         | `PoseLandmarker`/`HandLandmarker` y FFT       |      | `stability.test.ts`    |             |          |
++---------+-----------------------------------------------+------+------------------------+-------------+----------+
+| BKL-010 | TDD de Minijuego 3 "Sonríe y habla" con       | M/P0 | `Sonrisa.test.tsx`,    | Andrés      | Omar     |
+|         | `FaceLandmarker` + Web Audio API vocal        |      | `facial.test.ts`       |             |          |
++---------+-----------------------------------------------+------+------------------------+-------------+----------+
+| BKL-011 | TDD de Exportación de Informe (descarga JSON  | M/P1 | `export-report.test.ts`| Omar        | Andrés   |
+|         | local + hoja de impresión/PDF + borrado)      |      |                        |             |          |
++---------+-----------------------------------------------+------+------------------------+-------------+----------+
+| BKL-012 | Ejecutar protocolo de validación en los 3     | M/P1 | Protocolo Hardware /   | Los 3       | Los 3    |
+|         | equipos (FPS >= 20, modo avión, <= 6 min)     |      | `docs/validacion.md`   |             |          |
++---------+-----------------------------------------------+------+------------------------+-------------+----------+
+| BKL-013 | Consolidar documentación de Ingeniería de     | S/P1 | `bun run check` +      | Omar +      | Andrés   |
+|         | Software, trazabilidad y guion de Demo en vivo|      | Auditoría README       | Alexander   |          |
++---------+-----------------------------------------------+------+------------------------+-------------+----------+
+
+
+================================================================================
+6. PLAN GENERAL DE DESARROLLO POR FASES (CRONOGRAMA 15/11 AL 27/11/2026)
+================================================================================
+
+--------------------------------------------------------------------------------
+FASE 0: FUNDAMENTACIÓN, ARQUITECTURA Y SUITE TDD BASE (CONSOLIDADA AL 15/11/2026)
+--------------------------------------------------------------------------------
+- Estado: 100 % Completada.
+- Logros verificados: Propuesta Técnica Fase 1 aprobada, documentación de
+  Ingeniería de Software (`SRS`, `HU`, `CU`, `Backlog`, `SAD`, `STP/RTM`),
+  estructura React/TS/Vite/Bun, flujo de sesión, Dexie v2 con tabla
+  `measurements`, Web Worker de métricas, `HandLandmarker` base, 31 tests
+  unitarios en verde en Vitest, CI/CD con Biome y Storybook publicado.
+
+--------------------------------------------------------------------------------
+FASE 1: ACCESO REMOTO, CONTRATOS DE DATOS Y TDD DE VISIÓN / MÉTRICAS
+Periodo: Lunes 16 de noviembre al Martes 17 de noviembre de 2026 (Días 1 y 2)
+--------------------------------------------------------------------------------
+* Objetivo de la Fase:
+  Desbloquear el acceso remoto de los 3 miembros en el tablero Kanban, congelar
+  el contrato de claves `metric` en `MeasurementRow` y desarrollar bajo TDD
+  (Rojo -> Verde -> Refactor) las métricas pendientes (FFT, simetría facial y
+  audio vocal) junto con los cargadores `FaceLandmarker` y `PoseLandmarker`.
+* Actividades Clave:
+  1. Incorporar a Omar como colaborador en GitHub (`BKL-001`) y verificar que
+     ejecute `bun install && bun run check` en su portátil ASUS (`OMARFIGUEROA`).
+  2. Escribir primero los tests en `tests/metrics/stability.test.ts` para
+     señales sintéticas de 3, 5 y 8 Hz (meta de error <= 0,5 Hz) y en
+     `tests/metrics/facial.test.ts` para simetría de comisuras y duración vocal
+     (Fase TDD Red), e implementar las funciones puras y el despacho en
+     `src/workers/metric-dispatch.ts` hasta pasar en verde (Fase TDD Green).
+  3. Implementar `src/vision/face-landmarker.ts` y `src/vision/pose-landmarker.ts`
+     siguiendo el patrón de carga local de `hand-landmarker.ts`.
+  4. En Estación Omar, iniciar el ciclo TDD de `report-templates.test.ts`
+     escribiendo los casos de prueba para sesiones válidas y `"No evaluables"`.
+* Entregable de Salida (Hito M1 - 17/11 23:00):
+  Landmarkers de rostro y pose operativos, Worker actualizado y suite de tests
+  ampliada en verde en las 3 estaciones.
+
+--------------------------------------------------------------------------------
+FASE 2: CONSTRUCCIÓN TDD DISTRIBUIDA — OLEADA 1 (JUEGOS 2D, PINZA E INFORME)
+Periodo: Miércoles 18 de noviembre al Viernes 20 de noviembre de 2026 (Días 3 a 5)
+--------------------------------------------------------------------------------
+* Objetivo de la Fase:
+  Completar mediante ciclos TDD los dos juegos cognitivos 2D ("Semáforo" y
+  "El vuelo del cóndor"), el primer juego motor con cámara ("La pinza") y el
+  motor de plantillas del informe leyendo datos reales de Dexie.
+* Actividades Clave:
+  1. Alexander desarrolla bajo TDD `SemaforoScreen` (`src/features/games/semaforo/`):
+     primero escribe las pruebas de guiones Go/No-Go y renderizado accesible
+     (Círculo Verde `+` vs. Octágono Rojo `-`), y luego implementa el componente
+     conectado al Worker y a `saveMeasurements`.
+  2. Alexander desarrolla bajo TDD `CondorScreen` (`src/features/games/condor/`):
+     primero escribe las pruebas de fases (observación -> recorrido -> resultado)
+     y validación de trayectoria 2D, y luego implementa el mapa Canvas/SVG.
+  3. Andrés desarrolla bajo TDD `PinzaScreen` (`src/features/games/pinza/`):
+     escribe las pruebas de transición intermanual (10 s mano derecha -> descanso
+     -> 10 s mano izquierda) y manejo de `"No evaluable"`, e integra
+     `HandLandmarker` en vivo.
+  4. Omar completa bajo TDD `report-templates.ts` y `ReportScreen.tsx`
+     (`src/features/report/`), consultando `listMeasurements(sessionId)` y
+     formateando cada actividad con unidades o motivo técnico de `"No evaluable"`.
+* Entregable de Salida (Hito M2 - 20/11 23:00):
+  3 de los 5 minijuegos funcionando de extremo a extremo y mostrándose en el
+  informe final de sesión con todos los tests en verde.
+
+--------------------------------------------------------------------------------
+FASE 3: CONSTRUCCIÓN TDD DISTRIBUIDA — OLEADA 2 (BANDEJA, SONRISA Y EXPORTACIÓN)
+Periodo: Sábado 21 de noviembre al Lunes 23 de noviembre de 2026 (Días 6 a 8)
+--------------------------------------------------------------------------------
+* Objetivo de la Fase:
+  Completar mediante TDD los dos minijuegos multimodales restantes ("Sostén la
+  bandeja" y "Sonríe y habla"), la exportación local del informe (JSON + vista
+  imprimible + borrado de datos) y la integración completa en `App.tsx`.
+* Actividades Clave:
+  1. Andrés desarrolla bajo TDD `BandejaScreen` (`src/features/games/bandeja/`)
+     usando landmarks de brazos/manos, evaluación de desplazamiento postural y
+     frecuencia oscilatoria dominante.
+  2. Andrés desarrolla bajo TDD `SonrisaScreen` (`src/features/games/sonrisa/`)
+     combinando `FaceLandmarker` (simetría de comisuras labiales) y Web Audio
+     API (duración e intensidad relativa dBFS de vocal sostenida `"aaa"`).
+  3. Omar desarrolla bajo TDD `export-report.ts` (`export-report.test.ts`):
+     serialización segura sin datos crudos, botón "Guardar en el dispositivo
+     (JSON)", botón "Imprimir / Guardar PDF" (`@media print`), opción de borrar
+     resultados locales y repetición de actividades `"No evaluables"`.
+  4. Alexander realiza la prueba de integración completa del flujo en
+     `src/app/App.tsx` y verifica accesibilidad (`aria-live`, contraste,
+     foco visible, tamaño táctil >= 48 px).
+* Entregable de Salida (Hito M3 - 23/11 23:00):
+  MVP 100 % funcional con los 5 minijuegos, informe completo y exportación.
+
+--------------------------------------------------------------------------------
+FASE 4: VALIDACIÓN METROLÓGICA, PRUEBAS EN HARDWARE, DOCUMENTACIÓN Y CODE FREEZE
+Periodo: Martes 24 de noviembre al Miércoles 25 de noviembre de 2026 (Días 9 y 10)
+--------------------------------------------------------------------------------
+* Objetivo de la Fase:
+  Ejecutar y documentar todas las pruebas de validación comprometidas en la
+  Propuesta Técnica Fase 1, verificar la ejecución 100 % offline en las
+  máquinas de los 3 integrantes y congelar el repositorio antes de la hora límite.
+* Actividades Clave:
+  1. Verificación final de la suite TDD automatizada (`bun run test`):
+     - Error <= 10 % en secuencias de pinza (`tests/metrics/pinch.test.ts`).
+     - Error <= 0,5 Hz en señales sintéticas de 3, 5 y 8 Hz
+       (`tests/metrics/stability.test.ts`).
+     - 100 % de coincidencia en guiones de Cóndor y Semáforo.
+  2. Pruebas de sistema en hardware real (Andrés en MacBook Air M1, Alexander en
+     Ryzen 5 9600X, Omar en ASUS Core i5-7200U):
+     - Registrar tabla de FPS observados (>= 20 FPS), resolución de cámara y
+       duración total de sesión (<= 6 minutos).
+     - Probar los casos de fallo declarados: permiso de cámara denegado, mano o
+       rostro fuera de encuadre, micrófono en silencio y modelo corrupto.
+     - Probar flujo completo con Wi-Fi apagado tras instalar la PWA.
+  3. Actualizar `README.md` y `docs/validacion-mvp.md` con instrucciones de
+     reproducibilidad, tabla de resultados de validación y capturas reales.
+  4. Ejecutar `bun run check` final, fusionar último PR y declarar **CODE FREEZE**
+     el miércoles 25 de noviembre.
+* Entregable de Salida (Hito M4/M5 - 25/11):
+  Repositorio congelado en GitHub y despliegue en `yuyay.andresgaibor.com` actualizado.
+
+--------------------------------------------------------------------------------
+FASE 5: CONVERGENCIA PRESENCIAL, PRUEBAS EN AUDITORIO Y GRAN FINAL (RIOBAMBA)
+Periodo: Jueves 26 de noviembre al Viernes 27 de noviembre de 2026 (Días 11 y 12)
+--------------------------------------------------------------------------------
+* Objetivo de la Fase:
+  Reunir presencialmente al equipo en Riobamba (ESPOCH), validar la proyección
+  y audio en el Auditorio de la FIE y ejecutar una defensa sobresaliente.
+* Actividades Clave:
+  - Jueves 26/11 (Pruebas técnicas en Auditorio FIE):
+    * Probar conexión HDMI/proyección, iluminación del escenario sobre el
+      rostro/manos del operador de demo y ganancia del micrófono en el
+      MacBook Air M1 (Equipo Principal de Demo) y en el Portátil ASUS de Omar
+      (Equipo de Respaldo con PWA ya instalada en caché offline).
+  - Viernes 27/11 (Gran Final Presencial - 17 minutos por equipo):
+    * 1) Pitch (5 minutos exactos): Problema, fundamento neurocientífico,
+         arquitectura local/privada y valor diferencial.
+    * 2) Demostración en vivo (7 minutos exactos): Ejecución en tiempo real de
+         Yuyay (con red desconectada para demostrar naturaleza 100 % local),
+         mostrando un caso de éxito completo y provocando en vivo un caso de
+         error/límite (ej. retirar la mano de cámara -> reporte "No evaluable"
+         sin emitir ceros falsos) + generación y exportación del informe.
+    * 3) Preguntas del Jurado (5 minutos): Defensa técnica del código fuente,
+         suite de pruebas TDD, modelos MediaPipe, Web Workers y Dexie.js.
+
+
+================================================================================
+7. SUBPLANES DISTRIBUIDOS POR MIEMBRO (TRABAJO REMOTO CON CICLOS TDD)
+================================================================================
+
+Cada integrante ejecuta su subplan desde su ciudad siguiendo el tablero Kanban
+(WIP = 1) y el ciclo **TDD (1. Escribir test en Rojo -> 2. Implementar en Verde
+-> 3. Refactorizar y abrir PR)**:
+
+--------------------------------------------------------------------------------
+7.1. SUBPLAN A — ANDRÉS GAIBOR (VISIÓN, AUDIO, JUEGOS MULTIMODALES Y DEVOPS)
+--------------------------------------------------------------------------------
+* Estación de trabajo: MacBook Air M1 (8 GB RAM, macOS, cámara y mic integrados).
+
+CRONOGRAMA DETALLADO DE TAREAS (ANDRÉS):
+- Día 1 (Lunes 16/11):
+  1. Enviar invitación de colaborador con permisos Write a Omar en GitHub (`BKL-001`).
+  2. Crear rama `feat/vision-face-pose`.
+  3. Implementar `src/vision/face-landmarker.ts` (`createFaceLandmarker` usando
+     `/models/face_landmarker.task` y `/models/wasm`) y `src/vision/pose-landmarker.ts`
+     (`createPoseLandmarker` usando `/models/pose_landmarker_lite.task`).
+- Día 2 (Martes 17/11):
+  1. **Ciclo TDD Estabilidad/FFT:** Escribir primero en `tests/metrics/stability.test.ts`
+     las pruebas con señales sinusoidales sintéticas de 3 Hz, 5 Hz y 8 Hz
+     exigiendo error <= 0,5 Hz (Rojo); implementar el estimador espectral en
+     `src/metrics/stability.ts` hasta pasar en Verde.
+  2. **Ciclo TDD Simetría Facial y Vocal:** Escribir primero `tests/metrics/facial.test.ts`
+     (Rojo); implementar `src/metrics/facial.ts` y `src/audio/vowel-capture.ts`
+     (Verde) y registrarlos en `src/workers/metric-dispatch.ts`.
+  3. Abrir PR #1 (`feat/vision-face-pose`) -> Revisión y Merge (Hito M1).
+- Día 3 y 4 (Miércoles 18/11 - Jueves 19/11):
+  1. Crear rama `feat/game-pinza`.
+  2. **Ciclo TDD "La pinza":** Escribir pruebas de componente y transición
+     bimanual (`PinzaScreen.test.tsx`) + validar con 10 secuencias anotadas en
+     `tests/fixtures/pinch-cycles.json` (error <= 10 %).
+  3. Implementar `src/features/games/pinza/PinzaScreen.tsx` con `HandLandmarker`,
+     conteo de 10 s por mano, pantalla intermedia *"Ahora, la otra mano"*,
+     envío al Web Worker (`kind: 'pinch'`), manejo de `"No evaluable"` y guardado
+     en Dexie. Abrir PR #2.
+- Día 5 y 6 (Viernes 20/11 - Sábado 21/11):
+  1. Crear rama `feat/game-bandeja`.
+  2. **Ciclo TDD "Sostén la bandeja":** Escribir pruebas en `BandejaScreen.test.tsx`
+     verificando guardado de `bandeja.rms`, `bandeja.dominantFrequency` y
+     estado `"No evaluable"` ante pérdida de encuadre; implementar
+     `BandejaScreen.tsx`. Abrir PR #3.
+- Día 7 y 8 (Domingo 22/11 - Lunes 23/11):
+  1. Crear rama `feat/game-sonrisa`.
+  2. **Ciclo TDD "Sonríe y habla":** Escribir pruebas en `SonrisaScreen.test.tsx`
+     para la fase facial y la fase de vocal sostenida `"aaa"`; implementar
+     `SonrisaScreen.tsx` combinando `FaceLandmarker` y Web Audio API. Abrir PR #4.
+- Día 9 y 10 (Martes 24/11 - Miércoles 25/11):
+  1. Ejecutar protocolo de pruebas en MacBook Air M1 (registrar FPS, resolución,
+     tiempos y modo offline).
+  2. Actualizar el despliegue en `yuyay.andresgaibor.com` y `storybook.andresgaibor.com`
+     tras el último PR antes del Code Freeze.
+
+--------------------------------------------------------------------------------
+7.2. SUBPLAN B — ALEXANDER VILLALVA (LÍDER, JUEGOS 2D E INTEGRACIÓN DE FLUJO)
+--------------------------------------------------------------------------------
+* Estación de trabajo: Desktop AMD Ryzen 5 9600X (16 GB DDR5, SSD NVMe, Windows 11).
+* Ventaja metodológica: Con el paso a **TDD + Kanban**, Alexander ejecuta todo
+  su flujo nativamente en Windows PowerShell con `bun test` / `bun run check`,
+  sin depender de scripts bash de Spec Kit.
+
+CRONOGRAMA DETALLADO DE TAREAS (ALEXANDER):
+- Día 1 y 2 (Lunes 16/11 - Martes 17/11):
+  1. Configurar y actualizar las tarjetas del tablero Kanban del equipo en GitHub
+     según el Product Backlog (`BKL-001` a `BKL-013`).
+  2. Revisar y aprobar el PR #1 de Andrés.
+  3. Crear rama `feat/game-semaforo` e iniciar fase **TDD Red** escribiendo
+     `src/features/games/semaforo/SemaforoScreen.test.tsx`.
+- Día 3 y 4 (Miércoles 18/11 - Jueves 19/11):
+  1. **Ciclo TDD "Semáforo":**
+     - Escribir tests que verifiquen: (a) distinción accesible por forma, color y
+       símbolo (Círculo Verde `+` vs. Octágono Rojo `-`); (b) registro de
+       ensayos Go y No-Go; y (c) persistencia de `semaforo.medianLatency`,
+       `semaforo.omissions` y `semaforo.falseAlarms` en Dexie.
+     - Implementar `SemaforoScreen.tsx` hasta pasar todos los tests al 100 %.
+     - Abrir PR #5 (`feat/game-semaforo`).
+- Día 5 y 6 (Viernes 20/11 - Sábado 21/11):
+  1. Crear rama `feat/game-condor`.
+  2. **Ciclo TDD "El vuelo del cóndor":**
+     - Escribir primero `src/features/games/condor/CondorScreen.test.tsx`
+       validando la fase de observación de las 3 mesetas (`1`, `2`, `3`), el
+       ocultamiento de etiquetas durante la navegación y la coincidencia del
+       100 % en cálculo de aciertos y longitud de ruta (`pathMetrics`).
+     - Implementar `CondorScreen.tsx` en Canvas/SVG 2D con controles táctiles
+       (`<-`, `^`, `->`, >= 48 px) y de teclado. Abrir PR #6 (Hito M2).
+- Día 7 y 8 (Domingo 22/11 - Lunes 23/11):
+  1. Escribir pruebas de integración en `src/app/App.test.tsx` y conectar los
+     5 juegos reales y `ReportScreen` en `src/app/App.tsx`, eliminando los
+     `Placeholder.tsx`.
+- Día 9 y 10 (Martes 24/11 - Miércoles 25/11):
+  1. Ejecutar batería de pruebas en estación Ryzen 5 9600X.
+  2. Preparar estructura del Pitch (5 min) y liderar el cierre de PRs previo al
+     Code Freeze del miércoles 25/11.
+
+--------------------------------------------------------------------------------
+7.3. SUBPLAN C — OMAR FIGUEROA (INFORME POR PLANTILLAS, EXPORTACIÓN, OFFLINE Y QA)
+--------------------------------------------------------------------------------
+* Estación de trabajo principal: Portátil ASUS Q304UAK (`OMARFIGUEROA`, Intel
+  Core i5-7200U, 12 GB RAM DDR4, Intel HD Graphics 620, SSD 480 GB).
+* Ventaja metodológica: El desarrollo del motor de plantillas y exportación es
+  100 % determinista y se presta de forma ideal a **TDD puro con Vitest**,
+  ejecutándose en milisegundos en Windows PowerShell sobre el SSD del ASUS.
+
+CRONOGRAMA DETALLADO DE TAREAS (OMAR):
+- Día 1 y 2 (Lunes 16/11 - Martes 17/11):
+  1. Aceptar invitación al repo en GitHub, verificar el clon en el portátil ASUS,
+     y ejecutar `bun install && bun run check`.
+  2. Crear rama `feat/report-templates`.
+  3. **Ciclo TDD Motor de Plantillas (`report-templates.test.ts` -> `report-templates.ts`):**
+     - **Fase ROJO:** Escribir primero `src/features/report/report-templates.test.ts`
+       probando:
+       a) Formateo exacto con unidades físicas (`ciclos`, `u.n.`, `Hz`, `s`,
+          `dBFS`, `px`, `ms`) para los 5 juegos cuando `status === 'ok'`.
+       b) Bloqueo estricto de valores numéricos y despliegue del motivo técnico
+          cuando `status === 'not-evaluable'` o `value === null` (verificando
+          que jamás aparezca `"0"` como resultado).
+       c) Presencia invariable del descargo experimental y cumplimiento de
+          `bun run language` (cero términos clínicos).
+     - **Fase VERDE y REFACTOR:** Implementar `src/features/report/report-templates.ts`
+       hasta pasar todos los tests.
+- Día 3 a 5 (Miércoles 18/11 - Viernes 20/11):
+  1. **Ciclo TDD Pantalla de Informe (`ReportScreen.test.tsx` -> `ReportScreen.tsx`):**
+     - Escribir pruebas con `fake-indexeddb` verificando que `ReportScreen` lea
+       `listMeasurements(sessionId)` y `latestDeviceCheck(sessionId)` desde
+       Dexie y renderice las tarjetas de las 5 dimensiones.
+     - Implementar `src/features/report/ReportScreen.tsx`.
+  2. Abrir PR #7 (`feat/report-templates`) -> Revisión y Merge (Hito M2).
+- Día 6 a 8 (Sábado 21/11 - Lunes 23/11):
+  1. Crear rama `feat/report-export`.
+  2. **Ciclo TDD Exportación y Supresión (`export-report.test.ts` -> `export-report.ts`):**
+     - **Fase ROJO:** Escribir tests que comprueben la estructura del JSON
+       exportado (verificando ausencia de campos multimedia crudos) y el borrado
+       completo de sesión en Dexie (`deleteSessionData`).
+     - **Fase VERDE:** Implementar descarga `.json` vía `Blob`, vista de
+       impresión/PDF (`window.print()` con estilos `@media print`), botón de
+       borrado de resultados y acción para repetir actividades `"No evaluables"`.
+  3. Abrir PR #8 (`feat/report-export`) -> Revisión y Merge (Hito M3).
+- Día 9 y 10 (Martes 24/11 - Miércoles 25/11):
+  1. Ejecutar en el portátil ASUS Core i5-7200U (Intel HD 620) el protocolo
+     completo de validación:
+     - Medir FPS reales en "La pinza", "Sostén la bandeja" y "Sonríe y habla".
+     - Desconectar el Wi-Fi tras la pantalla de instalación y comprobar que toda
+       la sesión, los 5 juegos y la exportación funcionan con 0 peticiones de red.
+  2. Redactar `docs/validacion-mvp.md` y dejar el portátil ASUS listo con la PWA
+     instalada para llevarlo a Riobamba como Equipo de Respaldo para la Gran Final.
+
+
+================================================================================
+8. HITOS DE INTEGRACIÓN (MILESTONES) Y PUERTAS DE CALIDAD (QUALITY GATES)
+================================================================================
+
+Para evitar integraciones tardías trabajando desde distintas ciudades, el equipo
+se rige por 6 hitos de convergencia verificados automáticamente por la suite TDD:
+
++------+---------------+-----------------------------------------------+-------------------------------+
+| HITO | FECHA LÍMITE  | ENTREGABLE DE INTEGRACIÓN EN RAMA `main`      | PUERTA DE CALIDAD TDD (GATE)  |
++------+---------------+-----------------------------------------------+-------------------------------+
+| M0   | Dom 15/11     | Línea base auditada: Shell PWA, Dexie v2,     | `bun run check` en verde      |
+|      | (Completado)  | Worker de métricas, HandLandmarker y CI.      | (31 tests pasando).           |
++------+---------------+-----------------------------------------------+-------------------------------+
+| M1   | Mar 17/11     | Omar con acceso activo; `FaceLandmarker` y    | Nuevos tests TDD de FFT,      |
+|      | 23:00 UTC-5   | `PoseLandmarker` listos; métricas FFT/facial/ | rostro, voz y plantillas en   |
+|      |               | audio en Worker; tests de plantillas listos.  | verde (`bun run check`).      |
++------+---------------+-----------------------------------------------+-------------------------------+
+| M2   | Vie 20/11     | Minijuegos "Semáforo", "El vuelo del cóndor"  | Tests de componentes y flujo  |
+|      | 23:00 UTC-5   | y "La pinza" integrados + Vista de Informe    | `Consent -> 3 Juegos ->       |
+|      |               | leyendo mediciones reales de Dexie.           | Report` 100 % en verde.       |
++------+---------------+-----------------------------------------------+-------------------------------+
+| M3   | Lun 23/11     | Minijuegos "Sostén la bandeja" y "Sonríe y    | Los 5 minijuegos + Informe +  |
+|      | 23:00 UTC-5   | habla" integrados + Exportación JSON/Impresión| Exportación completos con     |
+|      |               | + repetición de capturas "No evaluables".     | cobertura TDD en verde.       |
++------+---------------+-----------------------------------------------+-------------------------------+
+| M4   | Mar 24/11     | Pruebas en dispositivos reales (M1, Ryzen 5,  | FPS >= 20 documentados,       |
+|      | 23:00 UTC-5   | Core i5-7200U), prueba en Modo Avión (Offline)| sesión <= 6 min y 0 errores   |
+|      |               | y documentación técnica final en `docs/`.     | en `bun run language`.        |
++------+---------------+-----------------------------------------------+-------------------------------+
+| M5   | Mié 25/11     | **CONGELAMIENTO DE CÓDIGO (CODE FREEZE)**     | Último commit en `main` antes |
+|      | (Hora Oficial)| Repositorio etiquetado `v1.0.0-mvp-polibyte`  | de la hora límite oficial;    |
+|      |               | y despliegue actualizado.                     | CI 100 % en verde.            |
++------+---------------+-----------------------------------------------+-------------------------------+
+| M6   | Jue 26/11 y   | Pruebas de audio/proyección en Auditorio FIE  | Demo en vivo (7 min) + Pitch  |
+|      | Vie 27/11     | y Defensa Presencial en la Gran Final.        | (5 min) + Q&A (5 min).        |
++------+---------------+-----------------------------------------------+-------------------------------+
+
+
+================================================================================
+9. DOCUMENTACIÓN PROPIA DE INGENIERÍA DE SOFTWARE A ENTREGAR
+================================================================================
+
+Para asegurar el puntaje máximo en "Arquitectura y calidad técnica (20 puntos)"
+y cumplir el Anexo A.4 de las Bases del Concurso, el proyecto cuenta con el
+siguiente paquete documental en `Documentacion/Ingenieria Software/` y `docs/`:
+
+1. ÍNDICE MAESTRO Y GOBERNANZA TDD + KANBAN (`00_Indice_Maestro_y_Gobernanza_TDD_Kanban.md`):
+   - Define el ciclo de vida TDD (Rojo -> Verde -> Refactor), el tablero Kanban
+     remoto, el contexto de la Estación Omar y la reconciliación entre Mockups
+     y reglas no clínicas del proyecto.
+2. ESPECIFICACIÓN DE REQUISITOS DE SOFTWARE — SRS (`01_Especificacion_Requisitos_Software_SRS.md`):
+   - Estándar ISO/IEC/IEEE 29148 con Reglas Invariables (`RC-01` a `RC-07`),
+     Requisitos Funcionales (`RF-001` a `RF-027`), Requisitos No Funcionales
+     (`RNF-001` a `RNF-013`) e interfaces con las 27 pantallas de los mockups.
+3. CATÁLOGO DE HISTORIAS DE USUARIO BDD (`02_Catalogo_Historias_de_Usuario_BDD.md`):
+   - 20 Historias de Usuario (`HU-001` a `HU-020`) con criterios Gherkin
+     (`Dado / Cuando / Entonces`) que se traducen directamente en bloques
+     `describe / it` de Vitest en el flujo TDD.
+4. ESPECIFICACIÓN DE CASOS DE USO UML (`03_Especificacion_Casos_de_Uso_UML.md`):
+   - Diagrama general, actores y 12 Casos de Uso expandidos (`CU-001` a `CU-012`).
+5. PRODUCT BACKLOG Y TABLERO KANBAN TDD (`04_Product_Backlog_y_Tablero_Kanban_TDD.md`):
+   - 32 ítems priorizados con MoSCoW, archivo de test TDD asociado, criterios
+     *DoR*/*DoD* y guía de ejecución para la Estación Omar.
+6. ARQUITECTURA, DISEÑO UI (MOCKUPS) Y MODELO DE DATOS (`05_Arquitectura_Diseno_UI_Mockups_y_Datos_SAD.md`):
+   - Arquitectura cliente en 4 capas, mapeo de las 27 vistas de los mockups,
+     modelo E-R de Dexie v2, diccionario de las 16 claves `metric` y fórmulas
+     matemáticas de las métricas.
+7. PLAN DE PRUEBAS TDD, VALIDACIÓN Y MATRIZ DE TRAZABILIDAD (`06_Plan_Pruebas_Validacion_y_Matriz_Trazabilidad_RTM.md`):
+   - Estrategia de pruebas TDD en 4 niveles, 20 Casos de Prueba (`CP-001` a
+     `CP-020`), protocolo de hardware para la Estación Omar y Matriz RTM.
+
+
+================================================================================
+10. MATRIZ DE GESTIÓN DE RIESGOS (HARDWARE, REMOTO, INTEGRACIÓN Y DEMO)
+================================================================================
+
++----+------------------------------------------+-----------+--------------------------------------------------+
+| ID | RIESGO IDENTIFICADO                      | IMPACTO   | PLAN DE MITIGACIÓN Y CONTINGENCIA                |
++----+------------------------------------------+-----------+--------------------------------------------------+
+| R1 | Conflictos de merge en archivos núcleo   | Alto      | Prohibido modificar `session-flow.ts`, `db.ts`,  |
+|    | al trabajar remotamente desde distintas  |           | `vite.config.ts` o `public/models/` sin aviso    |
+|    | ciudades.                                |           | previo en el canal del equipo. Cada minijuego    |
+|    |                                          |           | vive aislado en `src/features/games/<id>/`.      |
++----+------------------------------------------+-----------+--------------------------------------------------+
+| R2 | Caída de FPS (< 20 FPS) en el portátil   | Medio     | Ejecutar un solo landmarker activo a la vez por  |
+|    | Core i5-7200U (Intel HD 620) o por       |           | juego (liberar instancia con `.close()` al salir |
+|    | acumulación de memoria en el navegador.  |           | de cada pantalla) y procesar métricas en el      |
+|    |                                          |           | Web Worker.                                      |
++----+------------------------------------------+-----------+--------------------------------------------------+
+| R3 | Iluminación deficiente o ruido ambiental | Alto      | Calibrar umbrales el jueves 26/11 durante las    |
+|    | elevado en el Auditorio de la FIE        | (En Final)| pruebas técnicas en el Auditorio FIE. Aprovechar |
+|    | durante la demostración en vivo.         |           | este escenario para demostrar en vivo cómo Yuyay |
+|    |                                          |           | detecta baja calidad y reporta "No evaluable" en |
+|    |                                          |           | lugar de inventar datos falsos.                  |
++----+------------------------------------------+-----------+--------------------------------------------------+
+| R4 | Fallo de conexión a internet en el       | Medio     | Yuyay es una PWA 100 % offline tras instalar.    |
+|    | Auditorio FIE el día de la Gran Final.   |           | Llevar tanto el MacBook Air M1 (Andrés) como el  |
+|    |                                          |           | portátil ASUS (Omar) con `bun run preview` local |
+|    |                                          |           | y la caché `yuyay-models-v1` precargada y lista. |
++----+------------------------------------------+-----------+--------------------------------------------------+
+| R5 | Regresiones al integrar módulos creados  | Medio     | Ciclo TDD obligatorio: ningún PR se fusiona si   |
+|    | en distintas ciudades.                   |           | no incluye su archivo `*.test.ts` y pasa el gate |
+|    |                                          |           | completo `bun run check` en GitHub Actions CI.   |
++----+------------------------------------------+-----------+--------------------------------------------------+
+| R6 | Penalización del jurado por uso de       | Crítico   | Guardia automatizado `bun run language` en cada  |
+|    | términos médicos/clínicos o por falta de |           | PR y CI. En la sesión del miércoles 25/11 los    |
+|    | dominio cruzado del código entre los 3.  |           | 3 integrantes realizan revisión cruzada de todos |
+|    |                                          |           | los módulos para responder cualquier pregunta.   |
++----+------------------------------------------+-----------+--------------------------------------------------+
+
+================================================================================
+FIN DEL PLAN TENTATIVO DE DESARROLLO — PROYECTO YUYAY (LOS JACKERSMAINSTERS)
+================================================================================
