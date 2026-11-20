@@ -1,0 +1,99 @@
+================================================================================
+INFORME TÉCNICO DE EJECUCIÓN Y VALIDACIÓN — FASE 2 (PORTADO DE SOPORTE OFFLINE)
+PROYECTO : Yuyay — Tamizaje neurológico experimental con minijuegos (PoliByte 2026)
+EQUIPO   : Los JackersMainsters (ESPOCH - Ingeniería de Software, 8.º Semestre)
+ESTACIÓN : PC1 (DESKTOP-ML70LGD) — Estación de trabajo de Omar Figueroa
+FECHA    : 19 de noviembre de 2026 (20:39 UTC-5)
+ISSUE    : ALE-28 (Proyecto YUYAY / Equipo ALE / Workspace alexander-villalva)
+RAMA     : ohmarfigueroa/ale-28-portar-cache-offline-de-modelos-y -> dev
+================================================================================
+
+1. OBJETIVO DE LA FASE 2
+--------------------------------------------------------------------------------
+Portar e integrar al repositorio oficial del concurso
+(https://github.com/Polibyte/pb2026-jackersmainsters.git, rama dev) las mejoras
+locales desarrolladas por Omar Figueroa en PC1 para la gestión y verificación
+100 % sin red de checksums y modelos MediaPipe (pc1_model_cache_offline.patch),
+garantizando el cumplimiento integral de las puertas de calidad automatizadas
+(typecheck, lint, lenguaje no clínico, gestor de paquetes, pruebas unitarias y
+compilación PWA) y manteniendo trazabilidad completa en Linear (ALE-28)[cite: 1].
+
+
+2. ACCIONES REALIZADAS (PASO A PASO ATÓMICO)
+--------------------------------------------------------------------------------
+2.1. Trazabilidad y Gestión en Linear (Issue ALE-28):
+  - Se validó la credencial personal aislada en $HOME\.config\linearis\token-yuyay
+    contra el workspace oficial del equipo (alexander-villalva / equipo ALE).
+  - Se creó y asignó el issue ALE-28 ("Portar caché offline de modelos y checksums
+    en model-cache") con etiquetas Feature y TDD, prioridad 1, en el proyecto YUYAY.
+
+2.2. Aislamiento en Rama Trazable:
+  - En D:\FLASH 7 SEP 2026\ESPOCH OCTAVO\pb2026-jackersmainsters, partiendo del árbol
+    limpio en dev (## dev...origin/dev), se creó y activó la rama:
+    ohmarfigueroa/ale-28-portar-cache-offline-de-modelos-y.
+
+2.3. Verificación en Seco y Aplicación del Parche Offline:
+  - Se auditó el parche respaldado en Fase 0:
+    D:\FLASH 7 SEP 2026\ESPOCH OCTAVO\CONCURSO POLIBYTE\ImplementacionesOmar\pc1_model_cache_offline.patch
+  - Se ejecutó git apply --stat y git apply --check, confirmando 0 conflictos
+    sobre los 3 archivos objetivo:
+    * src/pwa/model-cache.ts (+75 / -17 líneas)
+    * src/pwa/model-cache.test.ts (+137 líneas)
+    * src/features/install/use-asset-install.ts (+16 líneas)
+  - Se aplicó el parche con git apply sobre la rama de trabajo.
+
+2.4. Validación TDD Unitaria y Corrección de Estilo (Biome):
+  - Se ejecutó bunx vitest run src/pwa/model-cache.test.ts, aprobando los 7 tests
+    unitarios (4 de installModels y 3 de soporte offline de checksums y caché).
+  - Al ejecutar bun run check, Biome reportó 1 observación de formateo en
+    src/pwa/model-cache.test.ts (líneas 279-283).
+  - Se aplicó formateo automático mediante bunx biome check --write
+    src/pwa/model-cache.test.ts y se re-ejecutó bun run check completo.
+
+2.5. Commit, Integración en dev, Push Remoto y Cierre en Linear:
+  - Se registró el commit e2c7ba5:
+    "feat(pwa): soporte offline de checksums y caché de modelos (ALE-28)"
+    (3 files changed, 207 insertions(+), 17 deletions(-)).
+  - Se cambió a rama dev, se sincronizó con origin/dev (git pull --ff-only) y se
+    realizó fusión --no-ff generando el commit de merge bc61a9f.
+  - Se publicó en el repositorio oficial mediante git push origin HEAD:dev
+    (3e26d61..bc61a9f HEAD -> dev), superando los hooks locales (.githooks).
+  - Se documentó la evidencia técnica mediante comentario en ALE-28 y se
+    actualizó el estado del issue a "Done" en Linear.
+
+
+3. RESULTADOS VERIFICADOS Y MÉTRICAS DE CALIDAD
+--------------------------------------------------------------------------------
+- Estado de Linear (ALE-28)   : Done (Completado el 2026-11-20T01:38:33.680Z)
+- Commit de implementación    : e2c7ba5
+- Commit de merge en dev      : bc61a9f (3e26d61..bc61a9f en origin/dev)
+- Archivos modificados        : 3 (207 inserciones, 17 eliminaciones)
+- Puertas de calidad (bun run check):
+  * typecheck (tsc -b)        : PASS (0 errores de tipado)
+  * lint (biome check .)      : PASS (113 archivos verificados, 0 errores)
+  * language                  : PASS (Lenguaje clínico: 0 hallazgos)
+  * pm:check                  : PASS (Gestor de paquetes: bun)
+  * test (vitest run)         : PASS (25 archivos de prueba / 166 tests en verde)
+  * build (tsc -b && vite)    : PASS (63 módulos transformados, PWA v2.0.0
+                                generateSW con 14 entradas precacheadas, 1252.76 KiB)
+
+Capacidades incorporadas en la línea base oficial (dev):
+1. loadChecksumsWithCache: Persiste checksums.json en Cache Storage cuando hay
+   conectividad y recupera la copia cacheada ante ausencia de red, emitiendo
+   error explícito si no existe respaldo previo.
+2. verifyCachedModels: Verifica integridad SHA-256 de los modelos locales en
+   caché sin emitir peticiones fetch de red, reportando modelos faltantes.
+3. Doble indexación en caché (cacheKey interno y spec.url) en installModels para
+   lectura offline directa desde MediaPipe WASM/Tasks.
+
+
+4. CONCLUSIÓN Y SIGUIENTE PASO
+--------------------------------------------------------------------------------
+La Fase 2 queda cerrada al 100 % con código integrado en origin/dev y trazabilidad
+completa en Linear (ALE-28). La estación PC1 (DESKTOP-ML70LGD) queda habilitada
+para iniciar inmediatamente la Fase 3 correspondiente al issue ALE-12:
+desarrollo bajo ciclo TDD del motor determinista de plantillas del informe
+(report-templates.ts) y la pantalla de resultados (ReportScreen.tsx)[cite: 1].
+================================================================================
+FIN DEL INFORME — FASE 2 (PROYECTO YUYAY / LOS JACKERSMAINSTERS)
+================================================================================
